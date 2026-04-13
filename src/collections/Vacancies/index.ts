@@ -70,12 +70,6 @@ export const Vacancies: CollectionConfig<'vacancies'> = {
       required: true,
     },
     {
-      name: 'applicationForm',
-      type: 'relationship',
-      relationTo: 'forms',
-      required: true,
-    },
-    {
       name: 'publishedAt',
       type: 'date',
       admin: {
