@@ -8,7 +8,6 @@ import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { hero } from '@/heros/config'
-import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
@@ -29,12 +28,10 @@ export const Pages: CollectionConfig<'pages'> = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  // This config controls what's populated by default when a page is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'pages'>
   defaultPopulate: {
     title: true,
     slug: true,
+    parent: true,
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
@@ -64,10 +61,11 @@ export const Pages: CollectionConfig<'pages'> = {
       type: 'tabs',
       tabs: [
         {
-          fields: [hero],
           label: 'Hero',
+          fields: [hero],
         },
         {
+          label: 'Content',
           fields: [
             {
               name: 'layout',
@@ -79,7 +77,6 @@ export const Pages: CollectionConfig<'pages'> = {
               },
             },
           ],
-          label: 'Content',
         },
         {
           name: 'meta',
@@ -96,13 +93,9 @@ export const Pages: CollectionConfig<'pages'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -111,13 +104,57 @@ export const Pages: CollectionConfig<'pages'> = {
       ],
     },
     {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'pages',
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Выберите родительскую страницу, если это подстраница.',
+      },
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       admin: {
         position: 'sidebar',
       },
     },
-    slugField(),
+    {
+      name: 'slug',
+      type: 'text',
+      index: true,
+      unique: true,
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, data }) => {
+            if (typeof value === 'string' && value.trim()) {
+              return value
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9-_]/g, '')
+            }
+
+            const title = data?.title
+
+            if (typeof title === 'string' && title.trim()) {
+              return title
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9-_]/g, '')
+            }
+
+            return value
+          },
+        ],
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidatePage],
@@ -127,7 +164,7 @@ export const Pages: CollectionConfig<'pages'> = {
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 100,
       },
       schedulePublish: true,
     },

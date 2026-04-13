@@ -210,11 +210,11 @@ export interface Page {
     image?: (number | null) | Media;
     description?: string | null;
   };
-  publishedAt?: string | null;
   /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   * Выберите родительскую страницу, если это подстраница.
    */
-  generateSlug?: boolean | null;
+  parent?: (number | null) | Page;
+  publishedAt?: string | null;
   slug: string;
   updatedAt: string;
   createdAt: string;
@@ -1097,8 +1097,8 @@ export interface PagesSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
+  parent?: T;
   publishedAt?: T;
-  generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
