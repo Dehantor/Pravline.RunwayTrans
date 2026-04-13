@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 
-import { FormBlock } from '@/blocks/Form/Component'
 import RichText from '@/components/RichText'
-import type { Form as PluginForm } from '@payloadcms/plugin-form-builder/types'
+import { VacancyApplicationForm } from '@/components/VacancyApplicationForm'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
@@ -24,18 +23,6 @@ export default async function VacancyPage({ params: paramsPromise }: Args) {
     notFound()
   }
 
-  const applicationForm = vacancy.applicationForm
-
-  const formForRender: PluginForm | null =
-    typeof applicationForm === 'object' && applicationForm !== null
-      ? ({
-          ...applicationForm,
-          confirmationType: applicationForm.confirmationType || 'message',
-          fields: applicationForm.fields || [],
-          submitButtonLabel: applicationForm.submitButtonLabel || 'Отправить',
-        } as unknown as PluginForm)
-      : null
-
   return (
     <section className="container py-24">
       <h1 className="text-4xl font-semibold mb-3">{vacancy.title}</h1>
@@ -48,7 +35,10 @@ export default async function VacancyPage({ params: paramsPromise }: Args) {
         <RichText data={vacancy.description} />
       </div>
 
-      {formForRender && <FormBlock enableIntro={false} form={formForRender} />}
+      <div className="max-w-2xl rounded-lg border border-border p-6">
+        <h2 className="mb-4 text-2xl font-medium">Отклик на вакансию</h2>
+        <VacancyApplicationForm vacancyId={vacancy.id} />
+      </div>
     </section>
   )
 }

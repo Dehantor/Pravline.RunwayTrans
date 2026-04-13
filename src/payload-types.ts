@@ -70,6 +70,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     vacancies: Vacancy;
+    'vacancy-applications': VacancyApplication;
     media: Media;
     categories: Category;
     users: User;
@@ -93,6 +94,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     vacancies: VacanciesSelect<false> | VacanciesSelect<true>;
+    'vacancy-applications': VacancyApplicationsSelect<false> | VacancyApplicationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -809,7 +811,6 @@ export interface Vacancy {
     };
     [k: string]: unknown;
   };
-  applicationForm: number | Form;
   publishedAt?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -819,6 +820,20 @@ export interface Vacancy {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vacancy-applications".
+ */
+export interface VacancyApplication {
+  id: number;
+  fullName: string;
+  contact: string;
+  resume: number | Media;
+  coverLetter: string;
+  vacancy: number | Vacancy;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1021,6 +1036,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'vacancies';
         value: number | Vacancy;
+      } | null)
+    | ({
+        relationTo: 'vacancy-applications';
+        value: number | VacancyApplication;
       } | null)
     | ({
         relationTo: 'media';
@@ -1273,13 +1292,25 @@ export interface VacanciesSelect<T extends boolean = true> {
   salary?: T;
   summary?: T;
   description?: T;
-  applicationForm?: T;
   publishedAt?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vacancy-applications_select".
+ */
+export interface VacancyApplicationsSelect<T extends boolean = true> {
+  fullName?: T;
+  contact?: T;
+  resume?: T;
+  coverLetter?: T;
+  vacancy?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
