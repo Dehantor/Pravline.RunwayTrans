@@ -205,7 +205,23 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | {
+        title?: string | null;
+        /**
+         * Сколько вакансий показывать на странице.
+         */
+        limit?: number | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'vacanciesList';
+      }
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -1151,6 +1167,14 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        vacanciesList?:
+          | T
+          | {
+              title?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
