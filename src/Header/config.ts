@@ -16,6 +16,19 @@ export const Header: GlobalConfig = {
         link({
           appearances: false,
         }),
+        {
+          name: 'children',
+          type: 'array',
+          admin: {
+            initCollapsed: true,
+          },
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+          label: 'Child links',
+        },
       ],
       maxRows: 6,
       admin: {
