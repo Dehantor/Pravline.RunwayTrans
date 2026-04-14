@@ -70,6 +70,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     vacancies: Vacancy;
+    equipment: Equipment;
     'vacancy-applications': VacancyApplication;
     media: Media;
     categories: Category;
@@ -94,6 +95,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     vacancies: VacanciesSelect<false> | VacanciesSelect<true>;
+    equipment: EquipmentSelect<false> | EquipmentSelect<true>;
     'vacancy-applications': VacancyApplicationsSelect<false> | VacancyApplicationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -839,6 +841,41 @@ export interface Vacancy {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipment".
+ */
+export interface Equipment {
+  id: number;
+  title: string;
+  category?: string | null;
+  summary: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image: number | Media;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "vacancy-applications".
  */
 export interface VacancyApplication {
@@ -1052,6 +1089,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'vacancies';
         value: number | Vacancy;
+      } | null)
+    | ({
+        relationTo: 'equipment';
+        value: number | Equipment;
       } | null)
     | ({
         relationTo: 'vacancy-applications';
@@ -1316,6 +1357,23 @@ export interface VacanciesSelect<T extends boolean = true> {
   salary?: T;
   summary?: T;
   description?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipment_select".
+ */
+export interface EquipmentSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  summary?: T;
+  description?: T;
+  image?: T;
   publishedAt?: T;
   generateSlug?: T;
   slug?: T;
@@ -1916,6 +1974,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'vacancies';
           value: number | Vacancy;
+        } | null)
+      | ({
+          relationTo: 'equipment';
+          value: number | Equipment;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
