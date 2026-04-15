@@ -2019,6 +2019,7 @@ export interface RunwayTransTodayPage {
   breadcrumbsTitle: string;
   pageTitle: string;
   videoUrl?: string | null;
+  videoFile?: (number | null) | Media;
   videoTitle: string;
   faqItems?:
     | {
@@ -2135,6 +2136,7 @@ export interface RunwayTransTodayPageSelect<T extends boolean = true> {
   breadcrumbsTitle?: T;
   pageTitle?: T;
   videoUrl?: T;
+  videoFile?: T;
   videoTitle?: T;
   faqItems?:
     | T

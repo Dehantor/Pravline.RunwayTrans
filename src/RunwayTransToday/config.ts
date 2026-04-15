@@ -42,6 +42,17 @@ export const RunwayTransTodayPage: GlobalConfig = {
           type: 'text',
         },
         {
+          name: 'videoFile',
+          label: 'Видео-файл',
+          type: 'upload',
+          relationTo: 'media',
+          filterOptions: {
+            mimeType: {
+              contains: 'video/',
+            },
+          },
+        },
+        {
           name: 'videoTitle',
           label: 'Название видео (для доступности)',
           type: 'text',
