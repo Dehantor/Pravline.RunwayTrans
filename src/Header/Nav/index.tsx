@@ -16,6 +16,7 @@ const quickLinks = [
 const fallbackNavLinks = [
   { href: '/', label: 'Главная' },
   { href: '/o-kompanii', label: 'Компания' },
+  { href: '/uslugi', label: 'Услуги' },
   { href: '/tehnika', label: 'Техника' },
   { href: '/vacancies', label: 'Вакансии' },
   { href: '/contacts', label: 'Контакты' },
@@ -37,6 +38,9 @@ const isCompanyLabel = (label?: string | null) => {
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems?.filter((item) => item?.link) ?? []
+  const navItemsWithoutServices = navItems.filter(
+    (item) => !item?.link?.label?.toLowerCase().includes('услуг'),
+  )
 
   return (
     <div className="flex w-full flex-col gap-4 lg:items-end">
@@ -88,20 +92,36 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
       <nav aria-label="Основная навигация" className="w-full rounded-sm border bg-white px-3 py-2">
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-[#89d57d]">
           {navItems.length > 0
-            ? navItems.map(({ link }, index) => {
-                if (!link) {
-                  return null
-                }
-
-                const childLinks = link.label && isCompanyLabel(link.label) ? [...companyDropdownLinks] : []
-
-                return (
-                  <li className="group relative" key={`${link.label}-${index}`}>
-                    <CMSLink className="transition-colors hover:text-white" {...link} />
-                    {childLinks.length > 0 ? <Dropdown items={childLinks} /> : null}
+            ? (() => {
+                const companyIndex = navItemsWithoutServices.findIndex(({ link }) => isCompanyLabel(link?.label))
+                const servicesItem = (
+                  <li className="group relative" key="services-after-company">
+                    <Link className="transition-colors hover:text-white" href="/uslugi">
+                      Услуги
+                    </Link>
                   </li>
                 )
-              })
+
+                return navItemsWithoutServices.flatMap(({ link }, index) => {
+                  if (!link) {
+                    return []
+                  }
+
+                  const childLinks = link.label && isCompanyLabel(link.label) ? [...companyDropdownLinks] : []
+                  const items = [
+                    <li className="group relative" key={`${link.label}-${index}`}>
+                      <CMSLink className="transition-colors hover:text-white" {...link} />
+                      {childLinks.length > 0 ? <Dropdown items={childLinks} /> : null}
+                    </li>,
+                  ]
+
+                  if (index === companyIndex) {
+                    items.push(servicesItem)
+                  }
+
+                  return items
+                })
+              })()
             : fallbackNavLinks.map((item) => (
                 <li className="group relative" key={item.href}>
                   <Link className="transition-colors hover:text-white" href={item.href}>
@@ -110,6 +130,13 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                   {isCompanyLabel(item.label) ? <Dropdown items={[...companyDropdownLinks]} /> : null}
                 </li>
               ))}
+          {navItems.length > 0 && !navItemsWithoutServices.some(({ link }) => isCompanyLabel(link?.label)) ? (
+            <li className="group relative" key="services-without-company">
+              <Link className="transition-colors hover:text-white" href="/uslugi">
+                Услуги
+              </Link>
+            </li>
+          ) : null}
         </ul>
       </nav>
     </div>
