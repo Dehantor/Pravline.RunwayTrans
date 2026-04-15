@@ -9,6 +9,8 @@ import { Equipment } from './collections/Equipment'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { ServiceOrders } from './collections/ServiceOrders'
+import { Services } from './collections/Services'
 import { Users } from './collections/Users'
 import { Vacancies } from './collections/Vacancies'
 import { VacancyApplications } from './collections/VacancyApplications'
@@ -68,7 +70,18 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Vacancies, Equipment, VacancyApplications, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    Vacancies,
+    Equipment,
+    Services,
+    ServiceOrders,
+    VacancyApplications,
+    Media,
+    Categories,
+    Users,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
