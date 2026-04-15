@@ -71,6 +71,8 @@ export interface Config {
     posts: Post;
     vacancies: Vacancy;
     equipment: Equipment;
+    services: Service;
+    'service-orders': ServiceOrder;
     'vacancy-applications': VacancyApplication;
     media: Media;
     categories: Category;
@@ -96,6 +98,8 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     vacancies: VacanciesSelect<false> | VacanciesSelect<true>;
     equipment: EquipmentSelect<false> | EquipmentSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    'service-orders': ServiceOrdersSelect<false> | ServiceOrdersSelect<true>;
     'vacancy-applications': VacancyApplicationsSelect<false> | VacancyApplicationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -118,10 +122,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    guidePage: GuidePage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -876,6 +882,55 @@ export interface Equipment {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  title: string;
+  serviceType?: string | null;
+  summary: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image: number | Media;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-orders".
+ */
+export interface ServiceOrder {
+  id: number;
+  fullName: string;
+  contact: string;
+  company?: string | null;
+  details: string;
+  service: number | Service;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "vacancy-applications".
  */
 export interface VacancyApplication {
@@ -1093,6 +1148,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'equipment';
         value: number | Equipment;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'service-orders';
+        value: number | ServiceOrder;
       } | null)
     | ({
         relationTo: 'vacancy-applications';
@@ -1380,6 +1443,36 @@ export interface EquipmentSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  serviceType?: T;
+  summary?: T;
+  description?: T;
+  image?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-orders_select".
+ */
+export interface ServiceOrdersSelect<T extends boolean = true> {
+  fullName?: T;
+  contact?: T;
+  company?: T;
+  details?: T;
+  service?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1886,6 +1979,37 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guidePage".
+ */
+export interface GuidePage {
+  id: number;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  mainGuideCards?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaLabel: string;
+  ctaHref: string;
+  advantages?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -1946,6 +2070,39 @@ export interface FooterSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guidePage_select".
+ */
+export interface GuidePageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  mainGuideCards?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  ctaLabel?: T;
+  ctaHref?: T;
+  advantages?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1978,6 +2135,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'equipment';
           value: number | Equipment;
+        } | null)
+      | ({
+          relationTo: 'services';
+          value: number | Service;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

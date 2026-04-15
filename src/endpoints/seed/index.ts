@@ -1,4 +1,4 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import type { CollectionSlug, Payload, PayloadRequest, File } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals = ['header', 'footer'] as const
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -45,8 +45,21 @@ export const seed = async ({
 
   // clear the database
   await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
+    globals.map((global) => {
+      if (global === 'header') {
+        return payload.updateGlobal({
+          slug: global,
+          data: {
+            navItems: [],
+          },
+          depth: 0,
+          context: {
+            disableRevalidate: true,
+          },
+        })
+      }
+
+      return payload.updateGlobal({
         slug: global,
         data: {
           navItems: [],
@@ -55,8 +68,8 @@ export const seed = async ({
         context: {
           disableRevalidate: true,
         },
-      }),
-    ),
+      })
+    }),
   )
 
   await Promise.all(
