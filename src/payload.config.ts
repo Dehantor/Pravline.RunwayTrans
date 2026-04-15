@@ -13,6 +13,7 @@ import { Users } from './collections/Users'
 import { Vacancies } from './collections/Vacancies'
 import { VacancyApplications } from './collections/VacancyApplications'
 import { Footer } from './Footer/config'
+import { GuidePage } from './Guide/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -70,7 +71,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Vacancies, Equipment, VacancyApplications, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, GuidePage],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
