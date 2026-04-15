@@ -10,7 +10,7 @@ type DropdownProps = {
 
 export const Dropdown = ({ items }: DropdownProps) => {
   return (
-    <div className="invisible absolute left-0 top-full z-30 mt-3 w-56 rounded-sm border border-[#2f794e] bg-black p-3 text-[#89d57d] opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100 data-[open=true]:visible data-[open=true]:opacity-100">
+    <div className="invisible absolute left-0 top-full z-30 mt-3 w-56 rounded-sm border border-[#2f794e] bg-white p-3 text-[#89d57d] opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100 data-[open=true]:visible data-[open=true]:opacity-100">
       {items.length > 0 ? (
         <ul className="space-y-1">
           {items.map((link, index) => {

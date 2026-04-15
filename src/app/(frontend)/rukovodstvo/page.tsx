@@ -24,7 +24,7 @@ export default async function GuidePage() {
   const advantages = guidePageData.advantages || []
 
   return (
-    <section className="bg-black py-12 text-white md:py-20">
+    <section className="bg-white py-12 text-balsck md:py-20">
       <div className="container">
         <nav aria-label="Хлебные крошки" className="mb-10 text-sm text-zinc-400 md:mb-16">
           <Link className="hover:text-white" href="/">
@@ -38,22 +38,21 @@ export default async function GuidePage() {
 
         <div className="grid gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
           {mainGuideCards.map((card) => (
-            <GuideCard description={card.description || ''} key={card.id} title={card.title || ''} />
+            <GuideCard
+              description={card.description || ''}
+              key={card.id}
+              title={card.title || ''}
+            />
           ))}
-        </div>
-
-        <div className="mt-14 flex justify-center md:mt-20">
-          <Link
-            className="rounded-sm bg-[#5f8f5e] px-8 py-3 text-base font-medium text-white transition hover:bg-[#77a873]"
-            href={guidePageData.ctaHref || '/next/vacancies/apply'}
-          >
-            {guidePageData.ctaLabel || 'Оформить заявку'}
-          </Link>
         </div>
 
         <div className="mt-16 grid gap-x-10 gap-y-14 md:mt-20 md:grid-cols-2 lg:grid-cols-3">
           {advantages.map((card) => (
-            <GuideCard description={card.description || ''} key={card.id} title={card.title || ''} />
+            <GuideCard
+              description={card.description || ''}
+              key={card.id}
+              title={card.title || ''}
+            />
           ))}
         </div>
       </div>
@@ -66,6 +65,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: guidePageData.meta?.title || 'Руководство',
-    description: guidePageData.meta?.description || 'Руководство по услугам и условиям грузоперевозок RunwayTrans.',
+    description:
+      guidePageData.meta?.description ||
+      'Руководство по услугам и условиям грузоперевозок RunwayTrans.',
   }
 }
