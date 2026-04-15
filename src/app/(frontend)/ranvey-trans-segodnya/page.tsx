@@ -34,6 +34,10 @@ export default async function RunwayTransTodayPage() {
   const breadcrumbsTitle = runwayPageData.breadcrumbsTitle || 'Ранвей Транс сегодня'
   const faqItems = runwayPageData.faqItems || []
   const videoUrl = runwayPageData.videoUrl || ''
+  const videoFileUrl =
+    runwayPageData.videoFile && typeof runwayPageData.videoFile === 'object'
+      ? runwayPageData.videoFile.url || ''
+      : ''
   const videoTitle = runwayPageData.videoTitle || 'Презентация компании Ранвей Транс'
 
   return (
@@ -52,8 +56,12 @@ export default async function RunwayTransTodayPage() {
         </h1>
 
         <div className="mb-16 overflow-hidden rounded-sm border border-[#2b7f56] bg-white md:mb-20">
-          {videoUrl ? (
-            isYouTubeUrl(videoUrl) ? (
+          {videoFileUrl || videoUrl ? (
+            videoFileUrl ? (
+              <video className="aspect-video w-full" controls preload="metadata" src={videoFileUrl}>
+                Ваш браузер не поддерживает встроенное видео.
+              </video>
+            ) : isYouTubeUrl(videoUrl) ? (
               <div className="aspect-video w-full">
                 <iframe
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -72,7 +80,7 @@ export default async function RunwayTransTodayPage() {
             )
           ) : (
             <div className="flex min-h-72 items-center justify-center p-8 text-center text-zinc-400 md:min-h-96">
-              Добавьте ссылку на видео в админке, чтобы показать его на странице.
+              Добавьте ссылку или загрузите видео-файл в админке, чтобы показать его на странице.
             </div>
           )}
         </div>
