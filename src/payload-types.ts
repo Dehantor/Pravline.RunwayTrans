@@ -123,11 +123,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     guidePage: GuidePage;
+    runwayTransTodayPage: RunwayTransTodayPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
+    runwayTransTodayPage: RunwayTransTodayPageSelect<false> | RunwayTransTodayPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2010,6 +2012,30 @@ export interface GuidePage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "runwayTransTodayPage".
+ */
+export interface RunwayTransTodayPage {
+  id: number;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  videoUrl?: string | null;
+  videoTitle: string;
+  faqItems?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2089,6 +2115,32 @@ export interface GuidePageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "runwayTransTodayPage_select".
+ */
+export interface RunwayTransTodayPageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  videoUrl?: T;
+  videoTitle?: T;
+  faqItems?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
         id?: T;
       };
   meta?:
