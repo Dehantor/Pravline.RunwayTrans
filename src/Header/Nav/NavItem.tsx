@@ -26,7 +26,7 @@ export const NavItem = ({
     >
       <button
         aria-expanded={isOpen}
-        className="inline-flex items-center gap-1 text-primary"
+        className="inline-flex items-center gap-1 text-sm font-medium text-[#89d57d]"
         onClick={onToggle}
         type="button"
       >
