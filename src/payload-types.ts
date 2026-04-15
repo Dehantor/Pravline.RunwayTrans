@@ -2003,11 +2003,17 @@ export interface GuidePage {
         id?: string | null;
       }[]
     | null;
-  teamTiles?:
+  peopleCards?:
     | {
-        title: string;
-        subtitle?: string | null;
-        layout: 'regular' | 'wide' | 'tall' | 'large';
+        photo: number | Media;
+        fullName: string;
+        position: string;
+        id?: string | null;
+      }[]
+    | null;
+  teamGallery?:
+    | {
+        image: number | Media;
         id?: string | null;
       }[]
     | null;
@@ -2126,12 +2132,18 @@ export interface GuidePageSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
-  teamTiles?:
+  peopleCards?:
     | T
     | {
-        title?: T;
-        subtitle?: T;
-        layout?: T;
+        photo?: T;
+        fullName?: T;
+        position?: T;
+        id?: T;
+      };
+  teamGallery?:
+    | T
+    | {
+        image?: T;
         id?: T;
       };
   meta?:

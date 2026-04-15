@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 
+import type { Media as MediaType } from '@/payload-types'
+
 import Link from 'next/link'
+
+import { Media } from '@/components/Media'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 type GuideCardData = {
@@ -9,18 +13,16 @@ type GuideCardData = {
   description?: string | null
 }
 
-type TeamTile = {
-  id: string
-  title: string
-  subtitle: string
-  className: string
+type PersonCardInput = {
+  id?: string | null
+  fullName?: string | null
+  position?: string | null
+  photo?: string | number | MediaType | null
 }
 
-const TEAM_TILE_LAYOUT_CLASSES: Record<string, string> = {
-  regular: 'md:col-span-1 md:row-span-1',
-  wide: 'md:col-span-2 md:row-span-1',
-  tall: 'md:col-span-1 md:row-span-2',
-  large: 'md:col-span-2 md:row-span-2',
+type GalleryImageInput = {
+  id?: string | null
+  image?: string | number | MediaType | null
 }
 
 function CircleIcon() {
@@ -37,22 +39,23 @@ function GuideCard({ title, description }: { title: string; description: string 
   )
 }
 
-function TeamTileCard({ tile, index }: { tile: TeamTile; index: number }) {
+function PersonCard({ person }: { person: ReturnType<typeof normalizePeopleCards>[number] }) {
   return (
-    <article
-      className={`relative overflow-hidden rounded-sm bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200 p-6 text-zinc-800 ${tile.className}`}
-    >
-      <div className="flex h-full flex-col justify-end">
-        <span className="text-sm uppercase tracking-[0.18em] text-zinc-500">{tile.subtitle}</span>
-        <h3 className="mt-2 text-xl font-semibold">{tile.title}</h3>
+    <article className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+      <div className="relative aspect-[3/4] bg-zinc-100">
+        <Media
+          fill
+          imgClassName="object-cover"
+          resource={person.photo}
+          alt={person.fullName}
+          size="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+        />
       </div>
 
-      <span
-        aria-hidden="true"
-        className="absolute right-4 top-4 inline-flex size-12 items-center justify-center rounded-full bg-white/90 text-sm font-semibold text-zinc-500"
-      >
-        {String(index + 1).padStart(2, '0')}
-      </span>
+      <div className="space-y-2 px-5 py-4">
+        <h3 className="text-lg font-semibold text-zinc-900">{person.fullName}</h3>
+        <p className="text-sm text-zinc-600">{person.position}</p>
+      </div>
     </article>
   )
 }
@@ -65,45 +68,34 @@ function normalizeCards(cards: GuideCardData[], prefix: string) {
   }))
 }
 
-function normalizeTeamTiles(
-  tiles: TeamTileInput[] | null | undefined,
-) {
-  const fallback: TeamTileInput[] = [
-    { title: 'Руководитель отдела', subtitle: 'Команда RunwayTrans', layout: 'large' },
-    { title: 'Менеджер проектов', subtitle: 'Команда RunwayTrans', layout: 'tall' },
-    { title: 'Координатор перевозок', subtitle: 'Команда RunwayTrans', layout: 'wide' },
-    { title: 'Логист', subtitle: 'Команда RunwayTrans', layout: 'regular' },
-    { title: 'Специалист сопровождения', subtitle: 'Команда RunwayTrans', layout: 'wide' },
-    { title: 'Оператор 24/7', subtitle: 'Команда RunwayTrans', layout: 'regular' },
-  ]
-
-  const source = tiles?.length ? tiles : fallback
-
-  return source.map((tile, index) => {
-    const layoutKey = tile.layout || 'regular'
-    return {
-      id: tile.id || `team-${index}`,
-      title: tile.title || 'Сотрудник команды',
-      subtitle: tile.subtitle || 'Команда RunwayTrans',
-      className: TEAM_TILE_LAYOUT_CLASSES[layoutKey] || TEAM_TILE_LAYOUT_CLASSES.regular,
-    }
-  })
+function normalizePeopleCards(cards: PersonCardInput[] | null | undefined) {
+  return (cards || [])
+    .map((person, index) => ({
+      id: person.id || `person-${index}`,
+      fullName: person.fullName || 'Сотрудник компании',
+      position: person.position || 'Специалист',
+      photo: typeof person.photo === 'object' && person.photo ? person.photo : null,
+    }))
+    .filter((person) => Boolean(person.photo))
 }
 
-type TeamTileInput = {
-  id?: string | null
-  title?: string | null
-  subtitle?: string | null
-  layout?: string | null
+function normalizeGallery(images: GalleryImageInput[] | null | undefined) {
+  return (images || [])
+    .map((item, index) => ({
+      id: item.id || `gallery-${index}`,
+      image: typeof item.image === 'object' && item.image ? item.image : null,
+    }))
+    .filter((item) => Boolean(item.image))
 }
 
-export default async function GuidePage() {
-  const guidePageData = await getCachedGlobal('guidePage', 1)()
+export default async function RukovodstvoPage() {
+  const guidePageData = await getCachedGlobal('guidePage', 2)()
 
   const mainGuideCards = normalizeCards(guidePageData.mainGuideCards || [], 'main')
   const advantageCards = normalizeCards(guidePageData.advantages || [], 'advantage')
   const heroCards = [...mainGuideCards, ...advantageCards].slice(0, 6)
-  const teamTiles = normalizeTeamTiles(guidePageData.teamTiles)
+  const peopleCards = normalizePeopleCards(guidePageData.peopleCards)
+  const teamGallery = normalizeGallery(guidePageData.teamGallery)
 
   return (
     <section className="bg-black text-white">
@@ -125,13 +117,37 @@ export default async function GuidePage() {
         </div>
       </div>
 
-      <div className="bg-white py-8 md:py-10">
-        <div className="container">
-          <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3 md:auto-rows-[240px] lg:auto-rows-[260px]">
-            {teamTiles.map((tile, index) => (
-              <TeamTileCard index={index} key={tile.id} tile={tile} />
-            ))}
-          </div>
+      <div className="bg-white py-8 text-zinc-900 md:py-10">
+        <div className="container space-y-12 md:space-y-16">
+          {peopleCards.length > 0 && (
+            <div>
+              <h2 className="mb-6 text-2xl font-semibold md:mb-8">Руководство</h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {peopleCards.map((person) => (
+                  <PersonCard key={person.id} person={person} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {teamGallery.length > 0 && (
+            <div>
+              <h2 className="mb-6 text-2xl font-semibold md:mb-8">Фотогалерея</h2>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {teamGallery.map((item) => (
+                  <article className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-100" key={item.id}>
+                    <Media
+                      fill
+                      imgClassName="object-cover"
+                      resource={item.image}
+                      alt="Фотография из галереи"
+                      size="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    />
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -139,7 +155,7 @@ export default async function GuidePage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const guidePageData = await getCachedGlobal('guidePage', 1)()
+  const guidePageData = await getCachedGlobal('guidePage', 2)()
 
   return {
     title: guidePageData.meta?.title || 'Руководство',
