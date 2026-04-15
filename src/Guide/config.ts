@@ -161,6 +161,77 @@ export const GuidePage: GlobalConfig = {
       ],
     },
     {
+      type: 'collapsible',
+      label: 'Блок команды',
+      fields: [
+        {
+          name: 'teamTiles',
+          label: 'Карточки команды',
+          type: 'array',
+          minRows: 1,
+          defaultValue: [
+            {
+              title: 'Руководитель отдела',
+              subtitle: 'Команда RunwayTrans',
+              layout: 'large',
+            },
+            {
+              title: 'Менеджер проектов',
+              subtitle: 'Команда RunwayTrans',
+              layout: 'tall',
+            },
+            {
+              title: 'Координатор перевозок',
+              subtitle: 'Команда RunwayTrans',
+              layout: 'wide',
+            },
+            {
+              title: 'Логист',
+              subtitle: 'Команда RunwayTrans',
+              layout: 'regular',
+            },
+            {
+              title: 'Специалист сопровождения',
+              subtitle: 'Команда RunwayTrans',
+              layout: 'wide',
+            },
+            {
+              title: 'Оператор 24/7',
+              subtitle: 'Команда RunwayTrans',
+              layout: 'regular',
+            },
+          ],
+          fields: [
+            {
+              name: 'title',
+              label: 'Заголовок',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'subtitle',
+              label: 'Подзаголовок',
+              type: 'text',
+              defaultValue: 'Команда RunwayTrans',
+            },
+            {
+              name: 'layout',
+              label: 'Размер карточки',
+              type: 'select',
+              defaultValue: 'regular',
+              options: [
+                { label: 'Стандартная', value: 'regular' },
+                { label: 'Широкая', value: 'wide' },
+                { label: 'Высокая', value: 'tall' },
+                { label: 'Большая (2x2)', value: 'large' },
+              ],
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
       type: 'group',
       name: 'meta',
       label: 'SEO',
