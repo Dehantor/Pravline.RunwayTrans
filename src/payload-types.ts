@@ -2003,6 +2003,14 @@ export interface GuidePage {
         id?: string | null;
       }[]
     | null;
+  teamTiles?:
+    | {
+        title: string;
+        subtitle?: string | null;
+        layout: 'regular' | 'wide' | 'tall' | 'large';
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -2116,6 +2124,14 @@ export interface GuidePageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        id?: T;
+      };
+  teamTiles?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        layout?: T;
         id?: T;
       };
   meta?:
