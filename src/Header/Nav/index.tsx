@@ -70,7 +70,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         </div>
       </div>
 
-      <nav aria-label="Основная навигация" className="w-full rounded-sm border border-[#2f794e] bg-[#101510] px-3 py-2">
+      <nav aria-label="Основная навигация" className="w-full rounded-sm border bg-white px-3 py-2">
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-[#89d57d]">
           {navItems.length > 0
             ? navItems.map(({ link }, index) => {
