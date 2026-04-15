@@ -85,9 +85,9 @@ export default async function RunwayTransTodayPage() {
           )}
         </div>
 
-        <ul className="space-y-6 md:space-y-8">
+        <ul className="space-y-6 md:space-y-4">
           {faqItems.map((item) => (
-            <li className="rounded-sm border bg-white p-5 md:p-6" key={item.id}>
+            <li className="rounded-sm bg-white p-1 md:p-1" key={item.id}>
               <h2 className="text-xl font-semibold leading-tight text-[#598758] md:text-2xl">
                 {item.question}
               </h2>
