@@ -1,68 +1,61 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-
 import type { Header as HeaderType } from '@/payload-types'
-
-import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
-import { SearchIcon } from 'lucide-react'
-import { Dropdown } from './Dropdown'
-import { NavItem } from './NavItem'
+import { Mail, Phone, Send, MessageCircle, Play, Video } from 'lucide-react'
 
-export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
-  const navItems = data?.navItems || []
-  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null)
-  const closeDelayRef = useRef<number | null>(null)
+const quickLinks = [
+  { href: '#', label: 'Telegram', icon: Send, bgClass: 'bg-[#27A7E7]' },
+  { href: '#', label: 'WhatsApp', icon: MessageCircle, bgClass: 'bg-[#25D366]' },
+  { href: '#', label: 'YouTube', icon: Play, bgClass: 'bg-[#FF3131]' },
+  { href: '#', label: 'Rutube', icon: Video, bgClass: 'bg-[#e3e5eb] text-[#252a33]' },
+]
 
-  useEffect(() => {
-    return () => {
-      if (closeDelayRef.current) {
-        window.clearTimeout(closeDelayRef.current)
-      }
-    }
-  }, [])
-
-  const handleMouseEnter = (index: number) => {
-    if (closeDelayRef.current) {
-      window.clearTimeout(closeDelayRef.current)
-      closeDelayRef.current = null
-    }
-
-    setOpenDropdownIndex(index)
-  }
-
-  const handleMouseLeave = () => {
-    closeDelayRef.current = window.setTimeout(() => {
-      setOpenDropdownIndex(null)
-    }, 120)
-  }
-
+export const HeaderNav: React.FC<{ data: HeaderType }> = () => {
   return (
-    <nav className="flex items-center gap-4">
-      {navItems.map(({ children, link }, index) => {
-        if (children?.length) {
-          return (
-            <NavItem
-              key={`dropdown-${index}`}
-              isOpen={openDropdownIndex === index}
-              label={link?.label || 'Раздел'}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-              onToggle={() => setOpenDropdownIndex((prev) => (prev === index ? null : index))}
-            >
-              <Dropdown items={children.map(({ link: childLink }) => childLink)} />
-            </NavItem>
-          )
-        }
+    <div className="flex flex-wrap items-center gap-4 lg:justify-end">
+      <div className="flex items-center gap-2">
+        {quickLinks.map(({ href, label, icon: Icon, bgClass }) => (
+          <Link
+            key={label}
+            aria-label={label}
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform hover:scale-105 ${bgClass}`}
+            href={href}
+          >
+            <Icon className="h-4 w-4" />
+          </Link>
+        ))}
+      </div>
 
-        return <CMSLink key={index} {...link} appearance="link" />
-      })}
-
-      <Link href="/search">
-        <span className="sr-only">Search</span>
-        <SearchIcon className="w-5 text-primary" />
+      <Link
+        className="rounded-sm border border-[#2f794e] bg-[#4c7d4f] px-6 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#5b915f]"
+        href="/contacts#callback-form"
+      >
+        Заказать звонок
       </Link>
-    </nav>
+
+      <div className="flex items-center gap-2 text-[#89d57d]">
+        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
+          <Mail className="h-4 w-4" />
+        </span>
+        <Link className="text-sm hover:text-white" href="mailto:info@runwaytrans.ru">
+          info@runwaytrans.ru
+        </Link>
+      </div>
+
+      <div className="flex items-center gap-2 text-[#89d57d]">
+        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
+          <Phone className="h-4 w-4" />
+        </span>
+        <div className="flex flex-col leading-tight">
+          <Link className="text-sm hover:text-white" href="tel:+79991234567">
+            +7 (999) 123-45-67
+          </Link>
+          <Link className="text-sm hover:text-white" href="tel:+78001234567">
+            +7 (800) 123-45-67
+          </Link>
+        </div>
+      </div>
+    </div>
   )
 }
