@@ -53,7 +53,7 @@ const timeline: TimelineItem[] = [
 
 export default function HistoryPage() {
   return (
-    <section className="bg-black py-12 text-white md:py-20">
+    <section className="bg-white py-12 text-black md:py-20">
       <div className="container">
         <nav aria-label="Хлебные крошки" className="mb-10 text-sm text-zinc-400 md:mb-16">
           <Link className="hover:text-white" href="/">

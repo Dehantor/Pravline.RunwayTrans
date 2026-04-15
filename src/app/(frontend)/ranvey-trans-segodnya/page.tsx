@@ -37,7 +37,7 @@ export default async function RunwayTransTodayPage() {
   const videoTitle = runwayPageData.videoTitle || 'Презентация компании Ранвей Транс'
 
   return (
-    <section className="bg-black py-12 text-[#69ad75] md:py-20">
+    <section className="bg-white py-12 text-[#69ad75] md:py-20">
       <div className="container">
         <nav aria-label="Хлебные крошки" className="mb-12 text-sm text-zinc-400 md:mb-16">
           <Link className="hover:text-white" href="/">
@@ -47,9 +47,11 @@ export default async function RunwayTransTodayPage() {
           <span className="text-zinc-200">{breadcrumbsTitle}</span>
         </nav>
 
-        <h1 className="mb-10 text-3xl font-semibold text-[#7de7af] md:mb-14 md:text-5xl">{pageTitle}</h1>
+        <h1 className="mb-10 text-3xl font-semibold text-[#7de7af] md:mb-14 md:text-5xl">
+          {pageTitle}
+        </h1>
 
-        <div className="mb-16 overflow-hidden rounded-sm border border-[#2b7f56] bg-[#030303] md:mb-20">
+        <div className="mb-16 overflow-hidden rounded-sm border border-[#2b7f56] bg-white md:mb-20">
           {videoUrl ? (
             isYouTubeUrl(videoUrl) ? (
               <div className="aspect-video w-full">
@@ -77,9 +79,11 @@ export default async function RunwayTransTodayPage() {
 
         <ul className="space-y-6 md:space-y-8">
           {faqItems.map((item) => (
-            <li className="rounded-sm border border-[#2b7f56] bg-[#050505] p-5 md:p-6" key={item.id}>
-              <h2 className="text-xl font-semibold leading-tight text-[#7de7af] md:text-2xl">{item.question}</h2>
-              <p className="mt-3 text-base leading-relaxed text-zinc-300 md:text-lg">{item.answer}</p>
+            <li className="rounded-sm border bg-white p-5 md:p-6" key={item.id}>
+              <h2 className="text-xl font-semibold leading-tight text-[#598758] md:text-2xl">
+                {item.question}
+              </h2>
+              <p className="mt-3 text-base leading-relaxed text-black md:text-lg">{item.answer}</p>
             </li>
           ))}
         </ul>
