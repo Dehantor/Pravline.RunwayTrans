@@ -24,7 +24,12 @@ const TEAM_TILE_LAYOUT_CLASSES: Record<string, string> = {
 }
 
 function CircleIcon() {
-  return <span aria-hidden="true" className="mx-auto block size-36 rounded-full bg-zinc-300 md:size-44" />
+  return (
+    <span
+      aria-hidden="true"
+      className="mx-auto block size-36 rounded-full bg-zinc-300 md:size-44"
+    />
+  )
 }
 
 function GuideCard({ title, description }: { title: string; description: string }) {
@@ -61,13 +66,12 @@ function normalizeCards(cards: GuideCardData[], prefix: string) {
   return cards.map((card, index) => ({
     id: card.id || `${prefix}-${index}`,
     title: card.title || 'Направление перевозок',
-    description: card.description || 'Подбираем оптимальный маршрут и формат доставки под вашу задачу.',
+    description:
+      card.description || 'Подбираем оптимальный маршрут и формат доставки под вашу задачу.',
   }))
 }
 
-function normalizeTeamTiles(
-  tiles: TeamTileInput[] | null | undefined,
-) {
+function normalizeTeamTiles(tiles: TeamTileInput[] | null | undefined) {
   const fallback: TeamTileInput[] = [
     { title: 'Руководитель отдела', subtitle: 'Команда RunwayTrans', layout: 'large' },
     { title: 'Менеджер проектов', subtitle: 'Команда RunwayTrans', layout: 'tall' },
@@ -106,7 +110,7 @@ export default async function GuidePage() {
   const teamTiles = normalizeTeamTiles(guidePageData.teamTiles)
 
   return (
-    <section className="bg-black text-white">
+    <section className="bg-white text-black">
       <div className="container py-12 md:py-16 lg:py-20">
         <nav aria-label="Хлебные крошки" className="mb-12 text-sm text-zinc-400 md:mb-20">
           <Link className="hover:text-white" href="/">
