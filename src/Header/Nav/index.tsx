@@ -35,6 +35,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItemsWithoutServices = navItems.filter(
     (item) => !item?.link?.label?.toLowerCase().includes('услуг'),
   )
+  const hasContactsLink = navItems.some(({ link }) => link?.label?.toLowerCase().includes('контакт'))
 
   return (
     <div className="flex w-full flex-col gap-4 lg:items-end">
@@ -52,8 +53,15 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                     </Link>
                   </li>
                 )
+                const contactsItem = (
+                  <li className="group relative" key="contacts-nav-link">
+                    <Link className="transition-colors hover:text-white" href="/contacts">
+                      Контакты
+                    </Link>
+                  </li>
+                )
 
-                return navItemsWithoutServices.flatMap(({ link }, index) => {
+                const items = navItemsWithoutServices.flatMap(({ link }, index) => {
                   if (!link) {
                     return []
                   }
@@ -72,6 +80,12 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
                   return items
                 })
+
+                if (!hasContactsLink) {
+                  items.push(contactsItem)
+                }
+
+                return items
               })()
             : fallbackNavLinks.map((item) => (
                 <li className="group relative" key={item.href}>
