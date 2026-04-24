@@ -124,12 +124,14 @@ export interface Config {
     footer: Footer;
     guidePage: GuidePage;
     runwayTransTodayPage: RunwayTransTodayPage;
+    reviewsPage: ReviewsPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
     runwayTransTodayPage: RunwayTransTodayPageSelect<false> | RunwayTransTodayPageSelect<true>;
+    reviewsPage: ReviewsPageSelect<false> | ReviewsPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2065,6 +2067,46 @@ export interface RunwayTransTodayPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviewsPage".
+ */
+export interface ReviewsPage {
+  id: number;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  pageDescription: string;
+  expertName: string;
+  expertTitle: string;
+  expertReviews?:
+    | {
+        title: string;
+        id?: string | null;
+      }[]
+    | null;
+  videoReviews?:
+    | {
+        title?: string | null;
+        year: number;
+        videoUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  textReviews?:
+    | {
+        title?: string | null;
+        year: number;
+        document?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2185,6 +2227,48 @@ export interface RunwayTransTodayPageSelect<T extends boolean = true> {
     | {
         question?: T;
         answer?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviewsPage_select".
+ */
+export interface ReviewsPageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  pageDescription?: T;
+  expertName?: T;
+  expertTitle?: T;
+  expertReviews?:
+    | T
+    | {
+        title?: T;
+        id?: T;
+      };
+  videoReviews?:
+    | T
+    | {
+        title?: T;
+        year?: T;
+        videoUrl?: T;
+        id?: T;
+      };
+  textReviews?:
+    | T
+    | {
+        title?: T;
+        year?: T;
+        document?: T;
         id?: T;
       };
   meta?:
