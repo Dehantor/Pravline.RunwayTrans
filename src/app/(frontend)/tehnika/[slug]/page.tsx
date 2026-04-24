@@ -42,6 +42,24 @@ export default async function TehnikaItemPage({ params: paramsPromise }: Args) {
 
       <p className="mb-8 text-lg text-zinc-300">{item.summary}</p>
 
+      {item.specifications && item.specifications.length > 0 ? (
+        <div className="mb-10 rounded-md border border-[#2b7f56] bg-black/30 p-6">
+          <h2 className="mb-4 text-2xl font-semibold">Характеристики</h2>
+
+          <dl className="space-y-4">
+            {item.specifications.map((spec, index) => (
+              <div
+                className="grid gap-1 border-b border-zinc-800 pb-4 last:border-b-0 last:pb-0 md:grid-cols-[220px_1fr]"
+                key={spec.id ?? `${spec.title}-${index}`}
+              >
+                <dt className="font-medium text-[#7de7af]">{spec.title}</dt>
+                <dd className="text-zinc-300">{spec.description}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ) : null}
+
       <div className="prose max-w-none dark:prose-invert">
         <RichText data={item.description} />
       </div>
