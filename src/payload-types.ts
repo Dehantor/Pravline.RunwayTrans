@@ -124,12 +124,14 @@ export interface Config {
     footer: Footer;
     guidePage: GuidePage;
     runwayTransTodayPage: RunwayTransTodayPage;
+    servicesPage: ServicesPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
     runwayTransTodayPage: RunwayTransTodayPageSelect<false> | RunwayTransTodayPageSelect<true>;
+    servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2065,6 +2067,31 @@ export interface RunwayTransTodayPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicesPage".
+ */
+export interface ServicesPage {
+  id: number;
+  transportedSectionTitle: string;
+  transportedItems?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  advantagesSectionTitle: string;
+  advantagesItems?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2192,6 +2219,31 @@ export interface RunwayTransTodayPageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicesPage_select".
+ */
+export interface ServicesPageSelect<T extends boolean = true> {
+  transportedSectionTitle?: T;
+  transportedItems?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  advantagesSectionTitle?: T;
+  advantagesItems?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
