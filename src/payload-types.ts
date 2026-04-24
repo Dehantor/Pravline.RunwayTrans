@@ -2080,11 +2080,8 @@ export interface PartnersPage {
   pageDescription: string;
   partners?:
     | {
+        logo: number | Media;
         name: string;
-        title: string;
-        description: string;
-        accent: string;
-        logoClassName: string;
         id?: string | null;
       }[]
     | null;
@@ -2306,11 +2303,8 @@ export interface PartnersPageSelect<T extends boolean = true> {
   partners?:
     | T
     | {
+        logo?: T;
         name?: T;
-        title?: T;
-        description?: T;
-        accent?: T;
-        logoClassName?: T;
         id?: T;
       };
   videoButtonLabel?: T;
