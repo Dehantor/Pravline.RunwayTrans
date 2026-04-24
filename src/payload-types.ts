@@ -871,6 +871,13 @@ export interface Equipment {
     };
     [k: string]: unknown;
   };
+  specifications?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   image: number | Media;
   publishedAt?: string | null;
   /**
@@ -1438,6 +1445,13 @@ export interface EquipmentSelect<T extends boolean = true> {
   category?: T;
   summary?: T;
   description?: T;
+  specifications?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   image?: T;
   publishedAt?: T;
   generateSlug?: T;
