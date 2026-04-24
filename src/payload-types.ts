@@ -124,12 +124,14 @@ export interface Config {
     footer: Footer;
     guidePage: GuidePage;
     runwayTransTodayPage: RunwayTransTodayPage;
+    partnersPage: PartnersPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
     runwayTransTodayPage: RunwayTransTodayPageSelect<false> | RunwayTransTodayPageSelect<true>;
+    partnersPage: PartnersPageSelect<false> | PartnersPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2065,6 +2067,34 @@ export interface RunwayTransTodayPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnersPage".
+ */
+export interface PartnersPage {
+  id: number;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  pageDescription: string;
+  partners?:
+    | {
+        name: string;
+        title: string;
+        description: string;
+        accent: string;
+        logoClassName: string;
+        id?: string | null;
+      }[]
+    | null;
+  videoButtonLabel: string;
+  videoButtonHref: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2187,6 +2217,36 @@ export interface RunwayTransTodayPageSelect<T extends boolean = true> {
         answer?: T;
         id?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnersPage_select".
+ */
+export interface PartnersPageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  pageDescription?: T;
+  partners?:
+    | T
+    | {
+        name?: T;
+        title?: T;
+        description?: T;
+        accent?: T;
+        logoClassName?: T;
+        id?: T;
+      };
+  videoButtonLabel?: T;
+  videoButtonHref?: T;
   meta?:
     | T
     | {
