@@ -6,10 +6,13 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 type PartnerCard = {
   id?: string | null
   name?: string | null
-  title?: string | null
-  description?: string | null
-  accent?: string | null
-  logoClassName?: string | null
+  logo?:
+    | {
+        url?: string | null
+      }
+    | number
+    | string
+    | null
 }
 
 function normalizePartners(partners: PartnerCard[] | null | undefined) {
@@ -18,10 +21,7 @@ function normalizePartners(partners: PartnerCard[] | null | undefined) {
   return partners.map((partner, index) => ({
     key: partner.id || `${partner.name || 'partner'}-${index}`,
     name: partner.name || 'Партнёр',
-    title: partner.title || partner.name || 'Партнёр',
-    description: partner.description || '',
-    accent: partner.accent || 'text-neutral-500',
-    logoClassName: partner.logoClassName || '',
+    logoUrl: typeof partner.logo === 'object' ? (partner.logo?.url ?? null) : null,
   }))
 }
 
@@ -54,14 +54,19 @@ export default async function PartnersPage() {
                   className="rounded border border-neutral-200 bg-white p-5 transition hover:border-green-500"
                   key={partner.key}
                 >
-                  <div
-                    className={`${partner.logoClassName} mb-4 flex h-20 items-center justify-center rounded border border-neutral-200 bg-white text-3xl font-bold uppercase text-black`}
-                  >
-                    {partner.name}
-                  </div>
-                  <h2 className="mb-3 text-lg font-semibold text-black">{partner.title}</h2>
-                  <p className="text-sm leading-relaxed text-neutral-700">{partner.description}</p>
-                  <p className={`mt-4 text-sm font-medium ${partner.accent}`}>{partner.name}</p>
+                  {partner.logoUrl ? (
+                    <img
+                      alt={partner.name}
+                      className="mb-4 h-20 w-full rounded border border-neutral-200 object-contain p-2"
+                      loading="lazy"
+                      src={partner.logoUrl}
+                    />
+                  ) : (
+                    <div className="mb-4 flex h-20 items-center justify-center rounded border border-neutral-200 bg-neutral-100 text-sm text-neutral-500">
+                      Нет логотипа
+                    </div>
+                  )}
+                  <h2 className="text-lg font-semibold text-black">{partner.name}</h2>
                 </article>
               )
             })}

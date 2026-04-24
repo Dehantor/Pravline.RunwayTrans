@@ -48,36 +48,17 @@ export const PartnersPage: GlobalConfig = {
 
       fields: [
         {
+          name: 'logo',
+          label: 'Логотип',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
           name: 'name',
-          label: 'Название (латиницей)',
+          label: 'Название',
           type: 'text',
           required: true,
-        },
-        {
-          name: 'title',
-          label: 'Название (локализованное)',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'description',
-          label: 'Описание',
-          type: 'textarea',
-          required: true,
-        },
-        {
-          name: 'accent',
-          label: 'CSS класс акцента',
-          type: 'text',
-          required: true,
-          defaultValue: 'text-neutral-200',
-        },
-        {
-          name: 'logoClassName',
-          label: 'CSS классы логотипа',
-          type: 'text',
-          required: true,
-          defaultValue: 'bg-neutral-900 text-neutral-100',
         },
       ],
     },
