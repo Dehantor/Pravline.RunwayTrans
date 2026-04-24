@@ -105,7 +105,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         </div>
       </div>
 
-          <HeaderNav data={data} />
+          <HeaderNav />
         </div>
       </div>
     </header>
