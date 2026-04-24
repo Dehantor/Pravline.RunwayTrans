@@ -19,6 +19,7 @@ import { GuidePage } from './Guide/config'
 import { Header } from './Header/config'
 import { RunwayTransTodayPage } from './RunwayTransToday/config'
 import { PartnersPage } from './Partners/config'
+import { ReviewsPage } from './Reviews/config'
 import { ServicesPage } from './ServicesPage/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -87,7 +88,7 @@ export default buildConfig({
     Users,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, GuidePage, RunwayTransTodayPage, PartnersPage, ServicesPage],
+  globals: [Header, Footer, GuidePage, RunwayTransTodayPage, PartnersPage, ReviewsPage, ServicesPage],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
