@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 
-import Link from 'next/link'
-
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -52,9 +50,16 @@ export default async function TehnikaPage() {
                   <h2 className="mb-3 text-xl font-medium">{item.title}</h2>
                   <p className="mb-4 text-sm text-zinc-300">{item.summary}</p>
 
-                  <Link className="font-medium text-[#7de7af] hover:underline" href={`/tehnika/${item.slug}`}>
-                    Подробнее →
-                  </Link>
+                  {item.specifications && item.specifications.length > 0 ? (
+                    <dl className="space-y-3 border-t border-zinc-800 pt-4">
+                      {item.specifications.map((spec, index) => (
+                        <div key={spec.id ?? `${spec.title}-${index}`}>
+                          <dt className="text-sm font-medium text-[#7de7af]">{spec.title}</dt>
+                          <dd className="text-sm text-zinc-300">{spec.description}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
                 </div>
               </article>
             )
