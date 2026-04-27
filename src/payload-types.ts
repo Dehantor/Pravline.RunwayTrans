@@ -124,12 +124,18 @@ export interface Config {
     footer: Footer;
     guidePage: GuidePage;
     runwayTransTodayPage: RunwayTransTodayPage;
+    partnersPage: PartnersPage;
+    reviewsPage: ReviewsPage;
+    servicesPage: ServicesPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
     runwayTransTodayPage: RunwayTransTodayPageSelect<false> | RunwayTransTodayPageSelect<true>;
+    partnersPage: PartnersPageSelect<false> | PartnersPageSelect<true>;
+    reviewsPage: ReviewsPageSelect<false> | ReviewsPageSelect<true>;
+    servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -871,6 +877,13 @@ export interface Equipment {
     };
     [k: string]: unknown;
   };
+  specifications?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   image: number | Media;
   publishedAt?: string | null;
   /**
@@ -1438,6 +1451,13 @@ export interface EquipmentSelect<T extends boolean = true> {
   category?: T;
   summary?: T;
   description?: T;
+  specifications?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   image?: T;
   publishedAt?: T;
   generateSlug?: T;
@@ -2051,6 +2071,95 @@ export interface RunwayTransTodayPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnersPage".
+ */
+export interface PartnersPage {
+  id: number;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  pageDescription: string;
+  partners?:
+    | {
+        logo: number | Media;
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  videoButtonLabel: string;
+  videoButtonHref: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviewsPage".
+ */
+export interface ReviewsPage {
+  id: number;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  pageDescription: string;
+  expertName: string;
+  expertRole: string;
+  expertReviewLabels?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  videoReviews?:
+    | {
+        year: number;
+        videoUrl: string;
+        previewImage?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  textReviews?:
+    | {
+        year: number;
+        documentImage: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicesPage".
+ */
+export interface ServicesPage {
+  id: number;
+  transportedSectionTitle: string;
+  transportedItems?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  advantagesSectionTitle: string;
+  advantagesItems?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2178,6 +2287,99 @@ export interface RunwayTransTodayPageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnersPage_select".
+ */
+export interface PartnersPageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  pageDescription?: T;
+  partners?:
+    | T
+    | {
+        logo?: T;
+        name?: T;
+        id?: T;
+      };
+  videoButtonLabel?: T;
+  videoButtonHref?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviewsPage_select".
+ */
+export interface ReviewsPageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  pageDescription?: T;
+  expertName?: T;
+  expertRole?: T;
+  expertReviewLabels?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  videoReviews?:
+    | T
+    | {
+        year?: T;
+        videoUrl?: T;
+        previewImage?: T;
+        id?: T;
+      };
+  textReviews?:
+    | T
+    | {
+        year?: T;
+        documentImage?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicesPage_select".
+ */
+export interface ServicesPageSelect<T extends boolean = true> {
+  transportedSectionTitle?: T;
+  transportedItems?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  advantagesSectionTitle?: T;
+  advantagesItems?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

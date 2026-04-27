@@ -53,6 +53,28 @@ export const Equipment: CollectionConfig<'equipment'> = {
       required: true,
     },
     {
+      name: 'specifications',
+      type: 'array',
+      labels: {
+        singular: 'Характеристика',
+        plural: 'Характеристики',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+          label: 'Заголовок',
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          required: true,
+          label: 'Описание',
+        },
+      ],
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
