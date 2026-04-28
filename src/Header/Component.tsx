@@ -7,5 +7,5 @@ export async function Header() {
   const locale = await getRequestLocale()
   const headerData = await getCachedGlobal('header', locale, 1)()
 
-  return <HeaderClient data={headerData} />
+  return <HeaderClient data={headerData} locale={locale} />
 }

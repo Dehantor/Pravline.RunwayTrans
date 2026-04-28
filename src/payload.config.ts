@@ -123,6 +123,18 @@ export default buildConfig({
         code: 'en',
         label: 'English',
       },
+      {
+        code: 'de',
+        label: 'Deutsch',
+      },
+      {
+        code: 'fr',
+        label: 'Français',
+      },
+      {
+        code: 'zh',
+        label: '中文',
+      },
     ],
     defaultLocale: 'ru',
     fallback: true,
