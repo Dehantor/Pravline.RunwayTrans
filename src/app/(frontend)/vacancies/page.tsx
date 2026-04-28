@@ -3,15 +3,19 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function VacanciesPage() {
+  const locale = await getRequestLocale()
   const payload = await getPayload({ config: configPromise })
 
   const vacancies = await payload.find({
     collection: 'vacancies',
+    locale,
+    fallbackLocale: 'ru',
     depth: 0,
     limit: 100,
     overrideAccess: false,

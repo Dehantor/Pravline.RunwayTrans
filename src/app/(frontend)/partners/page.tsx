@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import React from 'react'
 
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 type PartnerCard = {
   id?: string | null
@@ -26,7 +27,8 @@ function normalizePartners(partners: PartnerCard[] | null | undefined) {
 }
 
 export default async function PartnersPage() {
-  const partnersPageData = await getCachedGlobal('partnersPage', 1)()
+  const locale = await getRequestLocale()
+  const partnersPageData = await getCachedGlobal('partnersPage', locale, 1)()
 
   const breadcrumbsTitle = partnersPageData.breadcrumbsTitle || 'Партнеры'
   const pageTitle = partnersPageData.pageTitle || 'Партнеры'
@@ -93,7 +95,8 @@ export default async function PartnersPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const partnersPageData = await getCachedGlobal('partnersPage', 1)()
+  const locale = await getRequestLocale()
+  const partnersPageData = await getCachedGlobal('partnersPage', locale, 1)()
 
   return {
     title: partnersPageData.meta?.title || 'Партнеры',

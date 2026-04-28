@@ -7,15 +7,19 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
+  const locale = await getRequestLocale()
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
     collection: 'posts',
+    locale,
+    fallbackLocale: 'ru',
     depth: 1,
     limit: 12,
     overrideAccess: false,

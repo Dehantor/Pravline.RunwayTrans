@@ -2,15 +2,19 @@ import type { Metadata } from 'next'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function TehnikaPage() {
+  const locale = await getRequestLocale()
   const payload = await getPayload({ config: configPromise })
 
   const equipmentItems = await payload.find({
     collection: 'equipment',
+    locale,
+    fallbackLocale: 'ru',
     depth: 1,
     limit: 100,
     overrideAccess: false,

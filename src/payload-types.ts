@@ -118,7 +118,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ru' | 'en') | ('ru' | 'en')[];
   globals: {
     header: Header;
     footer: Footer;
@@ -137,7 +137,7 @@ export interface Config {
     reviewsPage: ReviewsPageSelect<false> | ReviewsPageSelect<true>;
     servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
   };
-  locale: null;
+  locale: 'ru' | 'en';
   widgets: {
     collections: CollectionsWidget;
   };

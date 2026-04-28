@@ -5,9 +5,11 @@ import React from 'react'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
+  const locale = await getRequestLocale()
+  const footerData = await getCachedGlobal('footer', locale, 1)()
 
   const navItems = footerData?.navItems || []
 

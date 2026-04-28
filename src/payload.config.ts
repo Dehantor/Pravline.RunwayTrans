@@ -113,6 +113,20 @@ export default buildConfig({
     },
     tasks: [],
   },
+  localization: {
+    locales: [
+      {
+        code: 'ru',
+        label: 'Русский',
+      },
+      {
+        code: 'en',
+        label: 'English',
+      },
+    ],
+    defaultLocale: 'ru',
+    fallback: true,
+  },
   i18n: {
     supportedLanguages: {
       en,

@@ -7,6 +7,8 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
+import type { AppLocale } from '@/i18n/locales'
 
 type Args = {
   params: Promise<{
@@ -15,9 +17,10 @@ type Args = {
 }
 
 export default async function VacancyPage({ params: paramsPromise }: Args) {
+  const locale = await getRequestLocale()
   const { slug } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const vacancy = await queryVacancyBySlug({ slug: decodedSlug })
+  const vacancy = await queryVacancyBySlug({ slug: decodedSlug, locale })
 
   if (!vacancy) {
     notFound()
@@ -44,9 +47,10 @@ export default async function VacancyPage({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const locale = await getRequestLocale()
   const { slug } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const vacancy = await queryVacancyBySlug({ slug: decodedSlug })
+  const vacancy = await queryVacancyBySlug({ slug: decodedSlug, locale })
 
   return {
     title: vacancy?.title ? `${vacancy.title} — Вакансии` : 'Вакансия',
@@ -54,12 +58,14 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   }
 }
 
-const queryVacancyBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryVacancyBySlug = cache(async ({ slug, locale }: { slug: string; locale: AppLocale }) => {
   const { isEnabled: draft } = await draftMode()
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
     collection: 'vacancies',
+    locale,
+    fallbackLocale: 'ru',
     depth: 2,
     draft,
     limit: 1,
