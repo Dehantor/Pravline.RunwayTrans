@@ -6,6 +6,7 @@ import type { Media as MediaType } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 import PageClient from './page.client'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 type ReviewLabel = {
   id?: string | null
@@ -51,7 +52,8 @@ function normalizeTextReviews(textReviews: TextReview[] | null | undefined) {
 }
 
 export default async function ReviewsPage() {
-  const reviewsPageData = await getCachedGlobal('reviewsPage', 1)()
+  const locale = await getRequestLocale()
+  const reviewsPageData = await getCachedGlobal('reviewsPage', locale, 1)()
 
   const breadcrumbsTitle = reviewsPageData.breadcrumbsTitle || 'Отзывы'
   const pageTitle = reviewsPageData.pageTitle || 'Видео-отзывы наших партнёров'
@@ -153,7 +155,8 @@ export default async function ReviewsPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const reviewsPageData = await getCachedGlobal('reviewsPage', 1)()
+  const locale = await getRequestLocale()
+  const reviewsPageData = await getCachedGlobal('reviewsPage', locale, 1)()
 
   return {
     title: reviewsPageData.meta?.title || 'Отзывы | RunwayTrans',

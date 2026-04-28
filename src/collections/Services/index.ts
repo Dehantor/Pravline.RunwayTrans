@@ -35,20 +35,24 @@ export const Services: CollectionConfig<'services'> = {
   fields: [
     {
       name: 'title',
+      localized: true,
       type: 'text',
       required: true,
     },
     {
       name: 'serviceType',
+      localized: true,
       type: 'text',
     },
     {
       name: 'summary',
+      localized: true,
       type: 'textarea',
       required: true,
     },
     {
       name: 'description',
+      localized: true,
       type: 'richText',
       required: true,
     },

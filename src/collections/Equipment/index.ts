@@ -35,25 +35,30 @@ export const Equipment: CollectionConfig<'equipment'> = {
   fields: [
     {
       name: 'title',
+      localized: true,
       type: 'text',
       required: true,
     },
     {
       name: 'category',
+      localized: true,
       type: 'text',
     },
     {
       name: 'summary',
+      localized: true,
       type: 'textarea',
       required: true,
     },
     {
       name: 'description',
+      localized: true,
       type: 'richText',
       required: true,
     },
     {
       name: 'specifications',
+      localized: true,
       type: 'array',
       labels: {
         singular: 'Характеристика',

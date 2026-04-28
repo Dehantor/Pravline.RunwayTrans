@@ -11,10 +11,12 @@ export const Footer: GlobalConfig = {
   fields: [
     {
       name: 'navItems',
+      localized: true,
       type: 'array',
       fields: [
         link({
           appearances: false,
+          localizedLabel: true,
         }),
       ],
       maxRows: 6,

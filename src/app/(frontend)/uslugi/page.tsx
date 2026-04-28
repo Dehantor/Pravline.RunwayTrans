@@ -4,6 +4,7 @@ import { ServicesCatalog } from '@/components/ServicesCatalog'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -37,11 +38,14 @@ function normalizeCards(cards: ServicesPageCard[] | null | undefined, prefix: st
 }
 
 export default async function ServicesPage() {
+  const locale = await getRequestLocale()
   const payload = await getPayload({ config: configPromise })
-  const servicesPageData = await getCachedGlobal('servicesPage', 1)()
+  const servicesPageData = await getCachedGlobal('servicesPage', locale, 1)()
 
   const services = await payload.find({
     collection: 'services',
+    locale,
+    fallbackLocale: 'ru',
     depth: 1,
     limit: 100,
     overrideAccess: false,
@@ -109,6 +113,7 @@ export default async function ServicesPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale()
   return {
     title: 'Услуги',
     description: 'Каталог услуг компании RunwayTrans для грузоперевозок и логистики.',

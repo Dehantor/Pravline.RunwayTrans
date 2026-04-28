@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import Link from 'next/link'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 function isYouTubeUrl(url: string) {
   return url.includes('youtube.com') || url.includes('youtu.be')
@@ -28,7 +29,8 @@ function toYouTubeEmbed(url: string) {
 }
 
 export default async function RunwayTransTodayPage() {
-  const runwayPageData = await getCachedGlobal('runwayTransTodayPage', 1)()
+  const locale = await getRequestLocale()
+  const runwayPageData = await getCachedGlobal('runwayTransTodayPage', locale, 1)()
 
   const pageTitle = runwayPageData.pageTitle || 'Ранвей Транс сегодня'
   const breadcrumbsTitle = runwayPageData.breadcrumbsTitle || 'Ранвей Транс сегодня'
@@ -101,7 +103,8 @@ export default async function RunwayTransTodayPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const runwayPageData = await getCachedGlobal('runwayTransTodayPage', 1)()
+  const locale = await getRequestLocale()
+  const runwayPageData = await getCachedGlobal('runwayTransTodayPage', locale, 1)()
 
   return {
     title: runwayPageData.meta?.title || 'Ранвей Транс сегодня',

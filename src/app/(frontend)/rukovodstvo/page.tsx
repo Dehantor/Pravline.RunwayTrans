@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 import { Media } from '@/components/Media'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 
 type GuideCardData = {
   id?: string | null
@@ -95,7 +96,8 @@ function normalizeGallery(images: GalleryImageInput[] | null | undefined) {
 }
 
 export default async function RukovodstvoPage() {
-  const guidePageData = await getCachedGlobal('guidePage', 2)()
+  const locale = await getRequestLocale()
+  const guidePageData = await getCachedGlobal('guidePage', locale, 2)()
 
   const mainGuideCards = normalizeCards(guidePageData.mainGuideCards || [], 'main')
   const advantageCards = normalizeCards(guidePageData.advantages || [], 'advantage')
@@ -161,7 +163,8 @@ export default async function RukovodstvoPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const guidePageData = await getCachedGlobal('guidePage', 2)()
+  const locale = await getRequestLocale()
+  const guidePageData = await getCachedGlobal('guidePage', locale, 2)()
 
   return {
     title: guidePageData.meta?.title || 'Руководство',
