@@ -2,11 +2,16 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { getRequestLocale } from '@/i18n/getRequestLocale'
+import { defaultLocale } from '@/i18n/locales'
 import { homeMessages } from '@/i18n/messages'
 
 export default async function HomePage() {
   const locale = await getRequestLocale()
-  const t = homeMessages[locale]
+  const t = homeMessages[locale] ?? homeMessages[defaultLocale]
+
+  if (!t) {
+    return null
+  }
 
   return (
     <main className="bg-white text-black">
@@ -175,9 +180,14 @@ export default async function HomePage() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
+  const t = homeMessages[locale] ?? homeMessages[defaultLocale]
+
+  if (!t) {
+    return {}
+  }
 
   return {
-    title: homeMessages[locale].metadata.title,
-    description: homeMessages[locale].metadata.description,
+    title: t.metadata.title,
+    description: t.metadata.description,
   }
 }

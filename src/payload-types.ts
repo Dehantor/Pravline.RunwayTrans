@@ -118,7 +118,12 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ru' | 'en') | ('ru' | 'en')[];
+  fallbackLocale:
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | ('ru' | 'en' | 'de' | 'fr' | 'zh')
+    | ('ru' | 'en' | 'de' | 'fr' | 'zh')[];
   globals: {
     header: Header;
     footer: Footer;
@@ -137,7 +142,7 @@ export interface Config {
     reviewsPage: ReviewsPageSelect<false> | ReviewsPageSelect<true>;
     servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
   };
-  locale: 'ru' | 'en';
+  locale: 'ru' | 'en' | 'de' | 'fr' | 'zh';
   widgets: {
     collections: CollectionsWidget;
   };

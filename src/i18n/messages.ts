@@ -36,7 +36,7 @@ type HomeMessages = {
   }
 }
 
-export const homeMessages: Record<AppLocale, HomeMessages> = {
+export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
   ru: {
     hero: {
       eyebrow: 'Грузоперевозки',
