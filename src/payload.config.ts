@@ -16,6 +16,7 @@ import { Users } from './collections/Users'
 import { Vacancies } from './collections/Vacancies'
 import { VacancyApplications } from './collections/VacancyApplications'
 import { Footer } from './Footer/config'
+import { GeographyPage } from './Geography/config'
 import { GuidePage } from './Guide/config'
 import { Header } from './Header/config'
 import { RunwayTransTodayPage } from './RunwayTransToday/config'
@@ -90,7 +91,16 @@ export default buildConfig({
     Users,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, GuidePage, RunwayTransTodayPage, PartnersPage, ReviewsPage, ServicesPage],
+  globals: [
+    Header,
+    Footer,
+    GuidePage,
+    RunwayTransTodayPage,
+    PartnersPage,
+    ReviewsPage,
+    ServicesPage,
+    GeographyPage,
+  ],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

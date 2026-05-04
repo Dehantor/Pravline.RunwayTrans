@@ -33,6 +33,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     ],
     topLevelLinks: [
       { href: '/uslugi', label: 'Услуги' },
+      { href: '/geografiya', label: 'География' },
       { href: '/reviews', label: 'Кейсы' },
       { href: '/partners', label: 'Партнёры' },
       { href: '/contacts', label: 'Контакты' },
@@ -54,6 +55,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     ],
     topLevelLinks: [
       { href: '/uslugi', label: 'Services' },
+      { href: '/geografiya', label: 'Geography' },
       { href: '/reviews', label: 'Cases' },
       { href: '/partners', label: 'Partners' },
       { href: '/contacts', label: 'Contacts' },
@@ -75,6 +77,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     ],
     topLevelLinks: [
       { href: '/uslugi', label: 'Leistungen' },
+      { href: '/geografiya', label: 'Geografie' },
       { href: '/reviews', label: 'Projekte' },
       { href: '/partners', label: 'Partner' },
       { href: '/contacts', label: 'Kontakte' },
@@ -96,6 +99,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     ],
     topLevelLinks: [
       { href: '/uslugi', label: 'Services' },
+      { href: '/geografiya', label: 'Geographie' },
       { href: '/reviews', label: 'Cas clients' },
       { href: '/partners', label: 'Partenaires' },
       { href: '/contacts', label: 'Contacts' },
@@ -117,6 +121,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     ],
     topLevelLinks: [
       { href: '/uslugi', label: '服务' },
+      { href: '/geografiya', label: '运输区域' },
       { href: '/reviews', label: '案例' },
       { href: '/partners', label: '合作伙伴' },
       { href: '/contacts', label: '联系方式' },

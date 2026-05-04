@@ -1,38 +1,40 @@
 'use client'
 
+import type { AppLocale } from '@/i18n/locales'
+
+import { headerMessages } from '@/i18n/navigationMessages'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Dropdown } from './Dropdown'
 
-const companyDropdownLinks = [
-  { type: 'custom', url: '/ranvey-trans-segodnya', label: 'Ранвей Транс сегодня' },
-  { type: 'custom', url: '/istoriya', label: 'История' },
-  { type: 'custom', url: '/rukovodstvo', label: 'Руководство' },
-  { type: 'custom', url: '/vacancies', label: 'Вакансии' },
-  { type: 'custom', url: '/tehnika', label: 'Техника' },
-] as const
+export const HeaderNav: React.FC<{ locale: AppLocale }> = ({ locale }) => {
+  const pathname = usePathname()
+  const t = headerMessages[locale]
+  const companyDropdownLinks = t.companyDropdownLinks.map((item) => ({
+    type: 'custom' as const,
+    url: item.href,
+    label: item.label,
+  }))
 
-const topLevelLinks = [
-  { href: '/uslugi', label: 'Услуги' },
-  { href: '/reviews', label: 'Кейсы' },
-  { href: '/partners', label: 'Партнёры' },
-  { href: '/contacts', label: 'Контакты' },
-] as const
-
-export const HeaderNav: React.FC = () => {
   return (
     <div className="flex w-full flex-col gap-4 lg:items-end">
-      <nav aria-label="Основная навигация" className="w-full rounded-sm border bg-white px-3 py-2">
+      <nav aria-label={t.mainNavAria} className="w-full rounded-sm border bg-white px-3 py-2">
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-[#89d57d]">
           <li className="group relative">
             <Link className="transition-colors hover:text-white" href="/ranvey-trans-segodnya">
-              Компания
+              {t.companyLabel}
             </Link>
-            <Dropdown items={[...companyDropdownLinks]} />
+            <Dropdown items={companyDropdownLinks} />
           </li>
 
-          {topLevelLinks.map((item) => (
+          {t.topLevelLinks.map((item) => (
             <li className="group relative" key={item.href}>
-              <Link className="transition-colors hover:text-white" href={item.href}>
+              <Link
+                className={`transition-colors hover:text-white ${
+                  pathname === item.href ? 'font-bold text-neutral-950' : ''
+                }`}
+                href={item.href}
+              >
                 {item.label}
               </Link>
             </li>
