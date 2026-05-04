@@ -2,6 +2,7 @@
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { type AppLocale } from '@/i18n/locales'
+import { headerMessages } from '@/i18n/navigationMessages'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -28,6 +29,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+  const t = headerMessages[locale]
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -56,10 +58,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
           <div className="flex flex-col text-sm leading-tight text-[#74c56a]">
             <span className="text-3xl">
-              <i>Грузоперевозки</i>
+              <i>{t.serviceLinePrimary}</i>
             </span>
             <span>
-              <i>Вездеходные и автомобильные</i>
+              <i>{t.serviceLineSecondary}</i>
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-4 lg:justify-end">
@@ -81,7 +83,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
               className="rounded-sm border border-[#2f794e] bg-[#4c7d4f] px-6 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#5b915f]"
               href="/contacts#callback-form"
             >
-              Заказать звонок
+              {t.callbackLabel}
             </Link>
 
             <div className="flex items-center gap-2 text-[#89d57d]">
@@ -108,7 +110,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
             </div>
           </div>
 
-          <HeaderNav />
+          <HeaderNav locale={locale} />
         </div>
       </div>
     </header>

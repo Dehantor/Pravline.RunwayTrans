@@ -79,6 +79,37 @@ type ContactsMessages = SimplePageMessages & {
   requisites: string
 }
 
+type GeographyDelivery = {
+  id: string
+  color: string
+  period: string
+  title: string
+  route: string
+  duration?: string
+}
+
+type GeographyMessages = SimplePageMessages & {
+  breadcrumbsAria: string
+  homeLink: string
+  intro: string
+  directionsTitle: string
+  directions: Record<
+    'chukotka' | 'sakha' | 'nenets' | 'kamchatka' | 'krasnoyarsk' | 'magadan' | 'yamal',
+    string
+  >
+  mapAria: string
+  mapTitle: string
+  zoomIn: string
+  zoomOut: string
+  locate: string
+  periodLabel: string
+  vehicleAllTerrain: string
+  vehicleCars: string
+  cargoType: string
+  region: string
+  fallbackDeliveries: GeographyDelivery[]
+}
+
 type LocalizedPageMessages = {
   guide: GuideMessages
   vacancies: VacanciesMessages
@@ -87,6 +118,7 @@ type LocalizedPageMessages = {
   partners: PartnersMessages
   cases: CasesMessages
   contacts: ContactsMessages
+  geography: GeographyMessages
 }
 
 export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
@@ -245,6 +277,54 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         description: 'Свяжитесь с Runway Trans: адрес, телефон, email и форма обратного звонка.',
       },
     },
+    geography: {
+      title: 'География',
+      breadcrumbsAria: 'Хлебные крошки',
+      homeLink: 'Главная',
+      intro:
+        'Транспортно-логистическая компания Ранвей Транс специализируется на доставке грузов преимущественно в районы Крайнего севера и приравненные к ним территории.',
+      directionsTitle: 'Основные направления грузоперевозок',
+      directions: {
+        chukotka: 'Чукотский АО',
+        sakha: 'Республика Саха (Якутия)',
+        nenets: 'Ненецкий АО',
+        kamchatka: 'Камчатский край',
+        krasnoyarsk: 'Красноярский край',
+        magadan: 'Магаданская область',
+        yamal: 'Ямало-Ненецкий АО',
+      },
+      mapAria: 'Карта перевозок',
+      mapTitle: 'Карта северных направлений грузоперевозок',
+      zoomIn: 'Увеличить карту',
+      zoomOut: 'Уменьшить карту',
+      locate: 'Определить местоположение',
+      periodLabel: 'Период',
+      vehicleAllTerrain: 'Вездеходы',
+      vehicleCars: 'Автомобили',
+      cargoType: 'Тип груза',
+      region: 'Регион',
+      fallbackDeliveries: [
+        {
+          id: 'vankor-all-terrain',
+          color: '#bd1395',
+          period: 'Январь 2025 - Март 2025',
+          title: 'Доставка грузов на Ванкор на вездеходах',
+          route: '(п. Ярцево - п. Игарка - п. Байкаловск)',
+          duration: '3 дня',
+        },
+        {
+          id: 'pipeline-service',
+          color: '#0e5ca6',
+          period: 'Январь 2025 - Май 2025',
+          title: 'Обслуживание нефтепровода',
+          route: '(п. Караул - п. Таналау)',
+        },
+      ],
+      metadata: {
+        title: 'География',
+        description: 'География грузоперевозок Runway Trans по районам Крайнего Севера.',
+      },
+    },
   },
   en: {
     guide: {
@@ -392,6 +472,54 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         description: 'Contact Runway Trans: address, phone, email, and callback form.',
       },
     },
+    geography: {
+      title: 'Geography',
+      breadcrumbsAria: 'Breadcrumbs',
+      homeLink: 'Home',
+      intro:
+        'Runway Trans specializes in cargo delivery mainly to the Far North and territories with equivalent operating conditions.',
+      directionsTitle: 'Main Cargo Transportation Directions',
+      directions: {
+        chukotka: 'Chukotka Autonomous Okrug',
+        sakha: 'Sakha Republic (Yakutia)',
+        nenets: 'Nenets Autonomous Okrug',
+        kamchatka: 'Kamchatka Krai',
+        krasnoyarsk: 'Krasnoyarsk Krai',
+        magadan: 'Magadan Oblast',
+        yamal: 'Yamalo-Nenets Autonomous Okrug',
+      },
+      mapAria: 'Transportation map',
+      mapTitle: 'Map of northern cargo transportation directions',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      locate: 'Find location',
+      periodLabel: 'Period',
+      vehicleAllTerrain: 'All-terrain vehicles',
+      vehicleCars: 'Road vehicles',
+      cargoType: 'Cargo type',
+      region: 'Region',
+      fallbackDeliveries: [
+        {
+          id: 'vankor-all-terrain',
+          color: '#bd1395',
+          period: 'January 2025 - March 2025',
+          title: 'Cargo delivery to Vankor by all-terrain vehicles',
+          route: '(Yartsevo - Igarka - Baikalovsk)',
+          duration: '3 days',
+        },
+        {
+          id: 'pipeline-service',
+          color: '#0e5ca6',
+          period: 'January 2025 - May 2025',
+          title: 'Oil pipeline maintenance',
+          route: '(Karaul - Tanalau)',
+        },
+      ],
+      metadata: {
+        title: 'Geography',
+        description: 'Runway Trans cargo transportation geography across northern territories.',
+      },
+    },
   },
   de: {
     guide: {
@@ -529,6 +657,54 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       metadata: {
         title: 'Kontakte',
         description: 'Kontaktieren Sie Runway Trans: Adresse, Telefon, Email und Formular.',
+      },
+    },
+    geography: {
+      title: 'Geografie',
+      breadcrumbsAria: 'Breadcrumbs',
+      homeLink: 'Startseite',
+      intro:
+        'Runway Trans ist auf Frachtlieferungen vor allem in den Hohen Norden und gleichgestellte Gebiete spezialisiert.',
+      directionsTitle: 'Wichtige Richtungen fur Gutertransporte',
+      directions: {
+        chukotka: 'Autonomer Kreis Tschukotka',
+        sakha: 'Republik Sacha (Jakutien)',
+        nenets: 'Autonomer Kreis der Nenzen',
+        kamchatka: 'Region Kamtschatka',
+        krasnoyarsk: 'Region Krasnojarsk',
+        magadan: 'Oblast Magadan',
+        yamal: 'Autonomer Kreis der Jamal-Nenzen',
+      },
+      mapAria: 'Transportkarte',
+      mapTitle: 'Karte der nordlichen Transportrichtungen',
+      zoomIn: 'Karte vergrossern',
+      zoomOut: 'Karte verkleinern',
+      locate: 'Standort bestimmen',
+      periodLabel: 'Zeitraum',
+      vehicleAllTerrain: 'Gelandefahrzeuge',
+      vehicleCars: 'Fahrzeuge',
+      cargoType: 'Frachtart',
+      region: 'Region',
+      fallbackDeliveries: [
+        {
+          id: 'vankor-all-terrain',
+          color: '#bd1395',
+          period: 'Januar 2025 - Marz 2025',
+          title: 'Frachtlieferung nach Wankor mit Gelandefahrzeugen',
+          route: '(Jartsewo - Igarka - Baikalowsk)',
+          duration: '3 Tage',
+        },
+        {
+          id: 'pipeline-service',
+          color: '#0e5ca6',
+          period: 'Januar 2025 - Mai 2025',
+          title: 'Wartung der Olpipeline',
+          route: '(Karaul - Tanalau)',
+        },
+      ],
+      metadata: {
+        title: 'Geografie',
+        description: 'Geografie der Runway Trans Frachttransporte in nordlichen Gebieten.',
       },
     },
   },
@@ -669,6 +845,54 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         description: 'Contactez Runway Trans : adresse, telephone, email et formulaire.',
       },
     },
+    geography: {
+      title: 'Geographie',
+      breadcrumbsAria: 'Fil d Ariane',
+      homeLink: 'Accueil',
+      intro:
+        'Runway Trans est specialisee dans la livraison de fret principalement vers le Grand Nord et les territoires assimiles.',
+      directionsTitle: 'Principales directions de transport de fret',
+      directions: {
+        chukotka: 'District autonome de Tchoukotka',
+        sakha: 'Republique de Sakha (Yakoutie)',
+        nenets: 'District autonome des Nenets',
+        kamchatka: 'Krai du Kamtchatka',
+        krasnoyarsk: 'Krai de Krasnoiarsk',
+        magadan: 'Oblast de Magadan',
+        yamal: 'District autonome de Iamalo-Nenets',
+      },
+      mapAria: 'Carte des transports',
+      mapTitle: 'Carte des directions de transport vers le Nord',
+      zoomIn: 'Agrandir la carte',
+      zoomOut: 'Reduire la carte',
+      locate: 'Determiner la position',
+      periodLabel: 'Periode',
+      vehicleAllTerrain: 'Vehicules tout-terrain',
+      vehicleCars: 'Vehicules routiers',
+      cargoType: 'Type de fret',
+      region: 'Region',
+      fallbackDeliveries: [
+        {
+          id: 'vankor-all-terrain',
+          color: '#bd1395',
+          period: 'Janvier 2025 - Mars 2025',
+          title: 'Livraison de fret vers Vankor en vehicules tout-terrain',
+          route: '(Yartsevo - Igarka - Baikalovsk)',
+          duration: '3 jours',
+        },
+        {
+          id: 'pipeline-service',
+          color: '#0e5ca6',
+          period: 'Janvier 2025 - Mai 2025',
+          title: 'Maintenance de l oleoduc',
+          route: '(Karaul - Tanalau)',
+        },
+      ],
+      metadata: {
+        title: 'Geographie',
+        description: 'Geographie des transports de fret Runway Trans dans les territoires du Nord.',
+      },
+    },
   },
   zh: {
     guide: {
@@ -763,6 +987,53 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       metadata: {
         title: '联系方式',
         description: '联系 Runway Trans：地址、电话、email 和回电表单。',
+      },
+    },
+    geography: {
+      title: '运输区域',
+      breadcrumbsAria: '面包屑导航',
+      homeLink: '首页',
+      intro: 'Runway Trans 主要专注于向极北地区及同等条件地区配送货物。',
+      directionsTitle: '主要货运方向',
+      directions: {
+        chukotka: '楚科奇自治区',
+        sakha: '萨哈共和国（雅库特）',
+        nenets: '涅涅茨自治区',
+        kamchatka: '堪察加边疆区',
+        krasnoyarsk: '克拉斯诺亚尔斯克边疆区',
+        magadan: '马加丹州',
+        yamal: '亚马尔-涅涅茨自治区',
+      },
+      mapAria: '运输地图',
+      mapTitle: '北方货运方向地图',
+      zoomIn: '放大地图',
+      zoomOut: '缩小地图',
+      locate: '定位',
+      periodLabel: '周期',
+      vehicleAllTerrain: '全地形车',
+      vehicleCars: '汽车',
+      cargoType: '货物类型',
+      region: '地区',
+      fallbackDeliveries: [
+        {
+          id: 'vankor-all-terrain',
+          color: '#bd1395',
+          period: '2025年1月 - 2025年3月',
+          title: '使用全地形车向 Vankor 配送货物',
+          route: '（Yartsevo - Igarka - Baikalovsk）',
+          duration: '3天',
+        },
+        {
+          id: 'pipeline-service',
+          color: '#0e5ca6',
+          period: '2025年1月 - 2025年5月',
+          title: '输油管道维护',
+          route: '（Karaul - Tanalau）',
+        },
+      ],
+      metadata: {
+        title: '运输区域',
+        description: 'Runway Trans 在北方地区的货物运输覆盖范围。',
       },
     },
   },

@@ -134,6 +134,7 @@ export interface Config {
     partnersPage: PartnersPage;
     reviewsPage: ReviewsPage;
     servicesPage: ServicesPage;
+    geographyPage: GeographyPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
@@ -143,6 +144,7 @@ export interface Config {
     partnersPage: PartnersPageSelect<false> | PartnersPageSelect<true>;
     reviewsPage: ReviewsPageSelect<false> | ReviewsPageSelect<true>;
     servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
+    geographyPage: GeographyPageSelect<false> | GeographyPageSelect<true>;
   };
   locale: 'ru' | 'en' | 'de' | 'fr' | 'zh';
   widgets: {
@@ -2173,6 +2175,25 @@ export interface ServicesPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "geographyPage".
+ */
+export interface GeographyPage {
+  id: number;
+  deliveries?:
+    | {
+        color: string;
+        period: string;
+        title: string;
+        route: string;
+        duration?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2393,6 +2414,25 @@ export interface ServicesPageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "geographyPage_select".
+ */
+export interface GeographyPageSelect<T extends boolean = true> {
+  deliveries?:
+    | T
+    | {
+        color?: T;
+        period?: T;
+        title?: T;
+        route?: T;
+        duration?: T;
         id?: T;
       };
   updatedAt?: T;
