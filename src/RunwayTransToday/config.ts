@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEditContent, userHasRole } from '@/access/roles'
 import { revalidateRunwayTransToday } from './hooks/revalidateRunwayTransToday'
 
 export const RunwayTransTodayPage: GlobalConfig = {
@@ -10,6 +11,10 @@ export const RunwayTransTodayPage: GlobalConfig = {
   },
   access: {
     read: () => true,
+    update: canEditContent,
+  },
+  admin: {
+    hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
   },
   fields: [
     {

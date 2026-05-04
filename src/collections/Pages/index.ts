@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { canEditContent, canEditContentOrPublished, userHasRole } from '@/access/roles'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
@@ -24,10 +23,10 @@ import {
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    create: canEditContent,
+    delete: canEditContent,
+    read: canEditContentOrPublished,
+    update: canEditContent,
   },
   defaultPopulate: {
     title: true,
@@ -36,6 +35,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
+    hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({

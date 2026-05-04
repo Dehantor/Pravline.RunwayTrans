@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEditContent, userHasRole } from '@/access/roles'
 import { revalidateServicesPage } from './hooks/revalidateServicesPage'
 
 export const ServicesPage: GlobalConfig = {
@@ -10,6 +11,10 @@ export const ServicesPage: GlobalConfig = {
   },
   access: {
     read: () => true,
+    update: canEditContent,
+  },
+  admin: {
+    hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
   },
   fields: [
     {
