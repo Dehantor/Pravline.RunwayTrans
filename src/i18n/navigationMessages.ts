@@ -35,7 +35,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
       { href: '/uslugi', label: 'Услуги' },
       { href: '/geografiya', label: 'География' },
       { href: '/reviews', label: 'Кейсы' },
-      { href: '/partners', label: 'Партнёры' },
+      { href: '/partners', label: 'Партнеры' },
       { href: '/contacts', label: 'Контакты' },
     ],
   },
@@ -49,7 +49,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: 'Runway Trans Today' },
       { href: '/istoriya', label: 'History' },
-      { href: '/rukovodstvo', label: 'Guide' },
+      { href: '/rukovodstvo', label: 'Management' },
       { href: '/vacancies', label: 'Vacancies' },
       { href: '/tehnika', label: 'Equipment' },
     ],
@@ -71,7 +71,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: 'Runway Trans heute' },
       { href: '/istoriya', label: 'Geschichte' },
-      { href: '/rukovodstvo', label: 'Leitfaden' },
+      { href: '/rukovodstvo', label: 'Management' },
       { href: '/vacancies', label: 'Stellenangebote' },
       { href: '/tehnika', label: 'Technik' },
     ],
@@ -93,7 +93,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: "Runway Trans aujourd'hui" },
       { href: '/istoriya', label: 'Histoire' },
-      { href: '/rukovodstvo', label: 'Guide' },
+      { href: '/rukovodstvo', label: 'Direction' },
       { href: '/vacancies', label: 'Postes vacants' },
       { href: '/tehnika', label: 'Materiel' },
     ],
@@ -115,8 +115,8 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: '今日 Runway Trans' },
       { href: '/istoriya', label: '历史' },
-      { href: '/rukovodstvo', label: '指南' },
-      { href: '/vacancies', label: '招聘职位' },
+      { href: '/rukovodstvo', label: '管理层' },
+      { href: '/vacancies', label: '职位空缺' },
       { href: '/tehnika', label: '设备' },
     ],
     topLevelLinks: [
