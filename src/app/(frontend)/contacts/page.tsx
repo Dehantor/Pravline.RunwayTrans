@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { CallbackForm } from '@/components/CallbackForm'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
 
@@ -64,17 +63,12 @@ export default async function ContactsPage() {
             ))}
           </ul>
 
-          <form className="space-y-4 rounded-lg border border-border bg-card p-5" method="post">
-            <h2 className="text-lg font-medium">{t.callbackTitle}</h2>
-            <Input name="phone" placeholder={t.phonePlaceholder} required type="tel" />
-            <label className="flex items-start gap-2 text-sm text-muted-foreground">
-              <input className="mt-1" name="consent" required type="checkbox" />
-              {t.consent}
-            </label>
-            <Button className="w-full" type="submit">
-              {t.submit}
-            </Button>
-          </form>
+          <CallbackForm
+            consent={t.consent}
+            phonePlaceholder={t.phonePlaceholder}
+            submit={t.submit}
+            title={t.callbackTitle}
+          />
         </div>
 
         <div className="space-y-6">
