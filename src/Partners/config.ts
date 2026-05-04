@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEditContent, userHasRole } from '@/access/roles'
 import { revalidatePartners } from './hooks/revalidatePartners'
 
 export const PartnersPage: GlobalConfig = {
@@ -10,6 +11,10 @@ export const PartnersPage: GlobalConfig = {
   },
   access: {
     read: () => true,
+    update: canEditContent,
+  },
+  admin: {
+    hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
   },
   fields: [
     {

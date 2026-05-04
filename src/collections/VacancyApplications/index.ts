@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '@/access/authenticated'
+import { canManageApplications, userHasRole } from '@/access/roles'
 
 export const VacancyApplications: CollectionConfig<'vacancy-applications'> = {
   slug: 'vacancy-applications',
@@ -10,12 +10,13 @@ export const VacancyApplications: CollectionConfig<'vacancy-applications'> = {
   },
   access: {
     create: () => true,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    delete: canManageApplications,
+    read: canManageApplications,
+    update: canManageApplications,
   },
   admin: {
     defaultColumns: ['fullName', 'contact', 'vacancy', 'createdAt'],
+    hidden: ({ user }) => !userHasRole(user, ['admin', 'office-manager']),
     useAsTitle: 'fullName',
   },
   fields: [

@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '@/access/authenticated'
-import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
+import { canEditContent, canEditContentOrPublished, userHasRole } from '@/access/roles'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { slugField } from 'payload'
@@ -13,13 +12,14 @@ export const Services: CollectionConfig<'services'> = {
     plural: 'Услуги',
   },
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    create: canEditContent,
+    delete: canEditContent,
+    read: canEditContentOrPublished,
+    update: canEditContent,
   },
   admin: {
     defaultColumns: ['title', 'serviceType', 'updatedAt'],
+    hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
