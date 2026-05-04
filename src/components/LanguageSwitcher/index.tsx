@@ -37,7 +37,7 @@ export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
       <span className="sr-only">Язык сайта</span>
       <select
         aria-label="Язык сайта"
-        className="rounded-md border border-[#5c8f61] bg-white px-2 py-1 text-sm text-[#2f794e] focus:outline-none"
+        className="h-9 rounded-sm border border-[#2f794e] bg-white px-3 text-sm font-semibold text-[#2f794e] transition-colors hover:bg-[#e8f4e7] focus:outline-none focus:ring-2 focus:ring-[#4c7d4f]"
         onChange={(event) => onChange(event.target.value as AppLocale)}
         value={locale}
       >
