@@ -1,11 +1,7 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import {
-  getLocaleFromAcceptLanguage,
-  isAppLocale,
-  type AppLocale,
-} from './src/i18n/locales'
+import { getLocaleFromAcceptLanguage, isAppLocale, type AppLocale } from './i18n/locales'
 
 const localeCookieName = 'rw_locale'
 
@@ -23,7 +19,7 @@ function isFileRequest(pathname: string): boolean {
   return /\.[^/]+$/.test(pathname)
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (

@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Media } from '@/components/Media'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
+import { getPageText, isDefaultRussianText, pageMessages } from '@/i18n/pageMessages'
 
 type GuideCardData = {
   id?: string | null
@@ -66,21 +67,23 @@ function PersonCard({ person }: { person: ReturnType<typeof normalizePeopleCards
   )
 }
 
-function normalizeCards(cards: GuideCardData[], prefix: string) {
+function normalizeCards(cards: GuideCardData[], prefix: string, fallback: GuideCardData) {
   return cards.map((card, index) => ({
     id: card.id || `${prefix}-${index}`,
-    title: card.title || 'Направление перевозок',
-    description:
-      card.description || 'Подбираем оптимальный маршрут и формат доставки под вашу задачу.',
+    title: card.title || fallback.title || '',
+    description: card.description || fallback.description || '',
   }))
 }
 
-function normalizePeopleCards(cards: PersonCardInput[] | null | undefined) {
+function normalizePeopleCards(
+  cards: PersonCardInput[] | null | undefined,
+  fallback: { fullName: string; position: string },
+) {
   return (cards || [])
     .map((person, index) => ({
       id: person.id || `person-${index}`,
-      fullName: person.fullName || 'Сотрудник компании',
-      position: person.position || 'Специалист',
+      fullName: person.fullName || fallback.fullName,
+      position: person.position || fallback.position,
       photo: typeof person.photo === 'object' && person.photo ? person.photo : null,
     }))
     .filter((person) => Boolean(person.photo))
@@ -97,26 +100,49 @@ function normalizeGallery(images: GalleryImageInput[] | null | undefined) {
 
 export default async function RukovodstvoPage() {
   const locale = await getRequestLocale()
-  const guidePageData = await getCachedGlobal('guidePage', locale, 2)()
+  const t = pageMessages[locale].guide
+  const ru = pageMessages.ru.guide
+  const guidePageData = await getCachedGlobal('guidePage', locale, 2, false)()
 
-  const mainGuideCards = normalizeCards(guidePageData.mainGuideCards || [], 'main')
-  const advantageCards = normalizeCards(guidePageData.advantages || [], 'advantage')
+  const hasDefaultRussianMain =
+    guidePageData.mainGuideCards?.[0]?.title &&
+    isDefaultRussianText(locale, guidePageData.mainGuideCards[0].title, ru.mainGuideCards[0].title)
+  const hasDefaultRussianAdvantages =
+    guidePageData.advantages?.[0]?.title &&
+    isDefaultRussianText(locale, guidePageData.advantages[0].title, ru.advantages[0].title)
+  const mainGuideCards = normalizeCards(
+    hasDefaultRussianMain ? t.mainGuideCards : guidePageData.mainGuideCards || t.mainGuideCards,
+    'main',
+    t.cardFallback,
+  )
+  const advantageCards = normalizeCards(
+    hasDefaultRussianAdvantages ? t.advantages : guidePageData.advantages || t.advantages,
+    'advantage',
+    t.cardFallback,
+  )
   const heroCards = [...mainGuideCards, ...advantageCards].slice(0, 6)
-  const peopleCards = normalizePeopleCards(guidePageData.peopleCards)
+  const peopleCards = normalizePeopleCards(guidePageData.peopleCards, t.personFallback)
   const teamGallery = normalizeGallery(guidePageData.teamGallery)
+  const breadcrumbsTitle = getPageText(
+    locale,
+    guidePageData.breadcrumbsTitle,
+    ru.breadcrumbsTitle,
+    t.breadcrumbsTitle,
+  )
+  const pageTitle = getPageText(locale, guidePageData.pageTitle, ru.title, t.title)
 
   return (
     <section className="bg-white text-black">
       <div className="container py-12 md:py-16 lg:py-20">
-        <nav aria-label="Хлебные крошки" className="mb-12 text-sm text-zinc-400 md:mb-20">
+        <nav aria-label={t.breadcrumbsAria} className="mb-12 text-sm text-zinc-400 md:mb-20">
           <Link className="hover:text-white" href="/">
-            Главная
+            {t.homeLink}
           </Link>{' '}
           <span aria-hidden="true">›</span>{' '}
-          <span className="text-zinc-200">{guidePageData.breadcrumbsTitle || 'Руководство'}</span>
+          <span className="text-zinc-200">{breadcrumbsTitle}</span>
         </nav>
 
-        <h1 className="sr-only">{guidePageData.pageTitle || 'Руководство по грузоперевозкам'}</h1>
+        <h1 className="sr-only">{pageTitle}</h1>
 
         <div className="grid gap-x-8 gap-y-16 pb-24 md:grid-cols-2 md:gap-y-20 lg:grid-cols-3 lg:pb-32">
           {heroCards.map((card) => (
@@ -129,7 +155,7 @@ export default async function RukovodstvoPage() {
         <div className="container space-y-12 md:space-y-16">
           {peopleCards.length > 0 && (
             <div>
-              <h2 className="mb-6 text-2xl font-semibold md:mb-8">Руководство</h2>
+              <h2 className="mb-6 text-2xl font-semibold md:mb-8">{t.peopleTitle}</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {peopleCards.map((person) => (
                   <PersonCard key={person.id} person={person} />
@@ -140,15 +166,18 @@ export default async function RukovodstvoPage() {
 
           {teamGallery.length > 0 && (
             <div>
-              <h2 className="mb-6 text-2xl font-semibold md:mb-8">Фотогалерея</h2>
+              <h2 className="mb-6 text-2xl font-semibold md:mb-8">{t.galleryTitle}</h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {teamGallery.map((item) => (
-                  <article className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-100" key={item.id}>
+                  <article
+                    className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-100"
+                    key={item.id}
+                  >
                     <Media
                       fill
                       imgClassName="object-cover"
                       resource={item.image}
-                      alt="Фотография из галереи"
+                      alt={t.galleryImageAlt}
                       size="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     />
                   </article>
@@ -164,12 +193,17 @@ export default async function RukovodstvoPage() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
-  const guidePageData = await getCachedGlobal('guidePage', locale, 2)()
+  const t = pageMessages[locale].guide
+  const ru = pageMessages.ru.guide
+  const guidePageData = await getCachedGlobal('guidePage', locale, 2, false)()
 
   return {
-    title: guidePageData.meta?.title || 'Руководство',
-    description:
-      guidePageData.meta?.description ||
-      'Руководство по услугам и условиям грузоперевозок RunwayTrans.',
+    title: getPageText(locale, guidePageData.meta?.title, ru.metadata.title, t.metadata.title),
+    description: getPageText(
+      locale,
+      guidePageData.meta?.description,
+      ru.metadata.description || '',
+      t.metadata.description || '',
+    ),
   }
 }

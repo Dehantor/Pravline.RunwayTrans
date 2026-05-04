@@ -20,6 +20,7 @@ export const GuidePage: GlobalConfig = {
           name: 'breadcrumbsTitle',
           label: 'Подпись в хлебных крошках',
           type: 'text',
+          localized: true,
           defaultValue: 'Руководство',
           required: true,
         },
@@ -27,6 +28,7 @@ export const GuidePage: GlobalConfig = {
           name: 'pageTitle',
           label: 'Заголовок страницы (скрыт визуально)',
           type: 'text',
+          localized: true,
           defaultValue: 'Руководство по грузоперевозкам',
           required: true,
         },
@@ -36,6 +38,7 @@ export const GuidePage: GlobalConfig = {
       name: 'mainGuideCards',
       label: 'Карточки главного блока',
       type: 'array',
+      localized: true,
       minRows: 1,
       defaultValue: [
         {
@@ -52,7 +55,8 @@ export const GuidePage: GlobalConfig = {
         },
         {
           title: 'Услуги крана и аварийных комиссаров',
-          description: 'Устраним аварийную остановку на базе болотохода ТГ-30 с оборудованным манипулятором и эвакуатором',
+          description:
+            'Устраним аварийную остановку на базе болотохода ТГ-30 с оборудованным манипулятором и эвакуатором',
         },
       ],
       fields: [
@@ -94,6 +98,7 @@ export const GuidePage: GlobalConfig = {
       name: 'advantages',
       label: 'Карточки преимуществ',
       type: 'array',
+      localized: true,
       minRows: 1,
       defaultValue: [
         {
@@ -130,7 +135,8 @@ export const GuidePage: GlobalConfig = {
         },
         {
           title: 'Работаем в сложных условиях',
-          description: 'Перевозим грузы в труднодоступные районы на месторождения и нефтегазовые объекты',
+          description:
+            'Перевозим грузы в труднодоступные районы на месторождения и нефтегазовые объекты',
         },
         {
           title: 'Работаем в любое время года',
@@ -138,7 +144,8 @@ export const GuidePage: GlobalConfig = {
         },
         {
           title: 'Комплексное решение по одному договору',
-          description: 'Берём на себя маршрут, подготовку расчётов, организацию погрузки и безопасную доставку',
+          description:
+            'Берём на себя маршрут, подготовку расчётов, организацию погрузки и безопасную доставку',
         },
         {
           title: 'Огромный опыт',
@@ -195,12 +202,14 @@ export const GuidePage: GlobalConfig = {
               name: 'fullName',
               label: 'ФИО',
               type: 'text',
+              localized: true,
               required: true,
             },
             {
               name: 'position',
               label: 'Должность',
               type: 'text',
+              localized: true,
               required: true,
             },
           ],
@@ -226,6 +235,7 @@ export const GuidePage: GlobalConfig = {
       type: 'group',
       name: 'meta',
       label: 'SEO',
+      localized: true,
       fields: [
         {
           name: 'title',

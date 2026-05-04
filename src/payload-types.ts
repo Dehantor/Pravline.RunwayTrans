@@ -865,23 +865,6 @@ export interface Vacancy {
 export interface Equipment {
   id: number;
   title: string;
-  category?: string | null;
-  summary: string;
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
   specifications?:
     | {
         title: string;
@@ -1453,9 +1436,6 @@ export interface VacanciesSelect<T extends boolean = true> {
  */
 export interface EquipmentSelect<T extends boolean = true> {
   title?: T;
-  category?: T;
-  summary?: T;
-  description?: T;
   specifications?:
     | T
     | {
@@ -2087,6 +2067,7 @@ export interface PartnersPage {
     | {
         logo: number | Media;
         name: string;
+        description?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -2310,6 +2291,7 @@ export interface PartnersPageSelect<T extends boolean = true> {
     | {
         logo?: T;
         name?: T;
+        description?: T;
         id?: T;
       };
   videoButtonLabel?: T;

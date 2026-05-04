@@ -20,6 +20,7 @@ export const RunwayTransTodayPage: GlobalConfig = {
           name: 'breadcrumbsTitle',
           label: 'Подпись в хлебных крошках',
           type: 'text',
+          localized: true,
           defaultValue: 'Ранвей Транс сегодня',
           required: true,
         },
@@ -27,6 +28,7 @@ export const RunwayTransTodayPage: GlobalConfig = {
           name: 'pageTitle',
           label: 'Заголовок страницы',
           type: 'text',
+          localized: true,
           defaultValue: 'Ранвей Транс сегодня',
           required: true,
         },
@@ -56,6 +58,7 @@ export const RunwayTransTodayPage: GlobalConfig = {
           name: 'videoTitle',
           label: 'Название видео (для доступности)',
           type: 'text',
+          localized: true,
           defaultValue: 'Презентация компании Ранвей Транс',
           required: true,
         },
@@ -65,6 +68,7 @@ export const RunwayTransTodayPage: GlobalConfig = {
       name: 'faqItems',
       label: 'Вопросы и ответы',
       type: 'array',
+      localized: true,
       minRows: 1,
       defaultValue: [
         {
@@ -102,6 +106,7 @@ export const RunwayTransTodayPage: GlobalConfig = {
       type: 'group',
       name: 'meta',
       label: 'SEO',
+      localized: true,
       fields: [
         {
           name: 'title',

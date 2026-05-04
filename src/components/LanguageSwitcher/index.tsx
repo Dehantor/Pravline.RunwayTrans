@@ -1,7 +1,7 @@
 'use client'
 
 import { locales, type AppLocale } from '@/i18n/locales'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 const localeLabels: Record<AppLocale, string> = {
   ru: 'Русский',
@@ -20,14 +20,16 @@ function buildPathWithLocale(pathname: string, locale: AppLocale): string {
 }
 
 export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   const onChange = (nextLocale: AppLocale) => {
     const pathWithLocale = buildPathWithLocale(pathname, nextLocale)
     const query = searchParams.toString()
-    router.push(query ? `${pathWithLocale}?${query}` : pathWithLocale)
+    const nextPath = query ? `${pathWithLocale}?${query}` : pathWithLocale
+
+    document.cookie = `rw_locale=${nextLocale}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
+    window.location.assign(nextPath)
   }
 
   return (

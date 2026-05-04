@@ -9,7 +9,6 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 import { Mail, Phone, Send, MessageCircle, Play, Video } from 'lucide-react'
 
-import Logo from '@/assets/logo.png'
 import { HeaderNav } from './Nav'
 
 const quickLinks = [
@@ -47,9 +46,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
     >
       <div className="container py-4">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-          <Link href="/" className="inline-flex">
-            <img src={Logo} alt="" />
-          </Link>
+          {/* <Link href="/" className="inline-flex">
+            <img src={logoImage.src} alt="" />
+          </Link> */}
 
           <Link href="/" className="text-2xl leading-none font-black tracking-wide text-[#1a1a1a]">
             RUNWAY TRANS

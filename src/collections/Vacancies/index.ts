@@ -8,6 +8,10 @@ import { slugField } from 'payload'
 
 export const Vacancies: CollectionConfig<'vacancies'> = {
   slug: 'vacancies',
+  labels: {
+    singular: 'Вакансия',
+    plural: 'Вакансии',
+  },
   access: {
     create: authenticated,
     delete: authenticated,

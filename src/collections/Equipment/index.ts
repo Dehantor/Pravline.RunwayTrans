@@ -8,6 +8,10 @@ import { slugField } from 'payload'
 
 export const Equipment: CollectionConfig<'equipment'> = {
   slug: 'equipment',
+  labels: {
+    singular: 'Единица техники',
+    plural: 'Техника',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -15,7 +19,7 @@ export const Equipment: CollectionConfig<'equipment'> = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['title', 'category', 'updatedAt'],
+    defaultColumns: ['title', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -37,23 +41,6 @@ export const Equipment: CollectionConfig<'equipment'> = {
       name: 'title',
       localized: true,
       type: 'text',
-      required: true,
-    },
-    {
-      name: 'category',
-      localized: true,
-      type: 'text',
-    },
-    {
-      name: 'summary',
-      localized: true,
-      type: 'textarea',
-      required: true,
-    },
-    {
-      name: 'description',
-      localized: true,
-      type: 'richText',
       required: true,
     },
     {
