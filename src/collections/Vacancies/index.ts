@@ -8,6 +8,10 @@ import { slugField } from 'payload'
 
 export const Vacancies: CollectionConfig<'vacancies'> = {
   slug: 'vacancies',
+  labels: {
+    singular: 'Вакансия',
+    plural: 'Вакансии',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -35,11 +39,13 @@ export const Vacancies: CollectionConfig<'vacancies'> = {
   fields: [
     {
       name: 'title',
+      localized: true,
       type: 'text',
       required: true,
     },
     {
       name: 'location',
+      localized: true,
       type: 'text',
       required: true,
     },
@@ -57,15 +63,18 @@ export const Vacancies: CollectionConfig<'vacancies'> = {
     },
     {
       name: 'salary',
+      localized: true,
       type: 'text',
     },
     {
       name: 'summary',
+      localized: true,
       type: 'textarea',
       required: true,
     },
     {
       name: 'description',
+      localized: true,
       type: 'richText',
       required: true,
     },

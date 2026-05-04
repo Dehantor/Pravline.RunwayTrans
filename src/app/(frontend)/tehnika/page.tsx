@@ -2,15 +2,28 @@ import type { Metadata } from 'next'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
+import { pageMessages } from '@/i18n/pageMessages'
 
-export const dynamic = 'force-static'
-export const revalidate = 600
+export const dynamic = 'force-dynamic'
+
+function getImageUrl(image: unknown) {
+  if (image && typeof image === 'object' && 'url' in image && typeof image.url === 'string') {
+    return image.url
+  }
+
+  return null
+}
 
 export default async function TehnikaPage() {
+  const locale = await getRequestLocale()
+  const t = pageMessages[locale].equipment
   const payload = await getPayload({ config: configPromise })
 
   const equipmentItems = await payload.find({
     collection: 'equipment',
+    locale,
+    fallbackLocale: 'ru',
     depth: 1,
     limit: 100,
     overrideAccess: false,
@@ -22,44 +35,55 @@ export default async function TehnikaPage() {
     },
   })
 
+  const introText =
+    locale === 'ru'
+      ? 'Наша компания уникальна тем, что мы имеем все возможности для работы в условиях тундры по грузоперевозкам.'
+      : t.metadata.description
+
   return (
-    <section className="container py-16">
-      <h1 className="mb-8 text-4xl font-semibold">Техника</h1>
+    <section className="container bg-white py-7 text-black">
+      <h1 className="sr-only">{t.title}</h1>
+      <p className="mb-4 text-[15px] leading-6 text-neutral-900">{introText}</p>
 
       {equipmentItems.docs.length === 0 ? (
-        <p className="text-muted-foreground">Пока нет опубликованной техники.</p>
+        <p className="text-muted-foreground">{t.empty}</p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {equipmentItems.docs.map((item) => {
-            const image = typeof item.image === 'object' ? item.image : null
+            const imageUrl = getImageUrl(item.image)
 
             return (
               <article
-                className="overflow-hidden rounded-sm border border-[#2b7f56] bg-black text-white"
+                className="flex min-h-[590px] flex-col border border-[#2b7f56] bg-white p-3 text-black"
                 key={item.id}
               >
-                {image?.url ? (
-                  <img alt={item.title} className="h-56 w-full object-cover" loading="lazy" src={image.url} />
+                {imageUrl ? (
+                  <img
+                    alt={item.title}
+                    className="mb-5 aspect-[1.12] w-full object-cover"
+                    loading="lazy"
+                    src={imageUrl}
+                  />
                 ) : (
-                  <div className="flex h-56 w-full items-center justify-center bg-zinc-900 text-zinc-400">
-                    Нет изображения
+                  <div className="mb-5 flex aspect-[1.12] w-full items-center justify-center bg-neutral-100 text-sm text-neutral-500">
+                    {t.noImage}
                   </div>
                 )}
 
-                <div className="min-h-48 p-5">
-                  <h2 className="mb-3 text-xl font-medium">{item.title}</h2>
-                  <p className="mb-4 text-sm text-zinc-300">{item.summary}</p>
+                <div className="flex flex-1 flex-col">
+                  <h2 className="mb-6 text-[13px] font-bold leading-5">{item.title}</h2>
 
                   {item.specifications && item.specifications.length > 0 ? (
-                    <dl className="space-y-3 border-t border-zinc-800 pt-4">
+                    <dl className="space-y-2">
                       {item.specifications.map((spec, index) => (
-                        <div key={spec.id ?? `${spec.title}-${index}`}>
-                          <dt className="text-sm font-medium text-[#7de7af]">{spec.title}</dt>
-                          <dd className="text-sm text-zinc-300">{spec.description}</dd>
+                        <div className="text-[11px] leading-[1.45]" key={spec.id ?? `${spec.title}-${index}`}>
+                          <dt className="inline font-bold">{spec.title}: </dt>
+                          <dd className="inline">{spec.description}</dd>
                         </div>
                       ))}
                     </dl>
                   ) : null}
+
                 </div>
               </article>
             )
@@ -70,9 +94,12 @@ export default async function TehnikaPage() {
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale()
+  const t = pageMessages[locale].equipment
+
   return {
-    title: 'Техника',
-    description: 'Каталог техники компании RunwayTrans для перевозок в сложных условиях.',
+    title: t.metadata.title,
+    description: t.metadata.description,
   }
 }

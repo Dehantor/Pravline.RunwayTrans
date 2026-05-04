@@ -1,5 +1,7 @@
 'use client'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { type AppLocale } from '@/i18n/locales'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -7,7 +9,6 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 import { Mail, Phone, Send, MessageCircle, Play, Video } from 'lucide-react'
 
-import Logo from '@/assets/logo.png'
 import { HeaderNav } from './Nav'
 
 const quickLinks = [
@@ -19,9 +20,10 @@ const quickLinks = [
 
 interface HeaderClientProps {
   data: Header
+  locale: AppLocale
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
@@ -44,9 +46,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     >
       <div className="container py-4">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-          <Link href="/" className="inline-flex">
-            <img src={Logo} alt="" />
-          </Link>
+          {/* <Link href="/" className="inline-flex">
+            <img src={logoImage.src} alt="" />
+          </Link> */}
 
           <Link href="/" className="text-2xl leading-none font-black tracking-wide text-[#1a1a1a]">
             RUNWAY TRANS
@@ -60,50 +62,51 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
               <i>Вездеходные и автомобильные</i>
             </span>
           </div>
-                <div className="flex flex-wrap items-center gap-4 lg:justify-end">
-        <div className="flex items-center gap-2">
-          {quickLinks.map(({ href, label, icon: Icon, bgClass }) => (
+          <div className="flex flex-wrap items-center gap-4 lg:justify-end">
+            <LanguageSwitcher locale={locale} />
+            <div className="flex items-center gap-2">
+              {quickLinks.map(({ href, label, icon: Icon, bgClass }) => (
+                <Link
+                  key={label}
+                  aria-label={label}
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform hover:scale-105 ${bgClass}`}
+                  href={href}
+                >
+                  <Icon className="h-4 w-4" />
+                </Link>
+              ))}
+            </div>
+
             <Link
-              key={label}
-              aria-label={label}
-              className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform hover:scale-105 ${bgClass}`}
-              href={href}
+              className="rounded-sm border border-[#2f794e] bg-[#4c7d4f] px-6 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#5b915f]"
+              href="/contacts#callback-form"
             >
-              <Icon className="h-4 w-4" />
+              Заказать звонок
             </Link>
-          ))}
-        </div>
 
-        <Link
-          className="rounded-sm border border-[#2f794e] bg-[#4c7d4f] px-6 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#5b915f]"
-          href="/contacts#callback-form"
-        >
-          Заказать звонок
-        </Link>
+            <div className="flex items-center gap-2 text-[#89d57d]">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
+                <Mail className="h-4 w-4" />
+              </span>
+              <Link className="text-sm hover:text-white" href="mailto:info@runwaytrans.ru">
+                info@runwaytrans.ru
+              </Link>
+            </div>
 
-        <div className="flex items-center gap-2 text-[#89d57d]">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
-            <Mail className="h-4 w-4" />
-          </span>
-          <Link className="text-sm hover:text-white" href="mailto:info@runwaytrans.ru">
-            info@runwaytrans.ru
-          </Link>
-        </div>
-
-        <div className="flex items-center gap-2 text-[#89d57d]">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
-            <Phone className="h-4 w-4" />
-          </span>
-          <div className="flex flex-col leading-tight">
-            <Link className="text-sm hover:text-white" href="tel:+79991234567">
-              +7 (999) 123-45-67
-            </Link>
-            <Link className="text-sm hover:text-white" href="tel:+78001234567">
-              +7 (800) 123-45-67
-            </Link>
+            <div className="flex items-center gap-2 text-[#89d57d]">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
+                <Phone className="h-4 w-4" />
+              </span>
+              <div className="flex flex-col leading-tight">
+                <Link className="text-sm hover:text-white" href="tel:+79991234567">
+                  +7 (999) 123-45-67
+                </Link>
+                <Link className="text-sm hover:text-white" href="tel:+78001234567">
+                  +7 (800) 123-45-67
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
           <HeaderNav />
         </div>

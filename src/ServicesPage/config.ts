@@ -16,6 +16,7 @@ export const ServicesPage: GlobalConfig = {
       name: 'transportedSectionTitle',
       label: 'Заголовок блока "Что мы перевозим"',
       type: 'text',
+      localized: true,
       defaultValue: 'Что мы перевозим',
       required: true,
     },
@@ -23,6 +24,7 @@ export const ServicesPage: GlobalConfig = {
       name: 'transportedItems',
       label: 'Карточки блока "Что мы перевозим"',
       type: 'array',
+      localized: true,
       minRows: 1,
       defaultValue: [
         {
@@ -57,6 +59,7 @@ export const ServicesPage: GlobalConfig = {
       name: 'advantagesSectionTitle',
       label: 'Заголовок блока "Наши преимущества"',
       type: 'text',
+      localized: true,
       defaultValue: 'Наши преимущества',
       required: true,
     },
@@ -64,6 +67,7 @@ export const ServicesPage: GlobalConfig = {
       name: 'advantagesItems',
       label: 'Карточки блока "Наши преимущества"',
       type: 'array',
+      localized: true,
       minRows: 1,
       defaultValue: [
         {

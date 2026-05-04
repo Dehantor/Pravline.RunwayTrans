@@ -4,6 +4,10 @@ import { authenticated } from '@/access/authenticated'
 
 export const VacancyApplications: CollectionConfig<'vacancy-applications'> = {
   slug: 'vacancy-applications',
+  labels: {
+    singular: 'Отклик на вакансию',
+    plural: 'Отклики на вакансии',
+  },
   access: {
     create: () => true,
     delete: authenticated,

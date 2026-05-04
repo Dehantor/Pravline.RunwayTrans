@@ -20,6 +20,7 @@ export const PartnersPage: GlobalConfig = {
           name: 'breadcrumbsTitle',
           label: 'Подпись в хлебных крошках',
           type: 'text',
+          localized: true,
           defaultValue: 'Партнеры',
           required: true,
         },
@@ -27,6 +28,7 @@ export const PartnersPage: GlobalConfig = {
           name: 'pageTitle',
           label: 'Заголовок страницы',
           type: 'text',
+          localized: true,
           defaultValue: 'Партнеры',
           required: true,
         },
@@ -34,6 +36,7 @@ export const PartnersPage: GlobalConfig = {
           name: 'pageDescription',
           label: 'Описание страницы',
           type: 'textarea',
+          localized: true,
           defaultValue:
             'Компании, с которыми мы сотрудничаем в международной логистике и комплексных поставках.',
           required: true,
@@ -60,6 +63,12 @@ export const PartnersPage: GlobalConfig = {
           type: 'text',
           required: true,
         },
+        {
+          name: 'description',
+          label: 'Описание',
+          type: 'textarea',
+          localized: true,
+        },
       ],
     },
     {
@@ -70,6 +79,7 @@ export const PartnersPage: GlobalConfig = {
           name: 'videoButtonLabel',
           label: 'Текст кнопки',
           type: 'text',
+          localized: true,
           defaultValue: 'Смотреть видео отзывы',
           required: true,
         },
@@ -86,6 +96,7 @@ export const PartnersPage: GlobalConfig = {
       type: 'group',
       name: 'meta',
       label: 'SEO',
+      localized: true,
       fields: [
         {
           name: 'title',

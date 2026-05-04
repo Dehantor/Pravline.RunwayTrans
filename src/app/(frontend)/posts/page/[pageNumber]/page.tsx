@@ -8,6 +8,8 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
+import { defaultLocale } from '@/i18n/locales'
 
 export const revalidate = 600
 
@@ -18,6 +20,7 @@ type Args = {
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
+  const locale = await getRequestLocale()
   const { pageNumber } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
@@ -27,6 +30,8 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const posts = await payload.find({
     collection: 'posts',
+    locale,
+    fallbackLocale: 'ru',
     depth: 1,
     limit: 12,
     page: sanitizedPageNumber,
@@ -74,6 +79,11 @@ export async function generateStaticParams() {
   const { totalDocs } = await payload.count({
     collection: 'posts',
     overrideAccess: false,
+    where: {
+      _status: {
+        equals: 'published',
+      },
+    },
   })
 
   const totalPages = Math.ceil(totalDocs / 10)

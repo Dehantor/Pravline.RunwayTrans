@@ -3,15 +3,21 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
+import { pageMessages } from '@/i18n/pageMessages'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function VacanciesPage() {
+  const locale = await getRequestLocale()
+  const t = pageMessages[locale].vacancies
   const payload = await getPayload({ config: configPromise })
 
   const vacancies = await payload.find({
     collection: 'vacancies',
+    locale,
+    fallbackLocale: 'ru',
     depth: 0,
     limit: 100,
     overrideAccess: false,
@@ -25,13 +31,16 @@ export default async function VacanciesPage() {
 
   return (
     <section className="container py-24">
-      <h1 className="text-4xl font-semibold mb-8">Вакансии</h1>
+      <h1 className="text-4xl font-semibold mb-8">{t.title}</h1>
 
       <div className="grid gap-4">
         {vacancies.docs.map((vacancy) => (
           <article className="rounded-lg border border-border p-6" key={vacancy.id}>
             <h2 className="text-2xl font-medium mb-2">
-              <Link className="underline-offset-4 hover:underline" href={`/vacancies/${vacancy.slug}`}>
+              <Link
+                className="underline-offset-4 hover:underline"
+                href={`/vacancies/${vacancy.slug}`}
+              >
                 {vacancy.title}
               </Link>
             </h2>
@@ -42,8 +51,11 @@ export default async function VacanciesPage() {
 
             <p className="mb-4">{vacancy.summary}</p>
 
-            <Link className="font-medium underline underline-offset-4" href={`/vacancies/${vacancy.slug}`}>
-              Подробнее и отклик →
+            <Link
+              className="font-medium underline underline-offset-4"
+              href={`/vacancies/${vacancy.slug}`}
+            >
+              {t.detailsLink}
             </Link>
           </article>
         ))}
@@ -52,8 +64,11 @@ export default async function VacanciesPage() {
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale()
+  const t = pageMessages[locale].vacancies
+
   return {
-    title: 'Вакансии',
+    title: t.metadata.title,
   }
 }

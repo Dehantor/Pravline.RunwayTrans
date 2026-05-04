@@ -20,6 +20,7 @@ export const ReviewsPage: GlobalConfig = {
           name: 'breadcrumbsTitle',
           label: 'Подпись в хлебных крошках',
           type: 'text',
+          localized: true,
           defaultValue: 'Отзывы',
           required: true,
         },
@@ -27,6 +28,7 @@ export const ReviewsPage: GlobalConfig = {
           name: 'pageTitle',
           label: 'Заголовок страницы',
           type: 'text',
+          localized: true,
           defaultValue: 'Видео-отзывы наших партнёров',
           required: true,
         },
@@ -34,6 +36,7 @@ export const ReviewsPage: GlobalConfig = {
           name: 'pageDescription',
           label: 'Описание страницы',
           type: 'textarea',
+          localized: true,
           defaultValue:
             'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.',
           required: true,
@@ -48,6 +51,7 @@ export const ReviewsPage: GlobalConfig = {
           name: 'expertName',
           label: 'Имя эксперта',
           type: 'text',
+          localized: true,
           defaultValue: 'Виктория Кондакова',
           required: true,
         },
@@ -55,6 +59,7 @@ export const ReviewsPage: GlobalConfig = {
           name: 'expertRole',
           label: 'Должность эксперта',
           type: 'text',
+          localized: true,
           defaultValue: 'Эксперт по эксплуатации отелей в РФ',
           required: true,
         },
@@ -62,6 +67,7 @@ export const ReviewsPage: GlobalConfig = {
           name: 'expertReviewLabels',
           label: 'Список отзывов эксперта',
           type: 'array',
+          localized: true,
           minRows: 1,
           fields: [
             {
@@ -137,6 +143,7 @@ export const ReviewsPage: GlobalConfig = {
       type: 'group',
       name: 'meta',
       label: 'SEO',
+      localized: true,
       fields: [
         {
           name: 'title',

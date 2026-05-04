@@ -4,6 +4,10 @@ import { authenticated } from '@/access/authenticated'
 
 export const ServiceOrders: CollectionConfig<'service-orders'> = {
   slug: 'service-orders',
+  labels: {
+    singular: 'Заявка на услугу',
+    plural: 'Заявки на услуги',
+  },
   access: {
     create: () => true,
     delete: authenticated,

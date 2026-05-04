@@ -6,6 +6,8 @@ import type { Media as MediaType } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 import PageClient from './page.client'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
+import { getPageText, pageMessages } from '@/i18n/pageMessages'
 
 type ReviewLabel = {
   id?: string | null
@@ -45,21 +47,39 @@ function normalizeTextReviews(textReviews: TextReview[] | null | undefined) {
       key: review.id || `text-${index}`,
       year: review.year || 2023,
       documentImage:
-        review.documentImage && typeof review.documentImage === 'object' ? review.documentImage : null,
+        review.documentImage && typeof review.documentImage === 'object'
+          ? review.documentImage
+          : null,
     }))
     .filter((review) => Boolean(review.documentImage))
 }
 
 export default async function ReviewsPage() {
-  const reviewsPageData = await getCachedGlobal('reviewsPage', 1)()
+  const locale = await getRequestLocale()
+  const t = pageMessages[locale].cases
+  const ru = pageMessages.ru.cases
+  const reviewsPageData = await getCachedGlobal('reviewsPage', locale, 1, false)()
 
-  const breadcrumbsTitle = reviewsPageData.breadcrumbsTitle || 'Отзывы'
-  const pageTitle = reviewsPageData.pageTitle || 'Видео-отзывы наших партнёров'
-  const pageDescription =
-    reviewsPageData.pageDescription ||
-    'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.'
-  const expertName = reviewsPageData.expertName || 'Виктория Кондакова'
-  const expertRole = reviewsPageData.expertRole || 'Эксперт по эксплуатации отелей в РФ'
+  const breadcrumbsTitle = getPageText(
+    locale,
+    reviewsPageData.breadcrumbsTitle,
+    'Отзывы',
+    t.breadcrumbsTitle,
+  )
+  const pageTitle = getPageText(
+    locale,
+    reviewsPageData.pageTitle,
+    'Видео-отзывы наших партнёров',
+    t.title,
+  )
+  const pageDescription = getPageText(
+    locale,
+    reviewsPageData.pageDescription,
+    'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.',
+    t.description,
+  )
+  const expertName = getPageText(locale, reviewsPageData.expertName, ru.expertName, t.expertName)
+  const expertRole = getPageText(locale, reviewsPageData.expertRole, ru.expertRole, t.expertRole)
   const expertReviewLabels = (reviewsPageData.expertReviewLabels || []) as ReviewLabel[]
   const videoReviews = normalizeVideoReviews(reviewsPageData.videoReviews)
   const textReviews = normalizeTextReviews(reviewsPageData.textReviews)
@@ -71,8 +91,12 @@ export default async function ReviewsPage() {
       <section className="bg-[#ececec] text-black">
         <div className="container grid gap-10 py-14 md:grid-cols-2 md:items-center md:py-20">
           <div>
-            <p className="mb-6 text-sm text-black/60">Главная / {breadcrumbsTitle}</p>
-            <h1 className="text-4xl font-semibold uppercase leading-tight md:text-6xl">{pageTitle}</h1>
+            <p className="mb-6 text-sm text-black/60">
+              {t.homeLink} / {breadcrumbsTitle}
+            </p>
+            <h1 className="text-4xl font-semibold uppercase leading-tight md:text-6xl">
+              {pageTitle}
+            </h1>
             <p className="mt-8 max-w-xl text-base text-black/60 md:text-lg">{pageDescription}</p>
           </div>
 
@@ -88,7 +112,7 @@ export default async function ReviewsPage() {
                     key={item.id || `review-label-${index}`}
                     className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm"
                   >
-                    Отзыв: {item.label}
+                    {t.reviewPrefix} {item.label}
                   </div>
                 ))}
               </div>
@@ -106,7 +130,7 @@ export default async function ReviewsPage() {
                 href={review.videoUrl}
                 rel="noreferrer"
                 target="_blank"
-                aria-label="Открыть видео-отзыв"
+                aria-label={t.openVideoAria}
               >
                 {review.previewImage ? (
                   <Media
@@ -121,7 +145,9 @@ export default async function ReviewsPage() {
                   </span>
                 )}
               </a>
-              <p className="text-right text-2xl font-black tracking-wide text-white/85">{review.year}</p>
+              <p className="text-right text-2xl font-black tracking-wide text-white/85">
+                {review.year}
+              </p>
             </article>
           ))}
         </div>
@@ -143,7 +169,9 @@ export default async function ReviewsPage() {
                   ) : null}
                 </div>
               </div>
-              <p className="text-right text-2xl font-black tracking-wide text-white/85">{review.year}</p>
+              <p className="text-right text-2xl font-black tracking-wide text-white/85">
+                {review.year}
+              </p>
             </article>
           ))}
         </div>
@@ -153,10 +181,22 @@ export default async function ReviewsPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const reviewsPageData = await getCachedGlobal('reviewsPage', 1)()
+  const locale = await getRequestLocale()
+  const t = pageMessages[locale].cases
+  const reviewsPageData = await getCachedGlobal('reviewsPage', locale, 1, false)()
 
   return {
-    title: reviewsPageData.meta?.title || 'Отзывы | RunwayTrans',
-    description: reviewsPageData.meta?.description || 'Видео-отзывы и письма благодарности от клиентов RunwayTrans.',
+    title: getPageText(
+      locale,
+      reviewsPageData.meta?.title,
+      'Отзывы | RunwayTrans',
+      t.metadata.title,
+    ),
+    description: getPageText(
+      locale,
+      reviewsPageData.meta?.description,
+      'Видео-отзывы и письма благодарности от клиентов RunwayTrans.',
+      t.metadata.description || '',
+    ),
   }
 }
