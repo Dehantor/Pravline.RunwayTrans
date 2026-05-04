@@ -72,6 +72,7 @@ export interface Config {
     vacancies: Vacancy;
     equipment: Equipment;
     services: Service;
+    'callback-requests': CallbackRequest;
     'service-orders': ServiceOrder;
     'vacancy-applications': VacancyApplication;
     media: Media;
@@ -99,6 +100,7 @@ export interface Config {
     vacancies: VacanciesSelect<false> | VacanciesSelect<true>;
     equipment: EquipmentSelect<false> | EquipmentSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    'callback-requests': CallbackRequestsSelect<false> | CallbackRequestsSelect<true>;
     'service-orders': ServiceOrdersSelect<false> | ServiceOrdersSelect<true>;
     'vacancy-applications': VacancyApplicationsSelect<false> | VacancyApplicationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -921,6 +923,16 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "callback-requests".
+ */
+export interface CallbackRequest {
+  id: number;
+  phone: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "service-orders".
  */
 export interface ServiceOrder {
@@ -1156,6 +1168,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'services';
         value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'callback-requests';
+        value: number | CallbackRequest;
       } | null)
     | ({
         relationTo: 'service-orders';
@@ -1468,6 +1484,15 @@ export interface ServicesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "callback-requests_select".
+ */
+export interface CallbackRequestsSelect<T extends boolean = true> {
+  phone?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

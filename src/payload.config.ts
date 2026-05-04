@@ -5,6 +5,7 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { CallbackRequests } from './collections/CallbackRequests'
 import { Equipment } from './collections/Equipment'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -81,6 +82,7 @@ export default buildConfig({
     Vacancies,
     Equipment,
     Services,
+    CallbackRequests,
     ServiceOrders,
     VacancyApplications,
     Media,
