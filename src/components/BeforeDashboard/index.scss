@@ -3,6 +3,40 @@
 .dashboard .before-dashboard {
   margin-bottom: base(1.5);
 
+  &__jivo {
+    align-items: center;
+    background: var(--theme-elevation-50);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--style-radius-m);
+    display: flex;
+    gap: base(0.75);
+    justify-content: space-between;
+    margin-bottom: base(1);
+    padding: base(0.75);
+
+    & h4 {
+      margin: 0 0 base(0.15);
+    }
+
+    & p {
+      color: var(--theme-elevation-600);
+      margin: 0;
+    }
+  }
+
+  &__jivo-link {
+    align-items: center;
+    background: var(--theme-success-500);
+    border-radius: var(--style-radius-s);
+    color: var(--theme-success-50);
+    display: inline-flex;
+    flex-shrink: 0;
+    font-weight: 600;
+    min-height: base(1.5);
+    padding: 0 base(0.6);
+    text-decoration: none;
+  }
+
   &__banner {
     & h4 {
       margin: 0;
@@ -20,5 +54,12 @@
 
   & a:hover {
     opacity: 0.85;
+  }
+
+  @include mid-break {
+    &__jivo {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 }

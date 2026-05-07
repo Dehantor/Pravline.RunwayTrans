@@ -9,6 +9,20 @@ const baseClass = 'before-dashboard'
 const BeforeDashboard: React.FC = () => {
   return (
     <div className={baseClass}>
+      <div className={`${baseClass}__jivo`}>
+        <div>
+          <h4>Jivo live chat</h4>
+          <p>Open the operator workspace to reply to site visitors.</p>
+        </div>
+        <a
+          className={`${baseClass}__jivo-link`}
+          href="https://app.jivo.ru"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Open Jivo
+        </a>
+      </div>
       <Banner className={`${baseClass}__banner`} type="success">
         <h4>Welcome to your dashboard!</h4>
       </Banner>
