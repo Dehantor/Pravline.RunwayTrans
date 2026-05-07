@@ -3,7 +3,8 @@ import type { Metadata } from 'next'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 import { pageMessages } from '@/i18n/pageMessages'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import { ChevronDown, ChevronRight, LocateFixed, Minus, Plus } from 'lucide-react'
+import { GeographyMap } from '@/components/GeographyMap'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 const directions = [
@@ -15,6 +16,23 @@ const directions = [
   ['Coat of Arms of Magadan oblast.svg', 'magadan'],
   ['Coat of Arms of Yamal Nenetsia.svg', 'yamal'],
 ] as const
+
+type RoutePoint = {
+  latitude?: number | null
+  longitude?: number | null
+}
+
+type DeliveryRouteSource = {
+  routePoints?: RoutePoint[] | null
+}
+
+function hasRoutePoints(item: unknown): item is DeliveryRouteSource {
+  return typeof item === 'object' && item !== null && 'routePoints' in item
+}
+
+function getDeliveryRoutePoints(item: unknown) {
+  return hasRoutePoints(item) ? item.routePoints : undefined
+}
 
 function getCommonsFileUrl(fileName: string) {
   return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`
@@ -37,6 +55,11 @@ export default async function GeographyPage() {
     geographyPageData.deliveries && geographyPageData.deliveries.length > 0
       ? geographyPageData.deliveries
       : t.fallbackDeliveries
+  const mapRoutes = deliveries.map((item) => ({
+    color: item.color,
+    title: item.title,
+    routePoints: getDeliveryRoutePoints(item),
+  }))
 
   return (
     <main className="bg-white pb-20 pt-9 text-neutral-950">
@@ -83,36 +106,7 @@ export default async function GeographyPage() {
 
         <section className="space-y-6" aria-label={t.mapAria}>
           <div className="relative h-[440px] overflow-hidden border border-neutral-300 bg-[#f6fbff] md:h-[700px]">
-            <iframe
-              className="absolute inset-0 h-full w-full"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=78.70%2C66.20%2C97.80%2C70.30&layer=mapnik"
-              title={t.mapTitle}
-            />
-
-            <div className="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col gap-3">
-              <div className="overflow-hidden rounded-xl bg-white shadow-md">
-                <button
-                  aria-label={t.zoomIn}
-                  className="flex size-11 items-center justify-center border-b border-neutral-200"
-                >
-                  <Plus className="size-5" />
-                </button>
-                <button aria-label={t.zoomOut} className="flex size-11 items-center justify-center">
-                  <Minus className="size-5" />
-                </button>
-              </div>
-              <button
-                aria-label={t.locate}
-                className="flex size-11 items-center justify-center rounded-full bg-white shadow-md"
-              >
-                <LocateFixed className="size-5 fill-neutral-700 text-neutral-700" />
-              </button>
-              <div className="flex size-14 items-center justify-center rounded-full border border-neutral-200 bg-white text-sm font-medium text-neutral-300 shadow-md">
-                3D
-              </div>
-            </div>
+            <GeographyMap routes={mapRoutes} />
           </div>
 
           <div className="flex flex-wrap items-center gap-6 text-xl">

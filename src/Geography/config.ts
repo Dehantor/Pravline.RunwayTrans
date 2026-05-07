@@ -72,6 +72,33 @@ export const GeographyPage: GlobalConfig = {
           type: 'text',
           localized: true,
         },
+        {
+          name: 'routePoints',
+          label: 'Координаты маршрута',
+          type: 'array',
+          admin: {
+            description:
+              'Добавьте минимум две точки. Маршрут на карте строится последовательно по этим координатам.',
+          },
+          fields: [
+            {
+              name: 'latitude',
+              label: 'Широта',
+              type: 'number',
+              min: -90,
+              max: 90,
+              required: true,
+            },
+            {
+              name: 'longitude',
+              label: 'Долгота',
+              type: 'number',
+              min: -180,
+              max: 180,
+              required: true,
+            },
+          ],
+        },
       ],
     },
   ],

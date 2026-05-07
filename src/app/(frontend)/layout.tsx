@@ -14,6 +14,7 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
+import 'leaflet/dist/leaflet.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 
@@ -22,7 +23,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getRequestLocale()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang={locale} suppressHydrationWarning>
+    <html
+      className={cn(GeistSans.variable, GeistMono.variable)}
+      lang={locale}
+      suppressHydrationWarning
+    >
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
