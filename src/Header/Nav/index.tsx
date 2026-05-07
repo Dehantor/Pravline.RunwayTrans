@@ -21,7 +21,7 @@ export const HeaderNav: React.FC<{ locale: AppLocale }> = ({ locale }) => {
       <nav aria-label={t.mainNavAria} className="w-full rounded-sm border bg-white px-3 py-2">
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-[#89d57d]">
           <li className="group relative">
-            <Link className="transition-colors hover:text-white" href="/ranvey-trans-segodnya">
+            <Link className="transition-colors hover:text-[#1d2a1e]" href="/ranvey-trans-segodnya">
               {t.companyLabel}
             </Link>
             <Dropdown items={companyDropdownLinks} />
@@ -30,7 +30,7 @@ export const HeaderNav: React.FC<{ locale: AppLocale }> = ({ locale }) => {
           {t.topLevelLinks.map((item) => (
             <li className="group relative" key={item.href}>
               <Link
-                className={`transition-colors hover:text-white ${
+                className={`transition-colors hover:text-[#1d2a1e] ${
                   pathname === item.href ? 'font-bold text-neutral-950' : ''
                 }`}
                 href={item.href}

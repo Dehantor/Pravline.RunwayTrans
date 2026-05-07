@@ -20,7 +20,7 @@ export const Dropdown = ({ items }: DropdownProps) => {
 
             return (
               <li
-                className="rounded-sm px-3 py-2 text-sm transition-colors hover:bg-[#1d2a1e]"
+                className="rounded-sm px-3 py-2 text-sm transition-colors hover:text-[#1d2a1e]"
                 key={index}
               >
                 <CMSLink {...link} />
