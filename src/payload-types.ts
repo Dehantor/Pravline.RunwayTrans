@@ -2186,6 +2186,16 @@ export interface GeographyPage {
         title: string;
         route: string;
         duration?: string | null;
+        /**
+         * Добавьте минимум две точки. Маршрут на карте строится последовательно по этим координатам.
+         */
+        routePoints?:
+          | {
+              latitude: number;
+              longitude: number;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -2433,6 +2443,13 @@ export interface GeographyPageSelect<T extends boolean = true> {
         title?: T;
         route?: T;
         duration?: T;
+        routePoints?:
+          | T
+          | {
+              latitude?: T;
+              longitude?: T;
+              id?: T;
+            };
         id?: T;
       };
   updatedAt?: T;
