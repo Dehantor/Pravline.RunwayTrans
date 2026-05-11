@@ -1,3 +1,17 @@
+docker run -d --name runway-trans-prod `
+  -p 3005:3000 `
+  --env-file .env `
+  -e "DATABASE_URL=postgres://admin:***@host.docker.internal:5432/runway_trans_restored" `
+  -e "NEXT_PUBLIC_SERVER_URL=http://localhost:3005" `
+  -e "PAYLOAD_DB_PUSH=false" `
+  -e "NEXT_TELEMETRY_DISABLED=1" `
+  -v "${PWD}:/app" `
+  -v "runway-trans-node_modules-npm:/app/node_modules" `
+  -w /app `
+  node:22.17.0-alpine `
+  sh -lc "npm run start -- --hostname 0.0.0.0"
+
+
 # Payload Website Template
 
 This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.

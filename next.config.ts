@@ -5,11 +5,27 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
-import { redirects } from './redirects'
 
 const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
+
+const redirects: NextConfig['redirects'] = async () => {
+  const internetExplorerRedirect = {
+    destination: '/ie-incompatible.html',
+    has: [
+      {
+        type: 'header' as const,
+        key: 'user-agent',
+        value: '(.*Trident.*)', // all ie browsers
+      },
+    ],
+    permanent: false,
+    source: '/:path((?!ie-incompatible.html$).*)', // all pages except the incompatibility page
+  }
+
+  return [internetExplorerRedirect]
+}
 
 const nextConfig: NextConfig = {
   images: {
