@@ -53,10 +53,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 }
 
 export const metadata: Metadata = {
+  title: 'Runway Trans',
+  description: 'Грузоперевозки в труднодоступные районы Севера.',
   metadataBase: new URL(getServerSideURL()),
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
   },
 }
