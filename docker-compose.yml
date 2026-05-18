@@ -1,31 +1,47 @@
-version: '3'
-
 services:
   payload:
-    image: node:18-alpine
+    image: node:22.17.0-alpine
+    container_name: runway-trans-dev
     ports:
-      - '3000:3000'
+      - '3005:3000'
     volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "yarn install && yarn dev"
+      - .:/app
+      - node_modules:/app/node_modules
+    working_dir: /app
+    command: >
+      sh -lc "corepack enable &&
+      corepack prepare pnpm@10 --activate &&
+      pnpm install --frozen-lockfile &&
+      pnpm dev --hostname 0.0.0.0"
     depends_on:
-      - mongo
+      postgres:
+        condition: service_healthy
     env_file:
       - .env
+    environment:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+      DATABASE_URL: postgres://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-runway_trans_restored}
+      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-http://localhost:3005}
+      PAYLOAD_DB_PUSH: ${PAYLOAD_DB_PUSH:-true}
+      NEXT_TELEMETRY_DISABLED: '1'
 
-  mongo:
-    image: mongo:latest
+  postgres:
+    image: postgres:16-alpine
+    container_name: runway-trans-postgres
     ports:
-      - '27017:27017'
-    command:
-      - --storageEngine=wiredTiger
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-runway_trans_restored}
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
-  data:
+  postgres_data:
   node_modules:
