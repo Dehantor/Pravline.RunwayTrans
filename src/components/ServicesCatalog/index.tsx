@@ -1,61 +1,57 @@
-'use client'
-
-import { useState } from 'react'
-
-import { ServiceOrderForm } from '@/components/ServiceOrderForm'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 type ServiceCard = {
   id: number | string
+  imageAlt: string
   imageUrl: string | null
   summary: string
   title: string
 }
 
 type ServicesCatalogProps = {
+  buttonHref: string
+  buttonLabel: string
   services: ServiceCard[]
 }
 
-export function ServicesCatalog({ services }: ServicesCatalogProps) {
-  const [selectedService, setSelectedService] = useState<ServiceCard | null>(null)
-
+export function ServicesCatalog({ buttonHref, buttonLabel, services }: ServicesCatalogProps) {
   return (
     <>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-x-12 gap-y-14 md:grid-cols-2 xl:grid-cols-3">
         {services.map((service) => (
-          <article className="overflow-hidden rounded-sm border border-[#2b7f56] bg-white text-black" key={service.id}>
-            {service.imageUrl ? (
-              <img alt={service.title} className="h-56 w-full object-cover" loading="lazy" src={service.imageUrl} />
-            ) : (
-              <div className="flex h-56 w-full items-center justify-center bg-zinc-100 text-zinc-500">Нет изображения</div>
-            )}
-
-            <div className="min-h-48 bg-white p-5">
-              <h2 className="mb-3 text-xl font-medium">{service.title}</h2>
-              <p className="mb-4 text-sm text-zinc-700">{service.summary}</p>
-
-              <Button onClick={() => setSelectedService(service)} type="button" variant="outline">
-                Заказать услугу
-              </Button>
+          <article className="mx-auto w-full max-w-[390px] text-center" key={service.id}>
+            <div className="mx-auto size-28 overflow-hidden rounded-full border border-black/30 bg-background-muted sm:size-32">
+              {service.imageUrl ? (
+                <img
+                  alt={service.imageAlt}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  src={service.imageUrl}
+                />
+              ) : null}
             </div>
+
+            <h3 className="mt-7 text-xl leading-tight font-semibold text-brand-green">
+              {service.title}
+            </h3>
+            <p className="mx-auto mt-5 max-w-[360px] text-lg leading-snug text-brand-green">
+              {service.summary}
+            </p>
           </article>
         ))}
       </div>
 
-      {selectedService ? (
-        <div aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" role="dialog">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-lg bg-white p-6 text-black">
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <h3 className="text-2xl font-semibold">Заказать: {selectedService.title}</h3>
-              <Button onClick={() => setSelectedService(null)} size="sm" type="button" variant="ghost">
-                Закрыть
-              </Button>
-            </div>
-
-            <ServiceOrderForm serviceId={selectedService.id} />
-          </div>
-        </div>
-      ) : null}
+      <div className="mt-12 text-center">
+        <Link
+          className="inline-flex min-h-12 items-center gap-4 rounded-md bg-brand-green px-8 py-3 text-lg font-semibold text-on-dark transition-colors hover:bg-brand-green-hover"
+          href={buttonHref}
+        >
+          {buttonLabel}
+          <span aria-hidden className="text-3xl leading-none">
+            ›
+          </span>
+        </Link>
+      </div>
     </>
   )
 }

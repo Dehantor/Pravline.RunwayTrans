@@ -42,7 +42,7 @@ function SelectButton({ children }: { children: React.ReactNode }) {
   return (
     <button className="inline-flex h-12 min-w-36 items-center justify-between gap-5 rounded-md border border-neutral-300 bg-white px-5 text-base text-neutral-950 shadow-sm">
       <span>{children}</span>
-      <ChevronDown className="size-5 text-[#4d8351]" />
+      <ChevronDown className="size-5 text-brand-green" />
     </button>
   )
 }
@@ -105,7 +105,7 @@ export default async function GeographyPage() {
         </section>
 
         <section className="space-y-6" aria-label={t.mapAria}>
-          <div className="relative h-[440px] overflow-hidden border border-neutral-300 bg-[#f6fbff] md:h-[700px]">
+          <div className="relative h-[440px] overflow-hidden border border-background-muted bg-background-light md:h-[700px]">
             <GeographyMap routes={mapRoutes} />
           </div>
 
@@ -117,14 +117,14 @@ export default async function GeographyPage() {
               <label className="inline-flex items-center gap-2">
                 <span className="size-7 rounded-full border border-neutral-400 bg-neutral-200" />
                 <span>{t.vehicleAllTerrain}</span>
-                <span className="relative h-5 w-9 rounded-full bg-[#88bd3b]">
+                <span className="relative h-5 w-9 rounded-full bg-brand-green">
                   <span className="absolute right-0.5 top-0.5 size-4 rounded-full bg-white shadow" />
                 </span>
               </label>
               <label className="inline-flex items-center gap-2">
                 <span className="size-7 rounded-full border border-neutral-400 bg-neutral-200" />
                 <span>{t.vehicleCars}</span>
-                <span className="relative h-5 w-9 rounded-full bg-[#88bd3b]">
+                <span className="relative h-5 w-9 rounded-full bg-brand-green">
                   <span className="absolute right-0.5 top-0.5 size-4 rounded-full bg-white shadow" />
                 </span>
               </label>

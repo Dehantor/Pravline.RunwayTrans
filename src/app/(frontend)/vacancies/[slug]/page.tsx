@@ -29,9 +29,6 @@ export default async function VacancyPage({ params: paramsPromise }: Args) {
   return (
     <section className="container py-24">
       <h1 className="text-4xl font-semibold mb-3">{vacancy.title}</h1>
-      <p className="text-muted-foreground mb-2">
-        {vacancy.location} • {vacancy.employmentType}
-      </p>
       {vacancy.salary && <p className="mb-8 font-medium">{vacancy.salary}</p>}
 
       <div className="prose dark:prose-invert max-w-none mb-12">
@@ -54,7 +51,6 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
   return {
     title: vacancy?.title ? `${vacancy.title} — Вакансии` : 'Вакансия',
-    description: vacancy?.summary ?? undefined,
   }
 }
 

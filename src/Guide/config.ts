@@ -37,6 +37,22 @@ export const GuidePage: GlobalConfig = {
           defaultValue: 'Руководство по грузоперевозкам',
           required: true,
         },
+        {
+          name: 'companyBreadcrumbLabel',
+          label: 'Раздел в хлебных крошках',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Компания',
+          required: true,
+        },
+        {
+          name: 'introText',
+          label: 'Вводный текст',
+          type: 'textarea',
+          localized: true,
+          defaultValue: 'Наша великолепная команда к Вашим услугам.',
+          required: true,
+        },
       ],
     },
     {
@@ -45,6 +61,9 @@ export const GuidePage: GlobalConfig = {
       type: 'array',
       localized: true,
       minRows: 1,
+      admin: {
+        hidden: true,
+      },
       defaultValue: [
         {
           title: 'Грузоперевозки на Витязях',
@@ -82,6 +101,9 @@ export const GuidePage: GlobalConfig = {
     {
       type: 'collapsible',
       label: 'Кнопка CTA',
+      admin: {
+        hidden: true,
+      },
       fields: [
         {
           name: 'ctaLabel',
@@ -105,6 +127,9 @@ export const GuidePage: GlobalConfig = {
       type: 'array',
       localized: true,
       minRows: 1,
+      admin: {
+        hidden: true,
+      },
       defaultValue: [
         {
           title: 'Крупногабаритные и тяжеловесные грузы',
@@ -177,24 +202,18 @@ export const GuidePage: GlobalConfig = {
       label: 'Команда и фотогалерея',
       fields: [
         {
+          name: 'peopleTitle',
+          label: 'Заголовок блока сотрудников',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Руководство',
+          required: true,
+        },
+        {
           name: 'peopleCards',
           label: 'Карточки людей',
           type: 'array',
           minRows: 1,
-          defaultValue: [
-            {
-              fullName: 'Иванов Иван Иванович',
-              position: 'Руководитель отдела',
-            },
-            {
-              fullName: 'Петров Пётр Петрович',
-              position: 'Менеджер проектов',
-            },
-            {
-              fullName: 'Сидорова Анна Сергеевна',
-              position: 'Координатор перевозок',
-            },
-          ],
           fields: [
             {
               name: 'photo',
@@ -218,6 +237,14 @@ export const GuidePage: GlobalConfig = {
               required: true,
             },
           ],
+        },
+        {
+          name: 'galleryTitle',
+          label: 'Заголовок галереи',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Фотогалерея',
+          required: true,
         },
         {
           name: 'teamGallery',

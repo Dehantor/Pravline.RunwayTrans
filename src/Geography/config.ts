@@ -24,14 +24,14 @@ export const GeographyPage: GlobalConfig = {
       minRows: 1,
       defaultValue: [
         {
-          color: '#bd1395',
+          color: 'var(--question)',
           period: 'Январь 2025 - Март 2025',
           title: 'Доставка грузов на Ванкор на вездеходах',
           route: '(п. Ярцево - п. Игарка - п. Байкаловск)',
           duration: '3 дня',
         },
         {
-          color: '#0e5ca6',
+          color: 'var(--brand-blue)',
           period: 'Январь 2025 - Май 2025',
           title: 'Обслуживание нефтепровода',
           route: '(п. Караул - п. Таналау)',
@@ -42,7 +42,7 @@ export const GeographyPage: GlobalConfig = {
           name: 'color',
           label: 'Цвет маркера',
           type: 'text',
-          defaultValue: '#0e5ca6',
+          defaultValue: 'var(--brand-blue)',
           required: true,
         },
         {

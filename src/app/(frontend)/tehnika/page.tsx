@@ -54,7 +54,7 @@ export default async function TehnikaPage() {
 
             return (
               <article
-                className="flex min-h-[590px] flex-col border border-[#2b7f56] bg-white p-3 text-black"
+                className="flex min-h-[590px] flex-col border border-brand-green bg-background-light p-3 text-ink"
                 key={item.id}
               >
                 {imageUrl ? (
@@ -76,14 +76,16 @@ export default async function TehnikaPage() {
                   {item.specifications && item.specifications.length > 0 ? (
                     <dl className="space-y-2">
                       {item.specifications.map((spec, index) => (
-                        <div className="text-[11px] leading-[1.45]" key={spec.id ?? `${spec.title}-${index}`}>
+                        <div
+                          className="text-[11px] leading-[1.45]"
+                          key={spec.id ?? `${spec.title}-${index}`}
+                        >
                           <dt className="inline font-bold">{spec.title}: </dt>
                           <dd className="inline">{spec.description}</dd>
                         </div>
                       ))}
                     </dl>
                   ) : null}
-
                 </div>
               </article>
             )

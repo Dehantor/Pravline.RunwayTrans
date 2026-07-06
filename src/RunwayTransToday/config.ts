@@ -37,6 +37,22 @@ export const RunwayTransTodayPage: GlobalConfig = {
           defaultValue: 'Ранвей Транс сегодня',
           required: true,
         },
+        {
+          name: 'companyBreadcrumbLabel',
+          label: 'Раздел в хлебных крошках',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Компания',
+          required: true,
+        },
+        {
+          name: 'videoSectionTitle',
+          label: 'Заголовок над видео',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Посмотрите о нас в 2 минутах',
+          required: true,
+        },
       ],
     },
     {
@@ -56,6 +72,17 @@ export const RunwayTransTodayPage: GlobalConfig = {
           filterOptions: {
             mimeType: {
               contains: 'video/',
+            },
+          },
+        },
+        {
+          name: 'videoPoster',
+          label: 'Обложка видео',
+          type: 'upload',
+          relationTo: 'media',
+          filterOptions: {
+            mimeType: {
+              contains: 'image/',
             },
           },
         },

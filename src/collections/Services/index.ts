@@ -4,6 +4,7 @@ import { canEditContent, canEditContentOrPublished, userHasRole } from '@/access
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { slugField } from 'payload'
+import { revalidateService, revalidateServiceDelete } from './hooks/revalidateService'
 
 export const Services: CollectionConfig<'services'> = {
   slug: 'services',
@@ -18,7 +19,7 @@ export const Services: CollectionConfig<'services'> = {
     update: canEditContent,
   },
   admin: {
-    defaultColumns: ['title', 'serviceType', 'updatedAt'],
+    defaultColumns: ['title', 'serviceType', 'sortOrder', 'updatedAt'],
     hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
     livePreview: {
       url: ({ data, req }) =>
@@ -49,6 +50,17 @@ export const Services: CollectionConfig<'services'> = {
       type: 'text',
     },
     {
+      name: 'sortOrder',
+      label: 'Порядок на странице услуг',
+      type: 'number',
+      defaultValue: 0,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        step: 1,
+      },
+    },
+    {
       name: 'summary',
       localized: true,
       type: 'textarea',
@@ -76,6 +88,8 @@ export const Services: CollectionConfig<'services'> = {
     slugField(),
   ],
   hooks: {
+    afterChange: [revalidateService],
+    afterDelete: [revalidateServiceDelete],
     beforeChange: [populatePublishedAt],
   },
   versions: {

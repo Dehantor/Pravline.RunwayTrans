@@ -10,7 +10,7 @@ type DropdownProps = {
 
 export const Dropdown = ({ items }: DropdownProps) => {
   return (
-    <div className="invisible absolute left-0 top-full z-30 mt-3 w-56 rounded-sm border border-[#2f794e] bg-white p-3 text-[#89d57d] opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100 data-[open=true]:visible data-[open=true]:opacity-100">
+    <div className="invisible absolute top-full left-0 z-30 mt-2 w-60 rounded-md border border-background-muted bg-background-light p-2 text-ink opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100 data-[open=true]:visible data-[open=true]:opacity-100">
       {items.length > 0 ? (
         <ul className="space-y-1">
           {items.map((link, index) => {
@@ -20,7 +20,7 @@ export const Dropdown = ({ items }: DropdownProps) => {
 
             return (
               <li
-                className="rounded-sm px-3 py-2 text-sm transition-colors hover:text-[#1d2a1e]"
+                className="rounded-sm px-3 py-2 text-sm transition-colors hover:bg-background-muted hover:text-brand-green"
                 key={index}
               >
                 <CMSLink {...link} />
@@ -29,7 +29,7 @@ export const Dropdown = ({ items }: DropdownProps) => {
           })}
         </ul>
       ) : (
-        <p className="px-3 py-2 text-sm text-[#6aa262]">Нет страниц</p>
+        <p className="px-3 py-2 text-sm text-brand-green">Нет страниц</p>
       )}
     </div>
   )

@@ -1,14 +1,16 @@
 'use client'
 
 import { locales, type AppLocale } from '@/i18n/locales'
+import Image from 'next/image'
 import { usePathname, useSearchParams } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 
-const localeLabels: Record<AppLocale, string> = {
-  ru: 'Русский',
-  en: 'English',
-  de: 'Deutsch',
-  fr: 'Français',
-  zh: '中文',
+const localeOptions: Record<AppLocale, { flag: string; label: string; shortLabel: string }> = {
+  ru: { flag: '/media/flags/ru.svg', label: 'Русский', shortLabel: 'Рус' },
+  en: { flag: '/media/social/mail.svg', label: 'English', shortLabel: 'Eng' },
+  fr: { flag: '/media/flags/fr.svg', label: 'Français', shortLabel: 'Fra' },
+  kk: { flag: '/media/flags/us.svg', label: 'Қазақша', shortLabel: 'Қаз' },
+  zh: { flag: '/media/flags/kz.svg', label: '中文', shortLabel: '中文' },
 }
 
 function buildPathWithLocale(pathname: string, locale: AppLocale): string {
@@ -22,6 +24,18 @@ function buildPathWithLocale(pathname: string, locale: AppLocale): string {
 export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [isOpen, setIsOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const current = localeOptions[locale]
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false)
+    }
+
+    document.addEventListener('mousedown', closeOnOutsideClick)
+    return () => document.removeEventListener('mousedown', closeOnOutsideClick)
+  }, [])
 
   const onChange = (nextLocale: AppLocale) => {
     const pathWithLocale = buildPathWithLocale(pathname, nextLocale)
@@ -33,20 +47,46 @@ export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
   }
 
   return (
-    <label className="inline-flex items-center gap-2 text-sm text-[#2f794e]">
-      <span className="sr-only">Язык сайта</span>
-      <select
+    <div className="relative shrink-0" ref={rootRef}>
+      <button
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
         aria-label="Язык сайта"
-        className="h-9 rounded-sm border border-[#2f794e] bg-white px-3 text-sm font-semibold text-[#2f794e] transition-colors hover:bg-[#e8f4e7] focus:outline-none focus:ring-2 focus:ring-[#4c7d4f]"
-        onChange={(event) => onChange(event.target.value as AppLocale)}
-        value={locale}
+        className="flex min-w-[49px] items-center gap-1 text-left text-[12px] leading-tight"
+        onClick={() => setIsOpen((value) => !value)}
+        type="button"
       >
-        {locales.map((item) => (
-          <option key={item} value={item}>
-            {localeLabels[item]}
-          </option>
-        ))}
-      </select>
-    </label>
+        <span className="flex flex-col items-center">
+          <Image alt="" aria-hidden height={27} src={current.flag} width={27} />
+          <span>{current.shortLabel}</span>
+        </span>
+        <Image alt="" aria-hidden height={7} src="/media/flags/ch.svg" width={12} />
+      </button>
+
+      {isOpen && (
+        <ul
+          aria-label="Выберите язык"
+          className="absolute top-full right-0 z-50 mt-2 w-40 overflow-hidden rounded-md border border-background-muted bg-background-light py-1 shadow-xl"
+          role="listbox"
+        >
+          {locales.map((item) => {
+            const option = localeOptions[item]
+
+            return (
+              <li aria-selected={item === locale} key={item} role="option">
+                <button
+                  className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-background-muted"
+                  onClick={() => onChange(item)}
+                  type="button"
+                >
+                  <Image alt="" aria-hidden height={24} src={option.flag} width={24} />
+                  <span>{option.label}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
   )
 }

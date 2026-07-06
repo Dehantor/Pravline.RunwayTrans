@@ -271,7 +271,7 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
         'Professional heavy and oversized cargo transportation, logistics, and support services in northern regions.',
     },
   },
-  de: {
+  kk: {
     hero: {
       eyebrow: 'Gutertransporte',
       title: 'In schwer erreichbare Regionen des Nordens',
@@ -672,7 +672,7 @@ export const historyMessages: Record<AppLocale, HistoryMessages> = {
       description: 'Key milestones in the development of RunwayTrans from 2008 to the present day.',
     },
   },
-  de: {
+  kk: {
     breadcrumbsAria: 'Breadcrumbs',
     homeLink: 'Startseite',
     pageTitle: 'Geschichte',
@@ -900,7 +900,7 @@ export const runwayTransTodayMessages: Record<AppLocale, RunwayTransTodayMessage
       description: 'A page about Runway Trans today: company video, key questions, and answers.',
     },
   },
-  de: {
+  kk: {
     breadcrumbsAria: 'Breadcrumbs',
     homeLink: 'Startseite',
     pageTitle: 'Runway Trans heute',
@@ -992,3 +992,8 @@ export const runwayTransTodayMessages: Record<AppLocale, RunwayTransTodayMessage
     },
   },
 }
+
+// Until full Kazakh page copy is ready, use the Russian copy instead of exposing legacy German text.
+homeMessages.kk = homeMessages.ru
+historyMessages.kk = historyMessages.ru
+runwayTransTodayMessages.kk = runwayTransTodayMessages.ru

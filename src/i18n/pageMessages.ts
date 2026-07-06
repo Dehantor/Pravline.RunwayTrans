@@ -306,7 +306,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       fallbackDeliveries: [
         {
           id: 'vankor-all-terrain',
-          color: '#bd1395',
+          color: 'var(--map-route-primary)',
           period: 'Январь 2025 - Март 2025',
           title: 'Доставка грузов на Ванкор на вездеходах',
           route: '(п. Ярцево - п. Игарка - п. Байкаловск)',
@@ -314,7 +314,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         },
         {
           id: 'pipeline-service',
-          color: '#0e5ca6',
+          color: 'var(--map-route-secondary)',
           period: 'Январь 2025 - Май 2025',
           title: 'Обслуживание нефтепровода',
           route: '(п. Караул - п. Таналау)',
@@ -501,7 +501,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       fallbackDeliveries: [
         {
           id: 'vankor-all-terrain',
-          color: '#bd1395',
+          color: 'var(--map-route-primary)',
           period: 'January 2025 - March 2025',
           title: 'Cargo delivery to Vankor by all-terrain vehicles',
           route: '(Yartsevo - Igarka - Baikalovsk)',
@@ -509,7 +509,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         },
         {
           id: 'pipeline-service',
-          color: '#0e5ca6',
+          color: 'var(--map-route-secondary)',
           period: 'January 2025 - May 2025',
           title: 'Oil pipeline maintenance',
           route: '(Karaul - Tanalau)',
@@ -521,7 +521,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       },
     },
   },
-  de: {
+  kk: {
     guide: {
       title: 'Leitfaden fur Gutertransporte',
       breadcrumbsAria: 'Breadcrumbs',
@@ -688,7 +688,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       fallbackDeliveries: [
         {
           id: 'vankor-all-terrain',
-          color: '#bd1395',
+          color: 'var(--map-route-primary)',
           period: 'Januar 2025 - Marz 2025',
           title: 'Frachtlieferung nach Wankor mit Gelandefahrzeugen',
           route: '(Jartsewo - Igarka - Baikalowsk)',
@@ -696,7 +696,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         },
         {
           id: 'pipeline-service',
-          color: '#0e5ca6',
+          color: 'var(--map-route-secondary)',
           period: 'Januar 2025 - Mai 2025',
           title: 'Wartung der Olpipeline',
           route: '(Karaul - Tanalau)',
@@ -874,7 +874,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       fallbackDeliveries: [
         {
           id: 'vankor-all-terrain',
-          color: '#bd1395',
+          color: 'var(--map-route-primary)',
           period: 'Janvier 2025 - Mars 2025',
           title: 'Livraison de fret vers Vankor en vehicules tout-terrain',
           route: '(Yartsevo - Igarka - Baikalovsk)',
@@ -882,7 +882,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         },
         {
           id: 'pipeline-service',
-          color: '#0e5ca6',
+          color: 'var(--map-route-secondary)',
           period: 'Janvier 2025 - Mai 2025',
           title: 'Maintenance de l oleoduc',
           route: '(Karaul - Tanalau)',
@@ -1017,7 +1017,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       fallbackDeliveries: [
         {
           id: 'vankor-all-terrain',
-          color: '#bd1395',
+          color: 'var(--map-route-primary)',
           period: '2025年1月 - 2025年3月',
           title: '使用全地形车向 Vankor 配送货物',
           route: '（Yartsevo - Igarka - Baikalovsk）',
@@ -1025,7 +1025,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         },
         {
           id: 'pipeline-service',
-          color: '#0e5ca6',
+          color: 'var(--map-route-secondary)',
           period: '2025年1月 - 2025年5月',
           title: '输油管道维护',
           route: '（Karaul - Tanalau）',
@@ -1038,6 +1038,9 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
     },
   },
 }
+
+// Until full Kazakh page copy is ready, use the Russian copy instead of exposing legacy German text.
+pageMessages.kk = pageMessages.ru
 
 export function getPageText(
   locale: AppLocale,

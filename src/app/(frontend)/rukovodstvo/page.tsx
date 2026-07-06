@@ -1,19 +1,13 @@
 import type { Metadata } from 'next'
 
-import type { Media as MediaType } from '@/payload-types'
-
-import Link from 'next/link'
-
 import { Media } from '@/components/Media'
-import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
-import { getPageText, isDefaultRussianText, pageMessages } from '@/i18n/pageMessages'
-
-type GuideCardData = {
-  id?: string | null
-  title?: string | null
-  description?: string | null
-}
+import type { AppLocale } from '@/i18n/locales'
+import { getPageText, pageMessages } from '@/i18n/pageMessages'
+import type { Media as MediaType } from '@/payload-types'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
 type PersonCardInput = {
   id?: string | null
@@ -27,75 +21,65 @@ type GalleryImageInput = {
   image?: string | number | MediaType | null
 }
 
-function CircleIcon() {
-  return (
-    <span
-      aria-hidden="true"
-      className="mx-auto block size-36 rounded-full bg-zinc-300 md:size-44"
-    />
-  )
+const companyLabels: Record<AppLocale, string> = {
+  ru: 'Компания',
+  en: 'Company',
+  fr: 'Entreprise',
+  kk: 'Компания',
+  zh: '公司',
 }
 
-function GuideCard({ title, description }: { title: string; description: string }) {
-  return (
-    <article className="mx-auto max-w-sm text-center text-[#69ad75]">
-      <CircleIcon />
-      <h2 className="mt-6 text-xl font-semibold leading-tight">{title}</h2>
-      <p className="mt-3 text-base leading-relaxed text-[#74bf81]">{description}</p>
-    </article>
-  )
+const introMessages: Record<AppLocale, string> = {
+  ru: 'Наша великолепная команда к Вашим услугам.',
+  en: 'Our outstanding team is at your service.',
+  fr: 'Notre formidable équipe est à votre service.',
+  kk: 'Біздің тамаша командамыз сіздің қызметіңізде.',
+  zh: '我们优秀的团队随时为您服务。',
 }
 
-function PersonCard({ person }: { person: ReturnType<typeof normalizePeopleCards>[number] }) {
-  return (
-    <article className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-      <div className="relative aspect-[3/4] bg-zinc-100">
-        <Media
-          fill
-          imgClassName="object-cover"
-          resource={person.photo}
-          alt={person.fullName}
-          size="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-        />
-      </div>
-
-      <div className="space-y-2 px-5 py-4">
-        <h3 className="text-lg font-semibold text-zinc-900">{person.fullName}</h3>
-        <p className="text-sm text-zinc-600">{person.position}</p>
-      </div>
-    </article>
-  )
-}
-
-function normalizeCards(cards: GuideCardData[], prefix: string, fallback: GuideCardData) {
-  return cards.map((card, index) => ({
-    id: card.id || `${prefix}-${index}`,
-    title: card.title || fallback.title || '',
-    description: card.description || fallback.description || '',
+function normalizePeople(cards: PersonCardInput[] | null | undefined) {
+  return (cards ?? []).map((person, index) => ({
+    id: person.id || `person-${index}`,
+    fullName: person.fullName || '',
+    position: person.position || '',
+    photo: typeof person.photo === 'object' && person.photo ? person.photo : null,
   }))
 }
 
-function normalizePeopleCards(
-  cards: PersonCardInput[] | null | undefined,
-  fallback: { fullName: string; position: string },
-) {
-  return (cards || [])
-    .map((person, index) => ({
-      id: person.id || `person-${index}`,
-      fullName: person.fullName || fallback.fullName,
-      position: person.position || fallback.position,
-      photo: typeof person.photo === 'object' && person.photo ? person.photo : null,
-    }))
-    .filter((person) => Boolean(person.photo))
+function normalizeGallery(images: GalleryImageInput[] | null | undefined) {
+  return (images ?? []).flatMap((item, index) => {
+    const image = typeof item.image === 'object' && item.image ? item.image : null
+
+    return image
+      ? [
+          {
+            id: item.id || `gallery-${index}`,
+            image,
+          },
+        ]
+      : []
+  })
 }
 
-function normalizeGallery(images: GalleryImageInput[] | null | undefined) {
-  return (images || [])
-    .map((item, index) => ({
-      id: item.id || `gallery-${index}`,
-      image: typeof item.image === 'object' && item.image ? item.image : null,
-    }))
-    .filter((item) => Boolean(item.image))
+function PersonCard({ person }: { person: ReturnType<typeof normalizePeople>[number] }) {
+  return (
+    <article className="text-center">
+      <div className="relative mx-auto size-56 overflow-hidden rounded-full border border-black/30 bg-background-muted sm:size-64">
+        {person.photo ? (
+          <Media
+            fill
+            alt={person.fullName}
+            imgClassName="object-cover"
+            resource={person.photo}
+            size="(max-width: 640px) 224px, 256px"
+          />
+        ) : null}
+      </div>
+
+      <h2 className="mt-7 text-xl leading-tight font-semibold">{person.fullName}</h2>
+      <p className="mt-4 text-lg leading-tight">{person.position}</p>
+    </article>
+  )
 }
 
 export default async function RukovodstvoPage() {
@@ -103,26 +87,9 @@ export default async function RukovodstvoPage() {
   const t = pageMessages[locale].guide
   const ru = pageMessages.ru.guide
   const guidePageData = await getCachedGlobal('guidePage', locale, 2, false)()
+  const people = normalizePeople(guidePageData.peopleCards)
+  const gallery = normalizeGallery(guidePageData.teamGallery)
 
-  const hasDefaultRussianMain =
-    guidePageData.mainGuideCards?.[0]?.title &&
-    isDefaultRussianText(locale, guidePageData.mainGuideCards[0].title, ru.mainGuideCards[0].title)
-  const hasDefaultRussianAdvantages =
-    guidePageData.advantages?.[0]?.title &&
-    isDefaultRussianText(locale, guidePageData.advantages[0].title, ru.advantages[0].title)
-  const mainGuideCards = normalizeCards(
-    hasDefaultRussianMain ? t.mainGuideCards : guidePageData.mainGuideCards || t.mainGuideCards,
-    'main',
-    t.cardFallback,
-  )
-  const advantageCards = normalizeCards(
-    hasDefaultRussianAdvantages ? t.advantages : guidePageData.advantages || t.advantages,
-    'advantage',
-    t.cardFallback,
-  )
-  const heroCards = [...mainGuideCards, ...advantageCards].slice(0, 6)
-  const peopleCards = normalizePeopleCards(guidePageData.peopleCards, t.personFallback)
-  const teamGallery = normalizeGallery(guidePageData.teamGallery)
   const breadcrumbsTitle = getPageText(
     locale,
     guidePageData.breadcrumbsTitle,
@@ -130,64 +97,98 @@ export default async function RukovodstvoPage() {
     t.breadcrumbsTitle,
   )
   const pageTitle = getPageText(locale, guidePageData.pageTitle, ru.title, t.title)
+  const companyLabel = getPageText(
+    locale,
+    guidePageData.companyBreadcrumbLabel,
+    companyLabels.ru,
+    companyLabels[locale],
+  )
+  const introText = getPageText(
+    locale,
+    guidePageData.introText,
+    introMessages.ru,
+    introMessages[locale],
+  )
+  const peopleTitle = getPageText(locale, guidePageData.peopleTitle, ru.peopleTitle, t.peopleTitle)
+  const galleryTitle = getPageText(
+    locale,
+    guidePageData.galleryTitle,
+    ru.galleryTitle,
+    t.galleryTitle,
+  )
 
   return (
-    <section className="bg-white text-black">
-      <div className="container py-12 md:py-16 lg:py-20">
-        <nav aria-label={t.breadcrumbsAria} className="mb-12 text-sm text-zinc-400 md:mb-20">
-          <Link className="hover:text-white" href="/">
+    <main className="bg-background-light pb-24 text-ink">
+      <div className="container pt-12 sm:pt-16">
+        <nav aria-label={t.breadcrumbsAria} className="flex items-center gap-3 text-sm">
+          <Link className="text-neutral-400 transition-colors hover:text-brand-green" href="/">
             {t.homeLink}
-          </Link>{' '}
-          <span aria-hidden="true">›</span>{' '}
-          <span className="text-zinc-200">{breadcrumbsTitle}</span>
+          </Link>
+          <ChevronRight className="size-5 text-neutral-400" />
+          <Link
+            className="text-neutral-400 transition-colors hover:text-brand-green"
+            href="/ranvey-trans-segodnya"
+          >
+            {companyLabel}
+          </Link>
+          <ChevronRight className="size-5 text-neutral-400" />
+          <span>{breadcrumbsTitle}</span>
         </nav>
 
         <h1 className="sr-only">{pageTitle}</h1>
+        <p className="mt-12 text-lg leading-relaxed sm:text-xl">{introText}</p>
 
-        <div className="grid gap-x-8 gap-y-16 pb-24 md:grid-cols-2 md:gap-y-20 lg:grid-cols-3 lg:pb-32">
-          {heroCards.map((card) => (
-            <GuideCard description={card.description} key={card.id} title={card.title} />
-          ))}
-        </div>
-      </div>
+        <section className="pt-8" aria-labelledby="people-title">
+          <h2 className="sr-only" id="people-title">
+            {peopleTitle}
+          </h2>
 
-      <div className="bg-white py-8 text-zinc-900 md:py-10">
-        <div className="container space-y-12 md:space-y-16">
-          {peopleCards.length > 0 && (
-            <div>
-              <h2 className="mb-6 text-2xl font-semibold md:mb-8">{t.peopleTitle}</h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {peopleCards.map((person) => (
-                  <PersonCard key={person.id} person={person} />
-                ))}
-              </div>
+          {people.length > 0 ? (
+            <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 xl:grid-cols-3 xl:gap-y-20">
+              {people.map((person) => (
+                <PersonCard key={person.id} person={person} />
+              ))}
             </div>
+          ) : (
+            <p className="py-12 text-center text-neutral-600">{t.personFallback.fullName}</p>
           )}
+        </section>
 
-          {teamGallery.length > 0 && (
-            <div>
-              <h2 className="mb-6 text-2xl font-semibold md:mb-8">{t.galleryTitle}</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {teamGallery.map((item) => (
-                  <article
-                    className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-100"
-                    key={item.id}
-                  >
-                    <Media
-                      fill
-                      imgClassName="object-cover"
-                      resource={item.image}
-                      alt={t.galleryImageAlt}
-                      size="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                    />
-                  </article>
-                ))}
-              </div>
+        {gallery.length > 0 ? (
+          <section className="mt-28 border-t border-background-muted pt-4">
+            <h2 className="sr-only">{galleryTitle}</h2>
+            <div
+              className={
+                gallery.length === 1
+                  ? 'grid'
+                  : 'grid auto-rows-[220px] grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-4'
+              }
+            >
+              {gallery.map((item, index) => (
+                <article
+                  className={
+                    gallery.length === 1
+                      ? 'relative aspect-[16/7] overflow-hidden bg-background-muted'
+                      : `relative overflow-hidden bg-background-muted ${
+                          index === 2 ? 'sm:col-span-2' : ''
+                        }`
+                  }
+                  key={item.id}
+                >
+                  <Media
+                    fill
+                    alt={galleryTitle}
+                    imgClassName="object-cover"
+                    resource={item.image}
+                    size="(max-width: 768px) 100vw, 50vw"
+                  />
+                </article>
+              ))}
             </div>
-          )}
-        </div>
+          </section>
+        ) : null}
       </div>
-    </section>
+    </main>
   )
 }
 

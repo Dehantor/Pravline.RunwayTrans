@@ -103,7 +103,7 @@ export function GeographyMap({ routes }: GeographyMapProps) {
       route.points.forEach((point) => {
         bounds.extend(point)
         L.circleMarker(point, {
-          color: '#ffffff',
+          color: 'var(--on-dark)',
           fillColor: route.color,
           fillOpacity: 1,
           radius: 6,

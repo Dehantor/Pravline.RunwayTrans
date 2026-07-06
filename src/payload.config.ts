@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
 import { CallbackRequests } from './collections/CallbackRequests'
+import { ContactsPage } from './ContactsPage/config'
 import { Equipment } from './collections/Equipment'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -19,6 +20,7 @@ import { Footer } from './Footer/config'
 import { GeographyPage } from './Geography/config'
 import { GuidePage } from './Guide/config'
 import { Header } from './Header/config'
+import { HistoryPage } from './HistoryPage/config'
 import { RunwayTransTodayPage } from './RunwayTransToday/config'
 import { PartnersPage } from './Partners/config'
 import { ReviewsPage } from './Reviews/config'
@@ -94,6 +96,8 @@ export default buildConfig({
   cors: [getServerSideURL()].filter(Boolean),
   globals: [
     Header,
+    ContactsPage,
+    HistoryPage,
     Footer,
     GuidePage,
     RunwayTransTodayPage,
@@ -137,16 +141,21 @@ export default buildConfig({
         label: 'English',
       },
       {
-        code: 'de',
-        label: 'Deutsch',
-      },
-      {
         code: 'fr',
         label: 'Français',
       },
       {
+        code: 'kk',
+        label: 'Қазақша',
+      },
+      {
         code: 'zh',
         label: '中文',
+      },
+      // Keep the legacy locale until existing `de` rows are migrated to `kk`.
+      {
+        code: 'de',
+        label: 'Deutsch (архив)',
       },
     ],
     defaultLocale: 'ru',

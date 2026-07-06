@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { canEditContent, canEditContentOrPublished, userHasRole } from '@/access/roles'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
+import { defaultLexical } from '@/fields/defaultLexical'
 import { slugField } from 'payload'
 
 export const Vacancies: CollectionConfig<'vacancies'> = {
@@ -18,7 +19,7 @@ export const Vacancies: CollectionConfig<'vacancies'> = {
     update: canEditContent,
   },
   admin: {
-    defaultColumns: ['title', 'location', 'employmentType', 'updatedAt'],
+    defaultColumns: ['title', 'salary', 'updatedAt'],
     hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
     livePreview: {
       url: ({ data, req }) =>
@@ -44,38 +45,27 @@ export const Vacancies: CollectionConfig<'vacancies'> = {
       required: true,
     },
     {
-      name: 'location',
-      localized: true,
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'employmentType',
-      type: 'select',
-      defaultValue: 'full-time',
-      options: [
-        { label: 'Полная занятость', value: 'full-time' },
-        { label: 'Частичная занятость', value: 'part-time' },
-        { label: 'Контракт', value: 'contract' },
-        { label: 'Стажировка', value: 'internship' },
-      ],
-      required: true,
-    },
-    {
       name: 'salary',
+      label: 'Заработная плата',
       localized: true,
       type: 'text',
     },
     {
-      name: 'summary',
-      localized: true,
-      type: 'textarea',
-      required: true,
+      name: 'contactPhone',
+      label: 'Телефон для консультации',
+      type: 'text',
+    },
+    {
+      name: 'contactEmail',
+      label: 'Email для резюме',
+      type: 'email',
     },
     {
       name: 'description',
+      label: 'Полное описание',
       localized: true,
       type: 'richText',
+      editor: defaultLexical,
       required: true,
     },
     {

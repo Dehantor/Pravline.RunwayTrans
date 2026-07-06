@@ -7,12 +7,23 @@ import { Input } from '@/components/ui/input'
 
 type CallbackFormProps = {
   consent: string
+  errorMessage: string
   phonePlaceholder: string
   submit: string
+  submitting: string
+  successMessage: string
   title: string
 }
 
-export function CallbackForm({ consent, phonePlaceholder, submit, title }: CallbackFormProps) {
+export function CallbackForm({
+  consent,
+  errorMessage,
+  phonePlaceholder,
+  submit,
+  submitting,
+  successMessage,
+  title,
+}: CallbackFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
@@ -35,14 +46,14 @@ export function CallbackForm({ consent, phonePlaceholder, submit, title }: Callb
 
       if (!response.ok) {
         const data = (await response.json()) as { error?: string }
-        throw new Error(data.error ?? 'Не удалось отправить заявку.')
+        throw new Error(data.error ?? errorMessage)
       }
 
       form.reset()
       setStatus('success')
     } catch (submitError) {
       setStatus('error')
-      setError(submitError instanceof Error ? submitError.message : 'Произошла ошибка при отправке.')
+      setError(submitError instanceof Error ? submitError.message : errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -61,11 +72,9 @@ export function CallbackForm({ consent, phonePlaceholder, submit, title }: Callb
         {consent}
       </label>
       <Button className="w-full" disabled={isSubmitting} type="submit">
-        {isSubmitting ? 'Отправка...' : submit}
+        {isSubmitting ? submitting : submit}
       </Button>
-      {status === 'success' && (
-        <p className="text-sm text-emerald-600">Заявка успешно отправлена.</p>
-      )}
+      {status === 'success' && <p className="text-sm text-emerald-600">{successMessage}</p>}
       {status === 'error' && <p className="text-sm text-destructive">{error}</p>}
     </form>
   )

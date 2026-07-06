@@ -16,9 +16,9 @@ export const Logo = ({ className }: Props) => {
         viewBox="0 0 92 70"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <circle cx="30" cy="35" fill="#171a1d" r="28" />
-        <path d="M4 53h53l-9 13H0z" fill="#d0e43e" />
-        <path d="M15 36h42l-7 11H8z" fill="#f6dc2f" opacity="0.85" />
+        <circle cx="30" cy="35" fill="var(--ink)" r="28" />
+        <path d="M4 53h53l-9 13H0z" fill="var(--brand-yellow)" />
+        <path d="M15 36h42l-7 11H8z" fill="var(--brand-yellow)" opacity="0.85" />
       </svg>
     </div>
   )

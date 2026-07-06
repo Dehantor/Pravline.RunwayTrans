@@ -40,18 +40,18 @@ export const VacanciesListBlock = async ({ title, limit }: Props) => {
         {vacancies.docs.map((vacancy) => (
           <article className="rounded-lg border border-border p-6" key={vacancy.id}>
             <h3 className="text-2xl font-medium mb-2">
-              <Link className="underline-offset-4 hover:underline" href={`/vacancies/${vacancy.slug}`}>
+              <Link
+                className="underline-offset-4 hover:underline"
+                href={`/vacancies/${vacancy.slug}`}
+              >
                 {vacancy.title}
               </Link>
             </h3>
 
-            <div className="text-sm text-muted-foreground mb-4">
-              {vacancy.location} • {vacancy.employmentType}
-            </div>
-
-            <p className="mb-4">{vacancy.summary}</p>
-
-            <Link className="font-medium underline underline-offset-4" href={`/vacancies/${vacancy.slug}`}>
+            <Link
+              className="font-medium underline underline-offset-4"
+              href={`/vacancies/${vacancy.slug}`}
+            >
               Подробнее и отклик →
             </Link>
           </article>

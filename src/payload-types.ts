@@ -124,10 +124,12 @@ export interface Config {
     | ('false' | 'none' | 'null')
     | false
     | null
-    | ('ru' | 'en' | 'de' | 'fr' | 'zh')
-    | ('ru' | 'en' | 'de' | 'fr' | 'zh')[];
+    | ('ru' | 'en' | 'fr' | 'kk' | 'zh' | 'de')
+    | ('ru' | 'en' | 'fr' | 'kk' | 'zh' | 'de')[];
   globals: {
     header: Header;
+    contactsPage: ContactsPage;
+    historyPage: HistoryPage;
     footer: Footer;
     guidePage: GuidePage;
     runwayTransTodayPage: RunwayTransTodayPage;
@@ -138,6 +140,8 @@ export interface Config {
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
+    contactsPage: ContactsPageSelect<false> | ContactsPageSelect<true>;
+    historyPage: HistoryPageSelect<false> | HistoryPageSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     guidePage: GuidePageSelect<false> | GuidePageSelect<true>;
     runwayTransTodayPage: RunwayTransTodayPageSelect<false> | RunwayTransTodayPageSelect<true>;
@@ -146,7 +150,7 @@ export interface Config {
     servicesPage: ServicesPageSelect<false> | ServicesPageSelect<true>;
     geographyPage: GeographyPageSelect<false> | GeographyPageSelect<true>;
   };
-  locale: 'ru' | 'en' | 'de' | 'fr' | 'zh';
+  locale: 'ru' | 'en' | 'fr' | 'kk' | 'zh' | 'de';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -834,10 +838,9 @@ export interface Form {
 export interface Vacancy {
   id: number;
   title: string;
-  location: string;
-  employmentType: 'full-time' | 'part-time' | 'contract' | 'internship';
   salary?: string | null;
-  summary: string;
+  contactPhone?: string | null;
+  contactEmail?: string | null;
   description: {
     root: {
       type: string;
@@ -896,6 +899,7 @@ export interface Service {
   id: number;
   title: string;
   serviceType?: string | null;
+  sortOrder?: number | null;
   summary: string;
   description: {
     root: {
@@ -1437,10 +1441,9 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface VacanciesSelect<T extends boolean = true> {
   title?: T;
-  location?: T;
-  employmentType?: T;
   salary?: T;
-  summary?: T;
+  contactPhone?: T;
+  contactEmail?: T;
   description?: T;
   publishedAt?: T;
   generateSlug?: T;
@@ -1477,6 +1480,7 @@ export interface EquipmentSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   serviceType?: T;
+  sortOrder?: T;
   summary?: T;
   description?: T;
   image?: T;
@@ -1986,6 +1990,71 @@ export interface Header {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactsPage".
+ */
+export interface ContactsPage {
+  id: number;
+  homeLinkLabel: string;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  contactItems?:
+    | {
+        icon: 'address' | 'phone' | 'email' | 'hours' | 'message';
+        label: string;
+        value: string;
+        /**
+         * Необязательно. Например: tel:+73910000000, mailto:info@example.ru или https://...
+         */
+        href?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  callbackTitle: string;
+  phonePlaceholder: string;
+  consentLabel: string;
+  submitLabel: string;
+  submittingLabel: string;
+  successMessage: string;
+  errorMessage: string;
+  mapEmbedUrl: string;
+  mapTitle: string;
+  requisitesImage?: (number | null) | Media;
+  requisitesText?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "historyPage".
+ */
+export interface HistoryPage {
+  id: number;
+  companyBreadcrumbLabel: string;
+  breadcrumbsTitle: string;
+  pageTitle: string;
+  timeline?:
+    | {
+        years: string;
+        title: string;
+        description: string;
+        tone: 'green' | 'gray';
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
@@ -2021,6 +2090,8 @@ export interface GuidePage {
   id: number;
   breadcrumbsTitle: string;
   pageTitle: string;
+  companyBreadcrumbLabel: string;
+  introText: string;
   mainGuideCards?:
     | {
         title: string;
@@ -2037,6 +2108,7 @@ export interface GuidePage {
         id?: string | null;
       }[]
     | null;
+  peopleTitle: string;
   peopleCards?:
     | {
         photo: number | Media;
@@ -2045,6 +2117,7 @@ export interface GuidePage {
         id?: string | null;
       }[]
     | null;
+  galleryTitle: string;
   teamGallery?:
     | {
         image: number | Media;
@@ -2066,8 +2139,11 @@ export interface RunwayTransTodayPage {
   id: number;
   breadcrumbsTitle: string;
   pageTitle: string;
+  companyBreadcrumbLabel: string;
+  videoSectionTitle: string;
   videoUrl?: string | null;
   videoFile?: (number | null) | Media;
+  videoPoster?: (number | null) | Media;
   videoTitle: string;
   faqItems?:
     | {
@@ -2118,6 +2194,11 @@ export interface ReviewsPage {
   breadcrumbsTitle: string;
   pageTitle: string;
   pageDescription: string;
+  /**
+   * Вертикальное изображение для правой части верхнего блока. Лучше использовать PNG с прозрачным фоном.
+   */
+  heroImage?: (number | null) | Media;
+  heroImageAlt?: string | null;
   expertName: string;
   expertRole: string;
   expertReviewLabels?:
@@ -2126,16 +2207,29 @@ export interface ReviewsPage {
         id?: string | null;
       }[]
     | null;
+  videoSectionTitle?: string | null;
+  /**
+   * Карточки выводятся на сайте в том же порядке, что и здесь.
+   */
   videoReviews?:
     | {
+        companyName: string;
+        reviewer: string;
         year: number;
         videoUrl: string;
         previewImage?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
+  documentsSectionTitle: string;
+  documentsSectionDescription: string;
+  /**
+   * Карточки выводятся на сайте в том же порядке, что и здесь.
+   */
   textReviews?:
     | {
+        companyName: string;
+        reviewer: string;
         year: number;
         documentImage: number | Media;
         id?: string | null;
@@ -2154,22 +2248,34 @@ export interface ReviewsPage {
  */
 export interface ServicesPage {
   id: number;
+  breadcrumbsTitle: string;
+  intro: string;
+  capabilitiesTitle: string;
+  capabilitiesDescription: string;
+  ctaLabel: string;
+  ctaHref: string;
   transportedSectionTitle: string;
+  transportedDescription: string;
   transportedItems?:
     | {
+        image?: (number | null) | Media;
         title: string;
-        description: string;
         id?: string | null;
       }[]
     | null;
   advantagesSectionTitle: string;
   advantagesItems?:
     | {
+        image?: (number | null) | Media;
         title: string;
         description: string;
         id?: string | null;
       }[]
     | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2241,6 +2347,72 @@ export interface HeaderSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactsPage_select".
+ */
+export interface ContactsPageSelect<T extends boolean = true> {
+  homeLinkLabel?: T;
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  contactItems?:
+    | T
+    | {
+        icon?: T;
+        label?: T;
+        value?: T;
+        href?: T;
+        id?: T;
+      };
+  callbackTitle?: T;
+  phonePlaceholder?: T;
+  consentLabel?: T;
+  submitLabel?: T;
+  submittingLabel?: T;
+  successMessage?: T;
+  errorMessage?: T;
+  mapEmbedUrl?: T;
+  mapTitle?: T;
+  requisitesImage?: T;
+  requisitesText?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "historyPage_select".
+ */
+export interface HistoryPageSelect<T extends boolean = true> {
+  companyBreadcrumbLabel?: T;
+  breadcrumbsTitle?: T;
+  pageTitle?: T;
+  timeline?:
+    | T
+    | {
+        years?: T;
+        title?: T;
+        description?: T;
+        tone?: T;
+        image?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
@@ -2269,6 +2441,8 @@ export interface FooterSelect<T extends boolean = true> {
 export interface GuidePageSelect<T extends boolean = true> {
   breadcrumbsTitle?: T;
   pageTitle?: T;
+  companyBreadcrumbLabel?: T;
+  introText?: T;
   mainGuideCards?:
     | T
     | {
@@ -2285,6 +2459,7 @@ export interface GuidePageSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  peopleTitle?: T;
   peopleCards?:
     | T
     | {
@@ -2293,6 +2468,7 @@ export interface GuidePageSelect<T extends boolean = true> {
         position?: T;
         id?: T;
       };
+  galleryTitle?: T;
   teamGallery?:
     | T
     | {
@@ -2316,8 +2492,11 @@ export interface GuidePageSelect<T extends boolean = true> {
 export interface RunwayTransTodayPageSelect<T extends boolean = true> {
   breadcrumbsTitle?: T;
   pageTitle?: T;
+  companyBreadcrumbLabel?: T;
+  videoSectionTitle?: T;
   videoUrl?: T;
   videoFile?: T;
+  videoPoster?: T;
   videoTitle?: T;
   faqItems?:
     | T
@@ -2372,6 +2551,8 @@ export interface ReviewsPageSelect<T extends boolean = true> {
   breadcrumbsTitle?: T;
   pageTitle?: T;
   pageDescription?: T;
+  heroImage?: T;
+  heroImageAlt?: T;
   expertName?: T;
   expertRole?: T;
   expertReviewLabels?:
@@ -2380,17 +2561,24 @@ export interface ReviewsPageSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  videoSectionTitle?: T;
   videoReviews?:
     | T
     | {
+        companyName?: T;
+        reviewer?: T;
         year?: T;
         videoUrl?: T;
         previewImage?: T;
         id?: T;
       };
+  documentsSectionTitle?: T;
+  documentsSectionDescription?: T;
   textReviews?:
     | T
     | {
+        companyName?: T;
+        reviewer?: T;
         year?: T;
         documentImage?: T;
         id?: T;
@@ -2410,21 +2598,35 @@ export interface ReviewsPageSelect<T extends boolean = true> {
  * via the `definition` "servicesPage_select".
  */
 export interface ServicesPageSelect<T extends boolean = true> {
+  breadcrumbsTitle?: T;
+  intro?: T;
+  capabilitiesTitle?: T;
+  capabilitiesDescription?: T;
+  ctaLabel?: T;
+  ctaHref?: T;
   transportedSectionTitle?: T;
+  transportedDescription?: T;
   transportedItems?:
     | T
     | {
+        image?: T;
         title?: T;
-        description?: T;
         id?: T;
       };
   advantagesSectionTitle?: T;
   advantagesItems?:
     | T
     | {
+        image?: T;
         title?: T;
         description?: T;
         id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
       };
   updatedAt?: T;
   createdAt?: T;

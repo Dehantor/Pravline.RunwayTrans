@@ -1,22 +1,76 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
+
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { type AppLocale } from '@/i18n/locales'
 import { headerMessages } from '@/i18n/navigationMessages'
+import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { MessageCircle, Phone, Play, Send } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 import type { Header } from '@/payload-types'
-import { Mail, Phone, Send, MessageCircle, Play, Video } from 'lucide-react'
 
 import { HeaderNav } from './Nav'
 
-const quickLinks = [
-  { href: '#', label: 'Telegram', icon: Send, bgClass: 'bg-[#27A7E7]' },
-  { href: '#', label: 'WhatsApp', icon: MessageCircle, bgClass: 'bg-[#25D366]' },
-  { href: '#', label: 'YouTube', icon: Play, bgClass: 'bg-[#FF3131]' },
-  { href: '#', label: 'Rutube', icon: Video, bgClass: 'bg-[#e3e5eb] text-[#252a33]' },
+type SocialLink =
+  | {
+      href: string
+      label: string
+      icon: React.ComponentType<{ className?: string }>
+      image?: never
+      className: string
+    }
+  | {
+      href: string
+      label: string
+      image: string
+      icon?: never
+      className?: never
+    }
+
+const socialLinks: SocialLink[] = [
+  {
+    href: '#',
+    label: 'Telegram',
+    icon: Send,
+    className: 'bg-social-telegram text-on-dark',
+  },
+  {
+    href: '#',
+    label: 'WhatsApp',
+    icon: MessageCircle,
+    className: 'bg-social-whatsapp text-on-dark',
+  },
+  {
+    href: '#',
+    label: 'YouTube',
+    icon: Play,
+    className: 'bg-social-youtube text-on-dark',
+  },
+  {
+    href: '#',
+    label: 'Rutube',
+    image: '/media/social/tel.svg',
+  },
+  {
+    href: '#',
+    label: 'ВКонтакте',
+    className: 'bg-social-vk text-on-dark',
+    icon: () => <span className="text-[13px] font-black tracking-[-1px]">VK</span>,
+  },
+  {
+    href: '#',
+    label: 'Одноклассники',
+    image: '/media/social/vk.svg',
+  },
+  {
+    href: '#',
+    label: 'TikTok',
+    className: 'bg-ink text-on-dark',
+    icon: () => <span className="text-lg font-black">♪</span>,
+  },
 ]
 
 interface HeaderClientProps {
@@ -24,8 +78,7 @@ interface HeaderClientProps {
   locale: AppLocale
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
-  /* Storing the value in a useState to avoid hydration errors */
+export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
@@ -43,75 +96,79 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
   return (
     <header
-      className="relative z-20 border-b border-[#2f794e] bg-white"
+      className="relative z-20 border-t-[3px] border-ink bg-background-light text-ink"
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className="container py-4">
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-          {/* <Link href="/" className="inline-flex">
-            <img src={logoImage.src} alt="" />
-          </Link> */}
-
-          <Link href="/" className="text-2xl leading-none font-black tracking-wide text-[#1a1a1a]">
-            RUNWAY TRANS
+      <div className="mx-auto w-full max-w-[1380px] px-2">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3 py-2 xl:flex-nowrap">
+          <Link aria-label="Runway Trans — на главную" className="shrink-0" href="/">
+            <Image
+              alt="Runway Trans"
+              className="h-auto w-[178px] sm:w-[202px]"
+              height={63}
+              priority
+              src="/media/logo.svg"
+              width={202}
+            />
           </Link>
 
-          <div className="flex flex-col text-sm leading-tight text-[#74c56a]">
-            <span className="text-3xl">
-              <i>{t.serviceLinePrimary}</i>
-            </span>
-            <span>
-              <i>{t.serviceLineSecondary}</i>
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center gap-4 lg:justify-end">
-            <LanguageSwitcher locale={locale} />
-            <div className="flex items-center gap-2">
-              {quickLinks.map(({ href, label, icon: Icon, bgClass }) => (
-                <Link
-                  key={label}
-                  aria-label={label}
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform hover:scale-105 ${bgClass}`}
-                  href={href}
-                >
-                  <Icon className="h-4 w-4" />
-                </Link>
-              ))}
+          <div className="mr-auto min-w-[185px] shrink-0 leading-none text-brand-green">
+            <div className="font-serif text-[24px] sm:text-[27px]">{t.serviceLinePrimary}</div>
+            <div className="mt-1 max-w-[200px] text-[12px] leading-[1.35]">
+              {t.serviceLineSecondary}
             </div>
+          </div>
 
-            <Link
-              className="rounded-sm border border-[#2f794e] bg-[#4c7d4f] px-6 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#5b915f]"
-              href="/contacts#callback-form"
-            >
-              {t.callbackLabel}
-            </Link>
-
-            <div className="flex items-center gap-2 text-[#89d57d]">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
-                <Mail className="h-4 w-4" />
-              </span>
-              <Link className="text-sm hover:text-white" href="mailto:info@runwaytrans.ru">
-                info@runwaytrans.ru
+          <div className="flex items-center gap-2">
+            {socialLinks.map(({ href, label, icon: Icon, image, className }) => (
+              <Link
+                aria-label={label}
+                className="inline-flex h-[39px] w-[39px] shrink-0 items-center justify-center rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+                href={href}
+                key={label}
+              >
+                {image ? (
+                  <Image alt="" aria-hidden height={39} src={image} width={39} />
+                ) : Icon ? (
+                  <span
+                    className={`inline-flex h-full w-full items-center justify-center rounded-full ${className}`}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </span>
+                ) : null}
               </Link>
-            </div>
+            ))}
+          </div>
 
-            <div className="flex items-center gap-2 text-[#89d57d]">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#507e53] text-white">
-                <Phone className="h-4 w-4" />
-              </span>
-              <div className="flex flex-col leading-tight">
-                <Link className="text-sm hover:text-white" href="tel:+79991234567">
-                  +7 (999) 123-45-67
-                </Link>
-                <Link className="text-sm hover:text-white" href="tel:+78001234567">
-                  +7 (800) 123-45-67
-                </Link>
-              </div>
+          <Link
+            className="inline-flex h-10 shrink-0 items-center rounded-[4px] bg-brand-green px-3 text-[14px] font-medium whitespace-nowrap text-on-dark transition-colors hover:bg-brand-green-hover"
+            href="/contacts#callback-form"
+          >
+            {t.callbackLabel}
+          </Link>
+
+          <Link
+            className="flex shrink-0 items-center gap-2 text-[14px] font-medium hover:text-brand-green"
+            href="mailto:info@rwt.ru"
+          >
+            <Image alt="" aria-hidden height={39} src="/media/social/rt.svg" width={39} />
+            <span>info@rwt.ru</span>
+          </Link>
+
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="inline-flex h-[39px] w-[39px] items-center justify-center rounded-full bg-brand-green text-on-dark">
+              <Phone className="h-5 w-5" />
+            </span>
+            <div className="flex flex-col text-[14px] leading-[1.35] font-medium">
+              <Link href="tel:+79130303030">8-913-030-30-30</Link>
+              <Link href="tel:+73912803030">280-30-30</Link>
             </div>
           </div>
 
-          <HeaderNav locale={locale} />
+          <LanguageSwitcher locale={locale} />
         </div>
+
+        <HeaderNav locale={locale} />
       </div>
     </header>
   )
