@@ -1,9 +1,8 @@
 'use client'
 
-import type { LatLngExpression, Map as LeafletMap } from 'leaflet'
+import type { LatLngExpression, LayerGroup, Map as LeafletMap } from 'leaflet'
 
 import { useEffect, useMemo, useRef } from 'react'
-import L from 'leaflet'
 
 type RoutePoint = {
   latitude?: number | null
@@ -38,7 +37,7 @@ function getRouteLatLngs(routePoints?: RoutePoint[] | null): LatLngExpression[] 
 export function GeographyMap({ routes }: GeographyMapProps) {
   const mapElementRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<LeafletMap | null>(null)
-  const routeLayerRef = useRef<L.LayerGroup | null>(null)
+  const routeLayerRef = useRef<LayerGroup | null>(null)
   const preparedRoutes = useMemo(
     () =>
       routes
@@ -52,71 +51,96 @@ export function GeographyMap({ routes }: GeographyMapProps) {
   )
 
   useEffect(() => {
-    if (!mapElementRef.current || mapRef.current) return
+    let cancelled = false
 
-    const map = L.map(mapElementRef.current, {
-      attributionControl: false,
-      center: defaultCenter,
-      scrollWheelZoom: true,
-      zoom: defaultZoom,
-      zoomControl: false,
-    })
+    async function initMap() {
+      if (!mapElementRef.current || mapRef.current) return
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-    }).addTo(map)
-    L.control.attribution({ prefix: false }).addAttribution('&copy; OpenStreetMap').addTo(map)
-    L.control.zoom({ position: 'topright' }).addTo(map)
+      const L = await import('leaflet')
 
-    const routeLayer = L.layerGroup().addTo(map)
+      if (cancelled || !mapElementRef.current || mapRef.current) return
 
-    mapRef.current = map
-    routeLayerRef.current = routeLayer
+      const map = L.map(mapElementRef.current, {
+        attributionControl: false,
+        center: defaultCenter,
+        scrollWheelZoom: true,
+        zoom: defaultZoom,
+        zoomControl: false,
+      })
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+      }).addTo(map)
+      L.control.attribution({ prefix: false }).addAttribution('&copy; OpenStreetMap').addTo(map)
+      L.control.zoom({ position: 'topright' }).addTo(map)
+
+      const routeLayer = L.layerGroup().addTo(map)
+
+      mapRef.current = map
+      routeLayerRef.current = routeLayer
+    }
+
+    void initMap()
 
     return () => {
-      map.remove()
+      cancelled = true
+      mapRef.current?.remove()
       mapRef.current = null
       routeLayerRef.current = null
     }
   }, [])
 
   useEffect(() => {
-    const map = mapRef.current
-    const routeLayer = routeLayerRef.current
+    let cancelled = false
 
-    if (!map || !routeLayer) return
+    async function renderRoutes() {
+      const map = mapRef.current
+      const routeLayer = routeLayerRef.current
 
-    routeLayer.clearLayers()
+      if (!map || !routeLayer) return
 
-    const bounds = L.latLngBounds([])
+      const L = await import('leaflet')
 
-    preparedRoutes.forEach((route) => {
-      const polyline = L.polyline(route.points, {
-        color: route.color,
-        lineCap: 'round',
-        lineJoin: 'round',
-        opacity: 0.95,
-        weight: 5,
-      }).bindTooltip(route.title)
+      if (cancelled) return
 
-      polyline.addTo(routeLayer)
-      route.points.forEach((point) => {
-        bounds.extend(point)
-        L.circleMarker(point, {
-          color: 'var(--on-dark)',
-          fillColor: route.color,
-          fillOpacity: 1,
-          radius: 6,
-          weight: 2,
-        }).addTo(routeLayer)
+      routeLayer.clearLayers()
+
+      const bounds = L.latLngBounds([])
+
+      preparedRoutes.forEach((route) => {
+        const polyline = L.polyline(route.points, {
+          color: route.color,
+          lineCap: 'round',
+          lineJoin: 'round',
+          opacity: 0.95,
+          weight: 5,
+        }).bindTooltip(route.title)
+
+        polyline.addTo(routeLayer)
+        route.points.forEach((point) => {
+          bounds.extend(point)
+          L.circleMarker(point, {
+            color: '#ffffff',
+            fillColor: route.color,
+            fillOpacity: 1,
+            radius: 6,
+            weight: 2,
+          }).addTo(routeLayer)
+        })
       })
-    })
 
-    if (bounds.isValid()) {
-      map.fitBounds(bounds, {
-        maxZoom: 9,
-        padding: [48, 48],
-      })
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, {
+          maxZoom: 9,
+          padding: [48, 48],
+        })
+      }
+    }
+
+    void renderRoutes()
+
+    return () => {
+      cancelled = true
     }
   }, [preparedRoutes])
 

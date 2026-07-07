@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 
+import { GeographyMapClientOnly } from '@/components/GeographyMap/ClientOnly'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 import { pageMessages } from '@/i18n/pageMessages'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import { GeographyMap } from '@/components/GeographyMap'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
@@ -104,9 +104,9 @@ export default async function GeographyPage() {
           </div>
         </section>
 
-        <section className="space-y-6" aria-label={t.mapAria}>
+        <section aria-label={t.mapAria} className="space-y-6">
           <div className="relative h-[440px] overflow-hidden border border-background-muted bg-background-light md:h-[700px]">
-            <GeographyMap routes={mapRoutes} />
+            <GeographyMapClientOnly routes={mapRoutes} />
           </div>
 
           <div className="flex flex-wrap items-center gap-6 text-xl">
