@@ -33,7 +33,7 @@ export const HeaderNav: React.FC<{ locale: AppLocale }> = ({ locale }) => {
           </li>
 
           {t.topLevelLinks.map((item) => (
-            <li className="group relative" key={item.href}>
+            <li className="group relative" key={`${item.href}-${item.label}`}>
               <Link
                 className={`transition-colors hover:text-brand-green ${
                   pathname === item.href ? 'text-brand-green' : ''

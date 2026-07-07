@@ -334,6 +334,82 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   `)
 
   await db.execute(sql`
+    ALTER TABLE "reviews_page_locales"
+      ADD COLUMN IF NOT EXISTS "hero_image_alt" character varying,
+      ADD COLUMN IF NOT EXISTS "video_section_title" character varying,
+      ADD COLUMN IF NOT EXISTS "documents_section_title" character varying,
+      ADD COLUMN IF NOT EXISTS "documents_section_description" character varying
+  `)
+
+  await db.execute(sql`
+    ALTER TABLE "reviews_page"
+      ADD COLUMN IF NOT EXISTS "hero_image_id" integer
+  `)
+
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS "reviews_page_hero_image_idx"
+      ON "reviews_page" ("hero_image_id")
+  `)
+
+  await db.execute(sql`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'reviews_page_hero_image_id_media_id_fk'
+      ) THEN
+        ALTER TABLE "reviews_page"
+          ADD CONSTRAINT "reviews_page_hero_image_id_media_id_fk"
+          FOREIGN KEY ("hero_image_id")
+          REFERENCES "media"("id")
+          ON DELETE SET NULL
+          ON UPDATE NO ACTION;
+      END IF;
+    END $$;
+  `)
+
+  await db.execute(sql`
+    ALTER TABLE "runway_trans_today_page_locales"
+      ADD COLUMN IF NOT EXISTS "company_breadcrumb_label" character varying,
+      ADD COLUMN IF NOT EXISTS "video_section_title" character varying
+  `)
+
+  await db.execute(sql`
+    ALTER TABLE "runway_trans_today_page"
+      ADD COLUMN IF NOT EXISTS "video_poster_id" integer
+  `)
+
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS "runway_trans_today_page_video_poster_idx"
+      ON "runway_trans_today_page" ("video_poster_id")
+  `)
+
+  await db.execute(sql`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'runway_trans_today_page_video_poster_id_media_id_fk'
+      ) THEN
+        ALTER TABLE "runway_trans_today_page"
+          ADD CONSTRAINT "runway_trans_today_page_video_poster_id_media_id_fk"
+          FOREIGN KEY ("video_poster_id")
+          REFERENCES "media"("id")
+          ON DELETE SET NULL
+          ON UPDATE NO ACTION;
+      END IF;
+    END $$;
+  `)
+
+  await db.execute(sql`
+    ALTER TABLE "guide_page_locales"
+      ADD COLUMN IF NOT EXISTS "company_breadcrumb_label" character varying,
+      ADD COLUMN IF NOT EXISTS "intro_text" character varying,
+      ADD COLUMN IF NOT EXISTS "people_title" character varying,
+      ADD COLUMN IF NOT EXISTS "gallery_title" character varying
+  `)
+
+  await db.execute(sql`
     ALTER TABLE "vacancies"
       ADD COLUMN IF NOT EXISTS "contact_phone" character varying,
       ADD COLUMN IF NOT EXISTS "contact_email" character varying
@@ -349,6 +425,43 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
 
   await db.execute(sql`DROP TABLE IF EXISTS "reviews_page_text_reviews_locales" CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS "reviews_page_video_reviews_locales" CASCADE`)
+  await db.execute(sql`
+    ALTER TABLE "reviews_page_locales"
+      DROP COLUMN IF EXISTS "hero_image_alt",
+      DROP COLUMN IF EXISTS "video_section_title",
+      DROP COLUMN IF EXISTS "documents_section_title",
+      DROP COLUMN IF EXISTS "documents_section_description"
+  `)
+  await db.execute(sql`
+    ALTER TABLE "reviews_page"
+      DROP CONSTRAINT IF EXISTS "reviews_page_hero_image_id_media_id_fk"
+  `)
+  await db.execute(sql`DROP INDEX IF EXISTS "reviews_page_hero_image_idx"`)
+  await db.execute(sql`
+    ALTER TABLE "runway_trans_today_page"
+      DROP CONSTRAINT IF EXISTS "runway_trans_today_page_video_poster_id_media_id_fk"
+  `)
+  await db.execute(sql`DROP INDEX IF EXISTS "runway_trans_today_page_video_poster_idx"`)
+  await db.execute(sql`
+    ALTER TABLE "runway_trans_today_page"
+      DROP COLUMN IF EXISTS "video_poster_id"
+  `)
+  await db.execute(sql`
+    ALTER TABLE "runway_trans_today_page_locales"
+      DROP COLUMN IF EXISTS "company_breadcrumb_label",
+      DROP COLUMN IF EXISTS "video_section_title"
+  `)
+  await db.execute(sql`
+    ALTER TABLE "guide_page_locales"
+      DROP COLUMN IF EXISTS "company_breadcrumb_label",
+      DROP COLUMN IF EXISTS "intro_text",
+      DROP COLUMN IF EXISTS "people_title",
+      DROP COLUMN IF EXISTS "gallery_title"
+  `)
+  await db.execute(sql`
+    ALTER TABLE "reviews_page"
+      DROP COLUMN IF EXISTS "hero_image_id"
+  `)
   await db.execute(sql`DROP TABLE IF EXISTS "history_page_timeline" CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS "history_page_locales" CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS "history_page" CASCADE`)

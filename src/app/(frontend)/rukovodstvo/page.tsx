@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 import { getPageText, pageMessages } from '@/i18n/pageMessages'
+import type { Media } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
@@ -12,6 +13,8 @@ type PersonCardInput = {
   fullName?: string | null
   position?: string | null
   photo?:
+    | number
+    | Media
     | {
         url?: string | null
         sizes?: {
@@ -28,12 +31,16 @@ function normalizePeopleCards(
   fallback: { fullName: string; position: string },
 ) {
   return (cards || [])
-    .map((person, index) => ({
-      id: person.id || `person-${index}`,
-      fullName: person.fullName || fallback.fullName,
-      position: person.position || fallback.position,
-      photoUrl: getMediaUrl(person.photo?.sizes?.medium?.url || person.photo?.url),
-    }))
+    .map((person, index) => {
+      const photo = person.photo && typeof person.photo === 'object' ? person.photo : null
+
+      return {
+        id: person.id || `person-${index}`,
+        fullName: person.fullName || fallback.fullName,
+        position: person.position || fallback.position,
+        photoUrl: getMediaUrl(photo?.sizes?.medium?.url || photo?.url),
+      }
+    })
     .filter((person) => Boolean(person.photoUrl))
 }
 
