@@ -78,7 +78,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: process.env.PAYLOAD_DB_PUSH !== 'false',
+    migrationDir: path.resolve(dirname, 'migrations'),
+    push: process.env.PAYLOAD_DB_PUSH === 'true',
   }),
   collections: [
     Pages,
