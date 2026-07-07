@@ -23,7 +23,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     mainNavAria: 'Основная навигация',
     noPages: 'Нет страниц',
     serviceLinePrimary: 'Грузоперевозки',
-    serviceLineSecondary: 'Автомобильная, вездеходная и специализированная техника',
+    serviceLineSecondary: 'Вездеходные и автомобильные',
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: 'Ранвей Транс сегодня' },
       { href: '/istoriya', label: 'История' },

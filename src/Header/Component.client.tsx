@@ -113,8 +113,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
           </Link>
 
           <div className="mr-auto min-w-[185px] shrink-0 leading-none text-brand-green">
-            <div className="font-serif text-[24px] sm:text-[27px]">{t.serviceLinePrimary}</div>
-            <div className="mt-1 max-w-[200px] text-[12px] leading-[1.35]">
+            <div className="text-[24px] font-semibold italic sm:text-[27px]">
+              {t.serviceLinePrimary}
+            </div>
+            <div className="mt-1 max-w-[200px] text-[12px] leading-[1.35] italic">
               {t.serviceLineSecondary}
             </div>
           </div>
