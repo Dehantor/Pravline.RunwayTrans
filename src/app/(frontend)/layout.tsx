@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
+import { Open_Sans } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -19,13 +19,19 @@ import 'leaflet/dist/leaflet.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 
+const openSans = Open_Sans({
+  subsets: ['cyrillic', 'latin'],
+  display: 'swap',
+  variable: '--font-open-sans',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
   const locale = await getRequestLocale()
 
   return (
     <html
-      className={cn(GeistSans.variable, GeistMono.variable)}
+      className={cn(openSans.variable, GeistMono.variable)}
       lang={locale}
       suppressHydrationWarning
     >

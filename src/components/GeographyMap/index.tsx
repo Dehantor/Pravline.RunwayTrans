@@ -5,8 +5,8 @@ import type { LatLngExpression, LayerGroup, Map as LeafletMap } from 'leaflet'
 import { useEffect, useMemo, useRef } from 'react'
 
 type RoutePoint = {
-  latitude?: number | null
-  longitude?: number | null
+  latitude?: number | string | null
+  longitude?: number | string | null
 }
 
 type GeographyRoute = {
@@ -22,16 +22,34 @@ type GeographyMapProps = {
 const defaultCenter: LatLngExpression = [68.25, 88.25]
 const defaultZoom = 5
 
-function isValidRoutePoint(point: RoutePoint): point is { latitude: number; longitude: number } {
-  return typeof point.latitude === 'number' && typeof point.longitude === 'number'
+function toCoordinate(value: number | string | null | undefined) {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null
+  if (typeof value === 'string') {
+    const parsed = Number(value.replace(',', '.'))
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  return null
 }
 
 function getRouteLatLngs(routePoints?: RoutePoint[] | null): LatLngExpression[] {
   if (!routePoints) return []
 
-  return routePoints
-    .filter(isValidRoutePoint)
-    .map((point) => [point.latitude, point.longitude] satisfies LatLngExpression)
+  return routePoints.flatMap((point) => {
+    const latitude = toCoordinate(point.latitude)
+    const longitude = toCoordinate(point.longitude)
+
+    return latitude === null || longitude === null
+      ? []
+      : ([[latitude, longitude] satisfies LatLngExpression] as LatLngExpression[])
+  })
+}
+
+function resolveRouteColor(color: string) {
+  const cssVarMatch = color.match(/^var\((--[^),]+)(?:,[^)]+)?\)$/)
+  if (!cssVarMatch) return color
+
+  return getComputedStyle(document.documentElement).getPropertyValue(cssVarMatch[1]).trim() || color
 }
 
 export function GeographyMap({ routes }: GeographyMapProps) {
@@ -108,8 +126,9 @@ export function GeographyMap({ routes }: GeographyMapProps) {
       const bounds = L.latLngBounds([])
 
       preparedRoutes.forEach((route) => {
+        const color = resolveRouteColor(route.color)
         const polyline = L.polyline(route.points, {
-          color: route.color,
+          color,
           lineCap: 'round',
           lineJoin: 'round',
           opacity: 0.95,
@@ -121,7 +140,7 @@ export function GeographyMap({ routes }: GeographyMapProps) {
           bounds.extend(point)
           L.circleMarker(point, {
             color: '#ffffff',
-            fillColor: route.color,
+            fillColor: color,
             fillOpacity: 1,
             radius: 6,
             weight: 2,

@@ -23,15 +23,64 @@ type RoutePoint = {
 }
 
 type DeliveryRouteSource = {
+  id?: string | null
+  route?: string | null
   routePoints?: RoutePoint[] | null
+  title?: string | null
 }
 
 function hasRoutePoints(item: unknown): item is DeliveryRouteSource {
-  return typeof item === 'object' && item !== null && 'routePoints' in item
+  return typeof item === 'object' && item !== null
+}
+
+const fallbackRoutePoints = {
+  pipelineService: [
+    { latitude: 70.4706, longitude: 83.2226 },
+    { latitude: 72.3875, longitude: 80.6553 },
+  ],
+  vankorAllTerrain: [
+    { latitude: 60.2526, longitude: 90.1955 },
+    { latitude: 67.4667, longitude: 86.5667 },
+    { latitude: 65.9623, longitude: 84.2881 },
+  ],
+} satisfies Record<string, RoutePoint[]>
+
+function getFallbackRoutePoints(item: DeliveryRouteSource): RoutePoint[] | undefined {
+  const searchable = [item.id, item.title, item.route].filter(Boolean).join(' ').toLowerCase()
+
+  if (
+    searchable.includes('vankor') ||
+    searchable.includes('ванкор') ||
+    searchable.includes('ярцево') ||
+    searchable.includes('igarka') ||
+    searchable.includes('игарка')
+  ) {
+    return fallbackRoutePoints.vankorAllTerrain
+  }
+
+  if (
+    searchable.includes('pipeline') ||
+    searchable.includes('нефтепровод') ||
+    searchable.includes('караул') ||
+    searchable.includes('tanalau') ||
+    searchable.includes('таналау')
+  ) {
+    return fallbackRoutePoints.pipelineService
+  }
+
+  return undefined
 }
 
 function getDeliveryRoutePoints(item: unknown) {
-  return hasRoutePoints(item) ? item.routePoints : undefined
+  if (!hasRoutePoints(item)) return undefined
+
+  const configuredPoints = item.routePoints?.filter(
+    (point) => typeof point.latitude === 'number' && typeof point.longitude === 'number',
+  )
+
+  return configuredPoints && configuredPoints.length >= 2
+    ? configuredPoints
+    : getFallbackRoutePoints(item)
 }
 
 function getCommonsFileUrl(fileName: string) {
