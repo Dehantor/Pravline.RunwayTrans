@@ -1,27 +1,34 @@
 'use client'
 
 import { Play } from 'lucide-react'
+import Image from 'next/image'
 import { useState } from 'react'
 
 type TodayVideoProps = {
   embedUrl?: string
   fileUrl?: string
-  placeholder: string
-  posterUrl?: string
+  playLabel: string
+  posterUrl: string
   title: string
+  unsupportedMessage: string
 }
 
-export function TodayVideo({ embedUrl, fileUrl, placeholder, posterUrl, title }: TodayVideoProps) {
+export function TodayVideo({
+  embedUrl,
+  fileUrl,
+  playLabel,
+  posterUrl,
+  title,
+  unsupportedMessage,
+}: TodayVideoProps) {
   const [isPlaying, setIsPlaying] = useState(false)
-  const hasVideo = Boolean(embedUrl || fileUrl)
 
   if (isPlaying && embedUrl) {
     return (
       <iframe
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
-        className="aspect-video w-full"
-        loading="lazy"
+        className="h-full w-full"
         referrerPolicy="strict-origin-when-cross-origin"
         src={embedUrl}
         title={title}
@@ -32,31 +39,29 @@ export function TodayVideo({ embedUrl, fileUrl, placeholder, posterUrl, title }:
   if (isPlaying && fileUrl) {
     return (
       <video
+        aria-label={title}
         autoPlay
-        className="aspect-video w-full bg-ink"
+        className="h-full w-full bg-black"
         controls
+        playsInline
         preload="metadata"
         src={fileUrl}
       >
-        {placeholder}
+        {unsupportedMessage}
       </video>
     )
   }
 
   return (
     <button
-      aria-label={hasVideo ? `Воспроизвести: ${title}` : placeholder}
-      className="group relative flex aspect-video w-full items-center justify-center overflow-hidden bg-ink"
-      disabled={!hasVideo}
+      aria-label={playLabel}
+      className="group relative flex h-full w-full cursor-pointer items-center justify-center focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-on-dark"
       onClick={() => setIsPlaying(true)}
       type="button"
     >
-      {posterUrl ? (
-        <img alt="" className="absolute inset-0 h-full w-full object-cover" src={posterUrl} />
-      ) : null}
-      <span className="absolute inset-0 bg-black/25" />
-      <span className="relative flex size-28 items-center justify-center rounded-full border-[10px] border-brand-green text-brand-green transition-transform group-enabled:group-hover:scale-105">
-        <Play className="ml-2 size-14 fill-current" />
+      <Image alt="" className="object-cover" fill src={posterUrl} unoptimized />
+      <span className="relative flex size-14 items-center justify-center rounded-full border-2 border-on-dark bg-brand-green text-on-dark transition-colors group-hover:bg-brand-green-hover sm:size-[4.5rem]">
+        <Play aria-hidden="true" className="ml-1 size-6 fill-current sm:size-8" />
       </span>
     </button>
   )

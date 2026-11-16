@@ -901,35 +901,35 @@ export const runwayTransTodayMessages: Record<AppLocale, RunwayTransTodayMessage
     },
   },
   kk: {
-    breadcrumbsAria: 'Breadcrumbs',
-    homeLink: 'Startseite',
-    pageTitle: 'Runway Trans heute',
-    breadcrumbsTitle: 'Runway Trans heute',
-    videoTitle: 'Unternehmensprasentation von Runway Trans',
-    videoUnsupported: 'Ihr Browser unterstutzt kein eingebettetes Video.',
+    breadcrumbsAria: 'Навигация жолы',
+    homeLink: 'Басты бет',
+    pageTitle: 'Runway Trans бүгін',
+    breadcrumbsTitle: 'Runway Trans бүгін',
+    videoTitle: 'Runway Trans компаниясының таныстырылымы',
+    videoUnsupported: 'Браузеріңіз кірістірілген бейнені қолдамайды.',
     videoPlaceholder:
-      'Fugen Sie im Adminbereich einen Link hinzu oder laden Sie eine Videodatei hoch, um sie auf dieser Seite anzuzeigen.',
+      'Бейнені осы бетте көрсету үшін басқару тақтасында сілтеме қосыңыз немесе бейнефайл жүктеңіз.',
     faqItems: [
       {
-        question: 'Warum ist Runway Trans ein zuverlassiger Partner?',
+        question: 'Неліктен Runway Trans сенімді серіктес?',
         answer:
-          'Wir arbeiten unter anspruchsvollen Bedingungen, nutzen einen eigenen Fuhrpark und sorgen in jeder Transportphase fur Transparenz.',
+          'Біз күрделі жағдайларда жұмыс істейміз, өз техникамызды пайдаланамыз және тасымалдаудың әр кезеңінде ашықтықты қамтамасыз етеміз.',
       },
       {
-        question: 'Wofur steht das Firmenlogo?',
+        question: 'Компанияның логотипі нені білдіреді?',
         answer:
-          'Das Logo steht fur Bewegung, Technologie und die Widerstandsfahigkeit unseres Teams bei allen Strassen- und Klimabedingungen.',
+          'Логотип қозғалысты, технологиялылықты және командамыздың түрлі жол мен климат жағдайларындағы төзімділігін білдіреді.',
       },
       {
-        question: 'Was macht das Unternehmen?',
+        question: 'Компания немен айналысады?',
         answer:
-          'Wir organisieren Gutertransporte, Spedition, Lieferung von Spezialtechnik sowie begleitende Logistikleistungen fur Unternehmen.',
+          'Біз жүк тасымалдауды, жүктерді экспедициялауды, арнайы техниканы жеткізуді және бизнеске арналған ілеспе логистикалық қызметтерді ұйымдастырамыз.',
       },
     ],
     metadata: {
-      title: 'Runway Trans heute',
+      title: 'Runway Trans бүгін',
       description:
-        'Eine Seite uber Runway Trans heute: Unternehmensvideo, zentrale Fragen und Antworten.',
+        'Runway Trans компаниясы туралы бейне және жиі қойылатын сұрақтардың жауаптары.',
     },
   },
   fr: {
@@ -996,4 +996,3 @@ export const runwayTransTodayMessages: Record<AppLocale, RunwayTransTodayMessage
 // Until full Kazakh page copy is ready, use the Russian copy instead of exposing legacy German text.
 homeMessages.kk = homeMessages.ru
 historyMessages.kk = historyMessages.ru
-runwayTransTodayMessages.kk = runwayTransTodayMessages.ru

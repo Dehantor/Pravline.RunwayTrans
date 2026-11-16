@@ -30,11 +30,6 @@ type VacanciesMessages = SimplePageMessages & {
   detailsLink: string
 }
 
-type EquipmentMessages = SimplePageMessages & {
-  empty: string
-  noImage: string
-}
-
 type ServicesMessages = SimplePageMessages & {
   empty: string
   cardFallback: CardMessage
@@ -113,7 +108,6 @@ type GeographyMessages = SimplePageMessages & {
 type LocalizedPageMessages = {
   guide: GuideMessages
   vacancies: VacanciesMessages
-  equipment: EquipmentMessages
   services: ServicesMessages
   partners: PartnersMessages
   cases: CasesMessages
@@ -176,15 +170,6 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       title: 'Вакансии',
       detailsLink: 'Подробнее и отклик ->',
       metadata: { title: 'Вакансии' },
-    },
-    equipment: {
-      title: 'Техника',
-      empty: 'Пока нет опубликованной техники.',
-      noImage: 'Нет изображения',
-      metadata: {
-        title: 'Техника',
-        description: 'Каталог техники компании RunwayTrans для перевозок в сложных условиях.',
-      },
     },
     services: {
       title: 'Услуги',
@@ -378,15 +363,6 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       detailsLink: 'Details and apply ->',
       metadata: { title: 'Vacancies' },
     },
-    equipment: {
-      title: 'Equipment',
-      empty: 'No published equipment yet.',
-      noImage: 'No image',
-      metadata: {
-        title: 'Equipment',
-        description: 'RunwayTrans equipment catalog for transportation in demanding conditions.',
-      },
-    },
     services: {
       title: 'Services',
       empty: 'No published services yet.',
@@ -570,15 +546,6 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       detailsLink: 'Details und Bewerbung ->',
       metadata: { title: 'Stellenangebote' },
     },
-    equipment: {
-      title: 'Technik',
-      empty: 'Noch keine veroffentlichte Technik.',
-      noImage: 'Kein Bild',
-      metadata: {
-        title: 'Technik',
-        description: 'Technikkatalog von RunwayTrans fur anspruchsvolle Transporte.',
-      },
-    },
     services: {
       title: 'Leistungen',
       empty: 'Noch keine veroffentlichten Leistungen.',
@@ -757,15 +724,6 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       detailsLink: 'Details et postuler ->',
       metadata: { title: 'Postes vacants' },
     },
-    equipment: {
-      title: 'Materiel',
-      empty: 'Aucun materiel publie pour le moment.',
-      noImage: 'Aucune image',
-      metadata: {
-        title: 'Materiel',
-        description: 'Catalogue du materiel RunwayTrans pour conditions difficiles.',
-      },
-    },
     services: {
       title: 'Services',
       empty: 'Aucun service publie pour le moment.',
@@ -921,12 +879,6 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       metadata: { title: '指南', description: 'RunwayTrans 货物运输服务和条件指南。' },
     },
     vacancies: { title: '招聘职位', detailsLink: '详情并申请 ->', metadata: { title: '招聘职位' } },
-    equipment: {
-      title: '设备',
-      empty: '暂无已发布设备。',
-      noImage: '无图片',
-      metadata: { title: '设备', description: 'RunwayTrans 复杂条件运输设备目录。' },
-    },
     services: {
       title: '服务',
       empty: '暂无已发布服务。',

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 
+import { equipmentImages, equipmentMessages } from '@/i18n/equipmentMessages'
+import { getRequestLocale } from '@/i18n/getRequestLocale'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { getRequestLocale } from '@/i18n/getRequestLocale'
-import { pageMessages } from '@/i18n/pageMessages'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,9 +17,11 @@ function getImageUrl(image: unknown) {
 }
 
 export default async function TehnikaPage() {
-  const locale = await getRequestLocale()
-  const t = pageMessages[locale].equipment
-  const payload = await getPayload({ config: configPromise })
+  const [locale, payload] = await Promise.all([
+    getRequestLocale(),
+    getPayload({ config: configPromise }),
+  ])
+  const t = equipmentMessages[locale]
 
   const equipmentItems = await payload.find({
     collection: 'equipment',
@@ -35,73 +38,95 @@ export default async function TehnikaPage() {
     },
   })
 
-  const introText =
-    locale === 'ru'
-      ? 'Наша компания уникальна тем, что мы имеем все возможности для работы в условиях тундры по грузоперевозкам.'
-      : t.metadata.description
-
   return (
-    <section className="container bg-white py-7 text-black">
-      <h1 className="sr-only">{t.title}</h1>
-      <p className="mb-4 text-[15px] leading-6 text-neutral-900">{introText}</p>
+    <main className="bg-background text-foreground">
+      <div className="container py-10 sm:py-14">
+        <h1 className="text-3xl font-bold sm:text-4xl">{t.title}</h1>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed">{t.intro}</p>
 
-      {equipmentItems.docs.length === 0 ? (
-        <p className="text-muted-foreground">{t.empty}</p>
-      ) : (
-        <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-          {equipmentItems.docs.map((item) => {
-            const imageUrl = getImageUrl(item.image)
+        <div className="mt-6 grid max-w-[960px] gap-4 sm:grid-cols-2 md:gap-6">
+          {equipmentImages.map(({ kind, src }) => {
+            const { title, description } = t.cards[kind]
 
             return (
               <article
-                className="flex min-h-[590px] flex-col border border-brand-green bg-background-light p-3 text-ink"
-                key={item.id}
+                className="rounded-xl border border-border bg-card p-3 text-card-foreground sm:p-4"
+                key={kind}
               >
-                {imageUrl ? (
-                  <img
-                    alt={item.title}
-                    className="mb-5 aspect-[1.12] w-full object-cover"
-                    loading="lazy"
-                    src={imageUrl}
-                  />
-                ) : (
-                  <div className="mb-5 flex aspect-[1.12] w-full items-center justify-center bg-neutral-100 text-sm text-neutral-500">
-                    {t.noImage}
-                  </div>
-                )}
-
-                <div className="flex flex-1 flex-col">
-                  <h2 className="mb-6 text-[13px] font-bold leading-5">{item.title}</h2>
-
-                  {item.specifications && item.specifications.length > 0 ? (
-                    <dl className="space-y-2">
-                      {item.specifications.map((spec, index) => (
-                        <div
-                          className="text-[11px] leading-[1.45]"
-                          key={spec.id ?? `${spec.title}-${index}`}
-                        >
-                          <dt className="inline font-bold">{spec.title}: </dt>
-                          <dd className="inline">{spec.description}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  ) : null}
-                </div>
+                <Image
+                  alt=""
+                  className="aspect-[16/10] w-full rounded-lg object-cover"
+                  height={128}
+                  src={src}
+                  unoptimized
+                  width={183}
+                />
+                <h2 className="mt-3 text-xl leading-tight font-bold sm:text-2xl">{title}</h2>
+                <p className="mt-2 text-base leading-relaxed">{description}</p>
               </article>
             )
           })}
         </div>
-      )}
-    </section>
+        <p className="mt-3 text-sm text-muted-foreground">{t.imageNote}</p>
+
+        {equipmentItems.docs.length > 0 ? (
+          <section aria-labelledby="equipment-specifications" className="mt-10">
+            <h2 className="text-2xl font-bold" id="equipment-specifications">
+              {t.specificationsTitle}
+            </h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
+              {equipmentItems.docs.map((item) => {
+                const imageUrl = getImageUrl(item.image)
+
+                return (
+                  <article
+                    className="rounded-xl border border-border bg-card p-3 text-card-foreground sm:p-4"
+                    key={item.id}
+                  >
+                    {imageUrl ? (
+                      <Image
+                        alt={item.title}
+                        className="aspect-[16/10] w-full rounded-lg object-cover"
+                        height={300}
+                        src={imageUrl}
+                        unoptimized
+                        width={480}
+                      />
+                    ) : (
+                      <div className="flex aspect-[16/10] items-center justify-center rounded-lg bg-muted text-sm text-muted-foreground">
+                        {t.noImage}
+                      </div>
+                    )}
+
+                    <h3 className="mt-3 text-xl font-bold">{item.title}</h3>
+
+                    {item.specifications?.length ? (
+                      <dl className="mt-3 space-y-2 text-sm">
+                        {item.specifications.map((spec, index) => (
+                          <div key={spec.id ?? `${spec.title}-${index}`}>
+                            <dt className="inline font-semibold">{spec.title}: </dt>
+                            <dd className="inline">{spec.description}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    ) : null}
+                  </article>
+                )
+              })}
+            </div>
+          </section>
+        ) : null}
+      </div>
+    </main>
   )
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
-  const t = pageMessages[locale].equipment
+  const t = equipmentMessages[locale]
 
   return {
-    title: t.metadata.title,
-    description: t.metadata.description,
+    title: t.title,
+    description: t.intro,
   }
 }
