@@ -1,79 +1,64 @@
 'use client'
 
 import { Maximize2, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useRef } from 'react'
 
 type HistoryImageProps = {
   alt: string
   className: string
+  closeLabel: string
+  openLabel: string
   src: string
 }
 
-export function HistoryImage({ alt, className, src }: HistoryImageProps) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  useEffect(() => {
-    if (!isOpen) return
-
-    const previousOverflow = document.body.style.overflow
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false)
-    }
-
-    document.body.style.overflow = 'hidden'
-    document.addEventListener('keydown', closeOnEscape)
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-      document.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [isOpen])
+export function HistoryImage({ alt, className, closeLabel, openLabel, src }: HistoryImageProps) {
+  const dialog = useRef<HTMLDialogElement>(null)
+  const opener = useRef<HTMLButtonElement>(null)
 
   return (
-    <>
-      <div className={className}>
-        <button
-          aria-label={`Открыть изображение: ${alt}`}
-          className="group relative h-full w-full cursor-zoom-in"
-          onClick={() => setIsOpen(true)}
-          type="button"
-        >
-          <img alt={alt} className="h-full w-full object-cover" loading="lazy" src={src} />
-          <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/10 group-focus-visible:bg-black/10">
-            <span className="flex size-11 scale-90 items-center justify-center rounded-sm bg-brand-green text-on-dark opacity-0 shadow-lg transition group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100">
-              <Maximize2 className="size-5" />
-            </span>
-          </span>
-        </button>
-      </div>
+    <div className={className}>
+      <button
+        aria-label={`${openLabel}: ${alt}`}
+        className="relative block aspect-[2.2] w-full cursor-zoom-in overflow-hidden rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+        onClick={() => dialog.current?.showModal()}
+        ref={opener}
+        title={openLabel}
+        type="button"
+      >
+        <img alt="" className="h-full w-full object-cover" loading="lazy" src={src} />
+        <span className="absolute right-2 bottom-2 flex size-8 items-center justify-center rounded-md bg-card text-card-foreground shadow-sm">
+          <Maximize2 aria-hidden="true" className="size-4" />
+        </span>
+      </button>
 
-      {isOpen &&
-        createPortal(
-          <div
-            aria-label={alt}
-            aria-modal="true"
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4"
-            onClick={() => setIsOpen(false)}
-            role="dialog"
+      <dialog
+        aria-label={alt}
+        className="m-auto max-w-[92vw] overflow-visible rounded-lg bg-card text-card-foreground backdrop:bg-[rgb(0_0_0/0.75)]"
+        data-history-image
+        onClick={(event) => {
+          if (event.target === event.currentTarget) event.currentTarget.close()
+        }}
+        onClose={() => opener.current?.focus()}
+        ref={dialog}
+      >
+        <div className="relative overflow-hidden rounded-lg">
+          <button
+            aria-label={closeLabel}
+            className="absolute top-2 right-2 flex size-11 items-center justify-center rounded-full bg-card text-card-foreground shadow-sm focus-visible:outline-2 focus-visible:outline-brand-green"
+            onClick={() => dialog.current?.close()}
+            title={closeLabel}
+            type="button"
           >
-            <button
-              aria-label="Закрыть изображение"
-              className="absolute top-5 right-5 flex size-11 items-center justify-center rounded-full bg-background-light text-ink shadow-lg"
-              onClick={() => setIsOpen(false)}
-              type="button"
-            >
-              <X className="size-6" />
-            </button>
-            <img
-              alt={alt}
-              className="max-h-[80vh] max-w-[80vw] object-contain shadow-2xl"
-              onClick={(event) => event.stopPropagation()}
-              src={src}
-            />
-          </div>,
-          document.body,
-        )}
-    </>
+            <X aria-hidden="true" className="size-6" />
+          </button>
+          <img
+            alt={alt}
+            className="max-h-[85vh] max-w-full object-contain"
+            loading="lazy"
+            src={src}
+          />
+        </div>
+      </dialog>
+    </div>
   )
 }

@@ -60,6 +60,9 @@ type HistoryMessages = {
   homeLink: string
   pageTitle: string
   breadcrumbsTitle: string
+  subtitle: string
+  openImage: string
+  closeImage: string
   timeline: HistoryTimelineItem[]
   metadata: {
     title: string
@@ -567,6 +570,9 @@ export const historyMessages: Record<AppLocale, HistoryMessages> = {
     homeLink: 'Главная',
     pageTitle: 'История',
     breadcrumbsTitle: 'История',
+    subtitle: 'Ключевые этапы развития компании',
+    openImage: 'Открыть изображение',
+    closeImage: 'Закрыть изображение',
     timeline: [
       {
         years: '2008',
@@ -609,7 +615,7 @@ export const historyMessages: Record<AppLocale, HistoryMessages> = {
       {
         years: '2023',
         title: 'Занимаем лидирующие позиции',
-        description: 'Наши вездеходы на всех месторождениях страны.',
+        description: 'Наши вездеходы работают на месторождениях по всей стране.',
       },
     ],
     metadata: {
@@ -622,6 +628,9 @@ export const historyMessages: Record<AppLocale, HistoryMessages> = {
     homeLink: 'Home',
     pageTitle: 'History',
     breadcrumbsTitle: 'History',
+    subtitle: 'Key milestones in the company’s development',
+    openImage: 'Open image',
+    closeImage: 'Close image',
     timeline: [
       {
         years: '2008',
@@ -673,65 +682,72 @@ export const historyMessages: Record<AppLocale, HistoryMessages> = {
     },
   },
   kk: {
-    breadcrumbsAria: 'Breadcrumbs',
-    homeLink: 'Startseite',
-    pageTitle: 'Geschichte',
-    breadcrumbsTitle: 'Geschichte',
+    breadcrumbsAria: 'Навигация жолы',
+    homeLink: 'Басты бет',
+    pageTitle: 'Тарих',
+    breadcrumbsTitle: 'Тарих',
+    subtitle: 'Компанияның негізгі даму кезеңдері',
+    openImage: 'Суретті ашу',
+    closeImage: 'Суретті жабу',
     timeline: [
       {
         years: '2008',
-        title: 'Grundung des Unternehmens',
+        title: 'Компанияның құрылуы',
         description:
-          'Das Unternehmen kaufte 2 Iveco-Zugmaschinen mit Sattelaufliegern sowie 1 Vityaz-Ketten-Gelandefahrzeug.',
+          'Компания жартылай тіркемелері бар 2 Iveco тартқышын және 1 «Витязь» батпақ жүргішін сатып алды.',
       },
       {
         years: '2009',
-        title: 'Arbeit in neuen Regionen',
+        title: 'Жаңа өңірлердегі жұмыс',
         description:
-          'Ein weiterer Vityaz wurde angeschafft. Das Unternehmen begann Langstreckentransporte mit Ketten-Gelandefahrzeugen.',
+          'Тағы бір «Витязь» сатып алынды. Компания батпақ жүргіштермен алыс қашықтыққа тасымалдауды бастады.',
       },
       {
         years: '2010',
-        title: 'Anerkennung im Bereich Transportleistungen',
+        title: 'Көлік қызметтері саласында танылу',
         description:
-          'Fuhrungskrafte anderer Unternehmen reisten personlich an, um Runway Trans LLC zu danken.',
+          'Басқа компаниялардың басшылары «Ранвей Транс» компаниясына алғыс айту үшін өздері ұшып келді.',
       },
       {
         years: '2011',
-        title: 'Einsatz auf der Taimyr-Halbinsel',
-        description: 'Beteiligung an der Erschliessung neuer Olfelder.',
+        title: 'Таймырдағы жұмыстың басталуы',
+        description: 'Жаңа мұнай кен орындарын игеруге қатысу.',
       },
       {
         years: '2012-2016',
-        title: 'Verstandnis der Starken und Grenzen der Technik',
-        description: 'Anschaffung neuer Einheiten von Spezialtechnik.',
+        title: 'Техниканың артықшылықтары мен шектеулерін анықтау',
+        description: 'Жаңа арнайы техника сатып алынды.',
       },
       {
         years: '2016-2020',
-        title: 'Ausbau der Unternehmensprasenz',
-        description: 'Region Irkutsk.',
+        title: 'Компанияның жұмыс аумағын кеңейту',
+        description: 'Иркутск облысы.',
       },
       {
         years: '2020-2022',
-        title: 'Anschaffung neuer Arten von Spezialtechnik',
-        description: 'Bagger- und Notfallkomplexe.',
+        title: 'Арнайы техниканың жаңа түрлерін сатып алу',
+        description: 'Экскаваторлық және апаттық кешендер.',
       },
       {
         years: '2023',
-        title: 'Fuhrende Positionen',
-        description: 'Unsere Gelandefahrzeuge sind auf Feldern im ganzen Land im Einsatz.',
+        title: 'Жетекші орындарға шығу',
+        description:
+          'Біздің жол талғамайтын көліктеріміз елдің түкпір-түкпіріндегі кен орындарында жұмыс істейді.',
       },
     ],
     metadata: {
-      title: 'Geschichte',
-      description: 'Wichtige Meilensteine in der Entwicklung von RunwayTrans von 2008 bis heute.',
+      title: 'Тарих',
+      description: 'Runway Trans компаниясының 2008 жылдан бүгінге дейінгі негізгі даму кезеңдері.',
     },
   },
   fr: {
-    breadcrumbsAria: 'Fil d Ariane',
+    breadcrumbsAria: 'Fil d’Ariane',
     homeLink: 'Accueil',
     pageTitle: 'Histoire',
     breadcrumbsTitle: 'Histoire',
+    subtitle: 'Les grandes étapes du développement de l’entreprise',
+    openImage: 'Ouvrir l’image',
+    closeImage: 'Fermer l’image',
     timeline: [
       {
         years: '2008',
@@ -787,6 +803,9 @@ export const historyMessages: Record<AppLocale, HistoryMessages> = {
     homeLink: '首页',
     pageTitle: '历史',
     breadcrumbsTitle: '历史',
+    subtitle: '公司发展历程中的重要里程碑',
+    openImage: '打开图片',
+    closeImage: '关闭图片',
     timeline: [
       {
         years: '2008',
@@ -995,4 +1014,3 @@ export const runwayTransTodayMessages: Record<AppLocale, RunwayTransTodayMessage
 
 // Until full Kazakh page copy is ready, use the Russian copy instead of exposing legacy German text.
 homeMessages.kk = homeMessages.ru
-historyMessages.kk = historyMessages.ru

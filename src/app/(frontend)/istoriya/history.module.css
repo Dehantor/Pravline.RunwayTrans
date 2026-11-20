@@ -1,0 +1,70 @@
+.timeline {
+  --gap: 1rem;
+  --axis: 0.375rem;
+  --marker-offset: 0.75rem;
+
+  display: grid;
+  gap: var(--gap);
+}
+
+.milestone {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  gap: 0.5rem;
+  padding-inline-start: 1.5rem;
+}
+
+.milestone::before,
+.milestone::after {
+  position: absolute;
+  top: var(--marker-offset);
+  inset-inline-start: var(--axis);
+  content: '';
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.milestone:not(:last-child)::before {
+  bottom: calc(-1 * (var(--gap) + var(--marker-offset)));
+  width: 1px;
+  background: var(--border);
+}
+
+.milestone::after {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid var(--background);
+  border-radius: 50%;
+  background: var(--brand-green);
+  transform: translate(-50%, -50%);
+}
+
+.media {
+  min-width: 0;
+}
+
+:global(body):has(.media :global(dialog[data-history-image][open])) {
+  overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+  .timeline {
+    --date-width: 7.25rem;
+    --column-gap: 2.75rem;
+    --axis: calc(var(--date-width) + var(--column-gap) / 2);
+    --marker-offset: 2rem;
+  }
+
+  .milestone {
+    grid-template-columns: var(--date-width) minmax(0, 1fr);
+    column-gap: var(--column-gap);
+    padding-inline-start: 0;
+  }
+
+  .media {
+    flex: 0 0 39%;
+    align-self: center;
+    max-width: 19rem;
+  }
+}

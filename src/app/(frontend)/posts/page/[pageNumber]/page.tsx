@@ -9,7 +9,6 @@ import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
-import { defaultLocale } from '@/i18n/locales'
 
 export const revalidate = 600
 
@@ -72,27 +71,4 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   return {
     title: `Новости | Runway Trans${pageNumber ? ` - страница ${pageNumber}` : ''}`,
   }
-}
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const { totalDocs } = await payload.count({
-    collection: 'posts',
-    overrideAccess: false,
-    where: {
-      _status: {
-        equals: 'published',
-      },
-    },
-  })
-
-  const totalPages = Math.ceil(totalDocs / 10)
-
-  const pages: { pageNumber: string }[] = []
-
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push({ pageNumber: String(i) })
-  }
-
-  return pages
 }

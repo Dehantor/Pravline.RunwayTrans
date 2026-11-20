@@ -49,7 +49,7 @@ type PartnersMessages = SimplePageMessages & {
   videoButtonLabel: string
 }
 
-type CasesMessages = SimplePageMessages & {
+type ReviewsMessages = SimplePageMessages & {
   homeLink: string
   breadcrumbsTitle: string
   description: string
@@ -57,6 +57,10 @@ type CasesMessages = SimplePageMessages & {
   expertRole: string
   reviewPrefix: string
   openVideoAria: string
+  heroImageAlt: string
+  documentsSectionTitle: string
+  documentsSectionDescription: string
+  metadata: { title: string; description: string }
 }
 
 type ContactsMessages = SimplePageMessages & {
@@ -110,7 +114,7 @@ type LocalizedPageMessages = {
   vacancies: VacanciesMessages
   services: ServicesMessages
   partners: PartnersMessages
-  cases: CasesMessages
+  reviews: ReviewsMessages
   contacts: ContactsMessages
   geography: GeographyMessages
 }
@@ -228,19 +232,23 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         description: 'Страница партнеров Runway Trans.',
       },
     },
-    cases: {
-      title: 'Кейсы',
+    reviews: {
+      title: 'Видео-отзывы наших партнёров',
       homeLink: 'Главная',
-      breadcrumbsTitle: 'Кейсы',
+      breadcrumbsTitle: 'Отзывы',
       description:
-        'Видео, отзывы и письма благодарности от клиентов, с которыми мы работали на сложных маршрутах.',
+        'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.',
       expertName: 'Виктория Кондакова',
       expertRole: 'Эксперт по эксплуатации отелей в РФ',
-      reviewPrefix: 'Кейс:',
-      openVideoAria: 'Открыть видео-кейс',
+      reviewPrefix: 'Отзыв:',
+      openVideoAria: 'Открыть видео-отзыв',
+      heroImageAlt: 'Видео-отзывы партнёров Runway Trans',
+      documentsSectionTitle: 'Отзывы на бумажных носителях',
+      documentsSectionDescription:
+        'Мы гордимся проделанной работой и успешным сотрудничеством с нашими заказчиками.',
       metadata: {
-        title: 'Кейсы | RunwayTrans',
-        description: 'Кейсы, видео и письма благодарности от клиентов RunwayTrans.',
+        title: 'Отзывы | RunwayTrans',
+        description: 'Видео-отзывы и письма благодарности от клиентов RunwayTrans.',
       },
     },
     contacts: {
@@ -414,19 +422,23 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       videoButtonLabel: 'Watch video testimonials',
       metadata: { title: 'Partners', description: 'Runway Trans partners page.' },
     },
-    cases: {
-      title: 'Cases',
+    reviews: {
+      title: 'Video testimonials from our partners',
       homeLink: 'Home',
-      breadcrumbsTitle: 'Cases',
+      breadcrumbsTitle: 'Reviews',
       description:
-        'Videos, testimonials, and letters of appreciation from clients we worked with on complex routes.',
+        'Our clients have shared more than 60 video testimonials and over 100 letters of appreciation on company letterhead.',
       expertName: 'Victoria Kondakova',
       expertRole: 'Hotel operations expert in Russia',
-      reviewPrefix: 'Case:',
-      openVideoAria: 'Open video case',
+      reviewPrefix: 'Review:',
+      openVideoAria: 'Open video testimonial',
+      heroImageAlt: 'Video testimonials from Runway Trans partners',
+      documentsSectionTitle: 'Written testimonials',
+      documentsSectionDescription:
+        'We are proud of our work and our collaboration with our clients.',
       metadata: {
-        title: 'Cases | RunwayTrans',
-        description: 'RunwayTrans cases, videos, and client letters of appreciation.',
+        title: 'Reviews | RunwayTrans',
+        description: 'Video testimonials and letters of appreciation from RunwayTrans clients.',
       },
     },
     contacts: {
@@ -593,18 +605,23 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       videoButtonLabel: 'Video-Referenzen ansehen',
       metadata: { title: 'Partner', description: 'Partnerseite von Runway Trans.' },
     },
-    cases: {
-      title: 'Projekte',
-      homeLink: 'Startseite',
-      breadcrumbsTitle: 'Projekte',
-      description: 'Videos, Referenzen und Dankesschreiben von Kunden auf komplexen Routen.',
-      expertName: 'Victoria Kondakova',
-      expertRole: 'Expertin fur Hotelbetrieb in Russland',
-      reviewPrefix: 'Projekt:',
-      openVideoAria: 'Video-Projekt offnen',
+    reviews: {
+      title: 'Серіктестеріміздің бейнепікірлері',
+      homeLink: 'Басты бет',
+      breadcrumbsTitle: 'Пікірлер',
+      description:
+        'Клиенттеріміз 60-тан астам бейнепікір және фирмалық бланкіде 100-ден астам алғыс хат жолдады.',
+      expertName: 'Виктория Кондакова',
+      expertRole: 'Ресейдегі қонақүйлерді пайдалану жөніндегі сарапшы',
+      reviewPrefix: 'Пікір:',
+      openVideoAria: 'Бейнепікірді ашу',
+      heroImageAlt: 'Runway Trans серіктестерінің бейнепікірлері',
+      documentsSectionTitle: 'Жазбаша пікірлер',
+      documentsSectionDescription:
+        'Атқарған жұмысымызды және тапсырыс берушілерімізбен табысты ынтымақтастығымызды мақтан тұтамыз.',
       metadata: {
-        title: 'Projekte | RunwayTrans',
-        description: 'RunwayTrans Projekte, Videos und Kundenreferenzen.',
+        title: 'Пікірлер | RunwayTrans',
+        description: 'RunwayTrans клиенттерінің бейнепікірлері мен алғыс хаттары.',
       },
     },
     contacts: {
@@ -769,19 +786,23 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       videoButtonLabel: 'Voir les temoignages video',
       metadata: { title: 'Partenaires', description: 'Page des partenaires Runway Trans.' },
     },
-    cases: {
-      title: 'Cas clients',
+    reviews: {
+      title: 'Témoignages vidéo de nos partenaires',
       homeLink: 'Accueil',
-      breadcrumbsTitle: 'Cas clients',
+      breadcrumbsTitle: 'Avis',
       description:
-        'Videos, temoignages et lettres de remerciement de clients sur des itineraire complexes.',
+        'Nos clients nous ont adressé plus de 60 témoignages vidéo et plus de 100 lettres de remerciement sur papier à en-tête.',
       expertName: 'Victoria Kondakova',
-      expertRole: 'Experte en exploitation hoteliere en Russie',
-      reviewPrefix: 'Cas:',
-      openVideoAria: 'Ouvrir le cas video',
+      expertRole: 'Experte en exploitation hôtelière en Russie',
+      reviewPrefix: 'Avis :',
+      openVideoAria: 'Ouvrir le témoignage vidéo',
+      heroImageAlt: 'Témoignages vidéo des partenaires de Runway Trans',
+      documentsSectionTitle: 'Témoignages écrits',
+      documentsSectionDescription:
+        'Nous sommes fiers de notre travail et de la réussite de nos collaborations avec nos clients.',
       metadata: {
-        title: 'Cas clients | RunwayTrans',
-        description: 'Cas clients, videos et temoignages RunwayTrans.',
+        title: 'Avis | RunwayTrans',
+        description: 'Témoignages vidéo et lettres de remerciement des clients de RunwayTrans.',
       },
     },
     contacts: {
@@ -908,18 +929,21 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       videoButtonLabel: '观看视频评价',
       metadata: { title: '合作伙伴', description: 'Runway Trans 合作伙伴页面。' },
     },
-    cases: {
-      title: '案例',
+    reviews: {
+      title: '合作伙伴的视频评价',
       homeLink: '首页',
-      breadcrumbsTitle: '案例',
-      description: '来自复杂路线客户的视频、评价和感谢信。',
+      breadcrumbsTitle: '评价',
+      description: '客户提供了 60 多条视频评价和 100 多封以公司信笺书写的感谢信。',
       expertName: 'Victoria Kondakova',
       expertRole: '俄罗斯酒店运营专家',
-      reviewPrefix: '案例：',
-      openVideoAria: '打开视频案例',
+      reviewPrefix: '评价：',
+      openVideoAria: '打开视频评价',
+      heroImageAlt: 'Runway Trans 合作伙伴的视频评价',
+      documentsSectionTitle: '书面评价',
+      documentsSectionDescription: '我们为自己的工作以及与客户的成功合作而自豪。',
       metadata: {
-        title: '案例 | RunwayTrans',
-        description: 'RunwayTrans 案例、视频和客户感谢信。',
+        title: '评价 | RunwayTrans',
+        description: 'RunwayTrans 客户的视频评价和感谢信。',
       },
     },
     contacts: {
@@ -991,8 +1015,8 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
   },
 }
 
-// Until full Kazakh page copy is ready, use the Russian copy instead of exposing legacy German text.
-pageMessages.kk = pageMessages.ru
+// Use the Russian copy for pages still awaiting a Kazakh translation.
+pageMessages.kk = { ...pageMessages.ru, reviews: pageMessages.kk.reviews }
 
 export function getPageText(
   locale: AppLocale,

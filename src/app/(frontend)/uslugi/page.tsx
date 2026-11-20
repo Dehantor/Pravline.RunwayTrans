@@ -12,7 +12,6 @@ import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
 const introMessages: Record<AppLocale, string> = {
@@ -48,17 +47,6 @@ function CircleImage({ image, title }: { image: CardImage; title: string }) {
         />
       ) : null}
     </span>
-  )
-}
-
-function CargoCard({ image, title }: { image: CardImage; title: string }) {
-  return (
-    <article className="text-center">
-      <CircleImage image={image} title={title} />
-      <h3 className="mx-auto mt-7 max-w-[420px] text-xl leading-tight font-semibold text-brand-green">
-        {title}
-      </h3>
-    </article>
   )
 }
 
@@ -152,23 +140,6 @@ export default async function ServicesPage() {
     homeCopy.ctaRequest,
   )
   const ctaHref = servicesPageData.ctaHref || '/contacts#callback-form'
-  const transportedTitle = getPageText(
-    locale,
-    servicesPageData.transportedSectionTitle,
-    ruPageCopy.transportedSectionTitle,
-    pageCopy.transportedSectionTitle,
-  )
-  const transportedDescription = getPageText(
-    locale,
-    servicesPageData.transportedDescription,
-    ruHomeCopy.cargoDescription,
-    homeCopy.cargoDescription,
-  )
-  const configuredTransportedItems = servicesPageData.transportedItems ?? []
-  const transportedItems =
-    configuredTransportedItems.length > 0
-      ? configuredTransportedItems
-      : pageCopy.transportedItems.map((item) => ({ ...item, image: null }))
   const advantagesTitle = getPageText(
     locale,
     servicesPageData.advantagesSectionTitle,
@@ -210,21 +181,6 @@ export default async function ServicesPage() {
           ) : (
             <p className="mt-10 text-center text-neutral-600">{pageCopy.empty}</p>
           )}
-        </section>
-
-        <section className="pt-20 sm:pt-24">
-          <h2 className="text-center text-3xl font-semibold">{transportedTitle}</h2>
-          <p className="mt-7 text-lg leading-relaxed sm:text-xl">{transportedDescription}</p>
-
-          <div className="mt-10 grid gap-x-12 gap-y-16 md:grid-cols-2 xl:grid-cols-3">
-            {transportedItems.map((item, index) => (
-              <CargoCard
-                image={item.image}
-                key={'id' in item ? item.id || index : index}
-                title={item.title}
-              />
-            ))}
-          </div>
         </section>
 
         <section className="pt-20 sm:pt-24">

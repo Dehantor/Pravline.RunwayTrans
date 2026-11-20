@@ -1,9 +1,11 @@
 'use client'
 
 import { locales, type AppLocale } from '@/i18n/locales'
+import { headerMessages } from '@/i18n/navigationMessages'
+import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef } from 'react'
 
 const localeOptions: Record<AppLocale, { flag: string; label: string; shortLabel: string }> = {
   ru: { flag: '/media/flags/ru.svg', label: 'Русский', shortLabel: 'Рус' },
@@ -21,21 +23,43 @@ function buildPathWithLocale(pathname: string, locale: AppLocale): string {
   return normalizedPath === '/' ? `/${locale}` : `/${locale}${normalizedPath}`
 }
 
-export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
+type LanguageSwitcherProps = {
+  locale: AppLocale
+  isOpen: boolean
+  onToggle: () => void
+  onClose: () => void
+}
+
+export function LanguageSwitcher({ locale, isOpen, onToggle, onClose }: LanguageSwitcherProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [isOpen, setIsOpen] = useState(false)
+  const menuId = useId()
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const current = localeOptions[locale]
+  const t = headerMessages[locale]
 
   useEffect(() => {
-    const closeOnOutsideClick = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false)
+    if (!isOpen) return
+
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) onClose()
+    }
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+
+      event.preventDefault()
+      onClose()
+      triggerRef.current?.focus()
     }
 
-    document.addEventListener('mousedown', closeOnOutsideClick)
-    return () => document.removeEventListener('mousedown', closeOnOutsideClick)
-  }, [])
+    document.addEventListener('pointerdown', closeOnOutsideClick)
+    document.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsideClick)
+      document.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [isOpen, onClose])
 
   const onChange = (nextLocale: AppLocale) => {
     const pathWithLocale = buildPathWithLocale(pathname, nextLocale)
@@ -47,26 +71,30 @@ export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
   }
 
   return (
-    <div className="relative shrink-0" ref={rootRef}>
+    <div className="relative ml-auto shrink-0 lg:order-4" ref={rootRef}>
       <button
+        aria-controls={isOpen ? menuId : undefined}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label="Язык сайта"
-        className="flex min-w-[49px] items-center gap-1 text-left text-[12px] leading-tight"
-        onClick={() => setIsOpen((value) => !value)}
+        aria-label={t.languageLabel}
+        className="flex min-h-11 min-w-[49px] cursor-pointer items-center justify-center gap-1 rounded-md px-1 text-left text-[12px] leading-tight focus-visible:outline-2 focus-visible:outline-brand-green max-lg:border max-lg:border-background-muted lg:min-h-0 lg:px-0"
+        onClick={onToggle}
+        ref={triggerRef}
+        title={t.languageLabel}
         type="button"
       >
-        <span className="flex flex-col items-center">
-          <Image alt="" aria-hidden height={27} src={current.flag} width={27} />
+        <span className="flex items-center gap-1.5">
+          <Image alt="" aria-hidden height={22} src={current.flag} width={22} />
           <span>{current.shortLabel}</span>
         </span>
-        <Image alt="" aria-hidden height={7} src="/media/flags/ch.svg" width={12} />
+        <ChevronDown aria-hidden="true" className="size-3" />
       </button>
 
       {isOpen && (
         <ul
-          aria-label="Выберите язык"
-          className="absolute top-full right-0 z-50 mt-2 w-40 overflow-hidden rounded-md border border-background-muted bg-background-light py-1 shadow-xl"
+          aria-label={t.languageOptionsLabel}
+          className="absolute top-full right-0 z-50 mt-2 max-h-[calc(100dvh-5rem)] w-40 overflow-y-auto overscroll-contain rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-xl"
+          id={menuId}
           role="listbox"
         >
           {locales.map((item) => {
@@ -75,7 +103,7 @@ export function LanguageSwitcher({ locale }: { locale: AppLocale }) {
             return (
               <li aria-selected={item === locale} key={item} role="option">
                 <button
-                  className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-background-muted"
+                  className="flex min-h-11 w-full cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm hover:bg-accent focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-green"
                   onClick={() => onChange(item)}
                   type="button"
                 >

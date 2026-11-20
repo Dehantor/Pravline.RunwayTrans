@@ -1,0 +1,62 @@
+.frame {
+  container-type: inline-size;
+}
+
+.frame :global(.leaflet-container) {
+  background: var(--muted);
+}
+
+.frame :global(.leaflet-control-zoom) {
+  border-color: var(--border);
+}
+
+.frame :global(.leaflet-control-zoom) a {
+  border-color: var(--border);
+  background: var(--popover);
+  color: var(--popover-foreground);
+}
+
+.frame :global(.leaflet-control-zoom) a:hover {
+  background: var(--muted);
+}
+
+.frame :global(.leaflet-control-zoom) a:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.frame :global(.leaflet-control-zoom) :global(.leaflet-disabled) {
+  color: var(--muted-foreground);
+}
+
+.frame :global(.leaflet-tooltip),
+.frame :global(.leaflet-control-attribution) {
+  border-color: var(--border);
+  background: var(--popover);
+  color: var(--popover-foreground);
+}
+
+.frame :global(.leaflet-tooltip) {
+  inline-size: max-content;
+  max-inline-size: min(18rem, 45cqw);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.frame :global(.leaflet-tooltip-top)::before {
+  border-top-color: var(--popover);
+}
+
+.frame :global(.leaflet-tooltip-bottom)::before {
+  border-bottom-color: var(--popover);
+}
+
+.frame :global(.leaflet-tooltip-left)::before {
+  border-left-color: var(--popover);
+}
+
+.frame :global(.leaflet-tooltip-right)::before {
+  border-right-color: var(--popover);
+}

@@ -10,7 +10,6 @@ import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import Link from 'next/link'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
 const contactIcons: Record<string, LucideIcon> = {

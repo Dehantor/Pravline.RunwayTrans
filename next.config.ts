@@ -28,6 +28,7 @@ const redirects: NextConfig['redirects'] = async () => {
 }
 
 const nextConfig: NextConfig = {
+  distDir: process.env.RUNWAY_NEXT_DIST_DIR || '.next',
   images: {
     localPatterns: [
       {

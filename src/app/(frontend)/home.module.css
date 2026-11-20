@@ -1,0 +1,133 @@
+.section {
+  padding-block: clamp(2rem, 5vw, 3.75rem);
+}
+
+.cargo {
+  background: color-mix(in srgb, var(--background), var(--foreground) 3%);
+}
+
+.sectionTitle {
+  margin: 0 0 clamp(0.875rem, 2vw, 1.375rem);
+  font-size: clamp(1.625rem, 3vw, 2.375rem);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.sectionTitle:has(+ .sectionDescription) {
+  margin-bottom: 0.625rem;
+}
+
+.sectionDescription {
+  max-width: 84ch;
+  margin-block: 0 1.5rem;
+  color: var(--foreground);
+  font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+  line-height: 1.55;
+}
+
+.transportIntro {
+  text-align: center;
+}
+
+.transportIntro .sectionDescription {
+  max-width: 112ch;
+  margin-inline: auto;
+}
+
+.serviceCard,
+.iconCard {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--card), var(--on-dark) 75%);
+  color: var(--card-foreground);
+}
+
+:global([data-theme='dark']) .serviceCard,
+:global([data-theme='dark']) .iconCard {
+  background: var(--card);
+}
+
+.serviceCard {
+  padding: 0.25rem;
+}
+
+.serviceImage {
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--muted);
+}
+
+.serviceBody {
+  padding: 0.75rem 0.875rem 1rem;
+}
+
+.cardTitle {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.cardDescription {
+  margin: 0.5rem 0 0;
+  color: var(--card-foreground);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.iconCard {
+  display: flex;
+  min-height: 5.5rem;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  padding: clamp(1rem, 2vw, 1.375rem);
+}
+
+.cardIcon {
+  width: clamp(2rem, 4vw, 2.75rem);
+  height: auto;
+  flex: none;
+  color: var(--brand-green);
+}
+
+.action {
+  display: inline-flex;
+  min-height: 2.75rem;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.625rem clamp(1rem, 4vw, 2.75rem);
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--brand-green-hover);
+  color: var(--on-dark);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.action:hover {
+  background: color-mix(in srgb, var(--brand-green-hover) 85%, black);
+}
+
+.action:focus-visible,
+.field:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 2px;
+}
+
+.field {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--border), var(--foreground) 35%);
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--background);
+  color: var(--foreground);
+}

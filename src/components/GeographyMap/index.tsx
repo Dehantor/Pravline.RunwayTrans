@@ -1,49 +1,19 @@
 'use client'
 
-import type { LatLngExpression, LayerGroup, Map as LeafletMap } from 'leaflet'
+import L, { type LatLngExpression, type LayerGroup, type Map as LeafletMap } from 'leaflet'
 
 import { useEffect, useMemo, useRef } from 'react'
+import { hasRouteGeometry, type GeographyRoute, type RouteFocusRequest } from './routes'
 
-type RoutePoint = {
-  latitude?: number | string | null
-  longitude?: number | string | null
-}
-
-type GeographyRoute = {
-  color: string
-  title: string
-  routePoints?: RoutePoint[] | null
-}
-
-type GeographyMapProps = {
+export type GeographyMapProps = {
+  focusRequest: RouteFocusRequest | null
   routes: GeographyRoute[]
+  zoomInLabel: string
+  zoomOutLabel: string
 }
 
 const defaultCenter: LatLngExpression = [68.25, 88.25]
 const defaultZoom = 5
-
-function toCoordinate(value: number | string | null | undefined) {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null
-  if (typeof value === 'string') {
-    const parsed = Number(value.replace(',', '.'))
-    return Number.isFinite(parsed) ? parsed : null
-  }
-
-  return null
-}
-
-function getRouteLatLngs(routePoints?: RoutePoint[] | null): LatLngExpression[] {
-  if (!routePoints) return []
-
-  return routePoints.flatMap((point) => {
-    const latitude = toCoordinate(point.latitude)
-    const longitude = toCoordinate(point.longitude)
-
-    return latitude === null || longitude === null
-      ? []
-      : ([[latitude, longitude] satisfies LatLngExpression] as LatLngExpression[])
-  })
-}
 
 function resolveRouteColor(color: string) {
   const cssVarMatch = color.match(/^var\((--[^),]+)(?:,[^)]+)?\)$/)
@@ -52,116 +22,102 @@ function resolveRouteColor(color: string) {
   return getComputedStyle(document.documentElement).getPropertyValue(cssVarMatch[1]).trim() || color
 }
 
-export function GeographyMap({ routes }: GeographyMapProps) {
+export function GeographyMap({
+  focusRequest,
+  routes,
+  zoomInLabel,
+  zoomOutLabel,
+}: GeographyMapProps) {
   const mapElementRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<LeafletMap | null>(null)
   const routeLayerRef = useRef<LayerGroup | null>(null)
   const preparedRoutes = useMemo(
-    () =>
-      routes
-        .map((route) => ({
-          color: route.color,
-          title: route.title,
-          points: getRouteLatLngs(route.routePoints),
-        }))
-        .filter((route) => route.points.length >= 2),
+    () => routes.filter((route) => hasRouteGeometry(route.points)),
     [routes],
   )
 
   useEffect(() => {
-    let cancelled = false
+    if (!mapElementRef.current) return
 
-    async function initMap() {
-      if (!mapElementRef.current || mapRef.current) return
+    const map = L.map(mapElementRef.current, {
+      attributionControl: false,
+      center: defaultCenter,
+      scrollWheelZoom: true,
+      zoom: defaultZoom,
+      zoomAnimation: false,
+      zoomControl: false,
+    })
 
-      const L = await import('leaflet')
-
-      if (cancelled || !mapElementRef.current || mapRef.current) return
-
-      const map = L.map(mapElementRef.current, {
-        attributionControl: false,
-        center: defaultCenter,
-        scrollWheelZoom: true,
-        zoom: defaultZoom,
-        zoomControl: false,
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(map)
+    L.control.attribution({ prefix: false }).addAttribution('&copy; OpenStreetMap').addTo(map)
+    L.control
+      .zoom({
+        position: 'topright',
+        zoomInTitle: zoomInLabel,
+        zoomOutTitle: zoomOutLabel,
       })
+      .addTo(map)
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-      }).addTo(map)
-      L.control.attribution({ prefix: false }).addAttribution('&copy; OpenStreetMap').addTo(map)
-      L.control.zoom({ position: 'topright' }).addTo(map)
-
-      const routeLayer = L.layerGroup().addTo(map)
-
-      mapRef.current = map
-      routeLayerRef.current = routeLayer
-    }
-
-    void initMap()
+    mapRef.current = map
+    routeLayerRef.current = L.layerGroup().addTo(map)
 
     return () => {
-      cancelled = true
-      mapRef.current?.remove()
+      map.remove()
       mapRef.current = null
       routeLayerRef.current = null
     }
-  }, [])
+  }, [zoomInLabel, zoomOutLabel])
 
   useEffect(() => {
-    let cancelled = false
+    const routeLayer = routeLayerRef.current
 
-    async function renderRoutes() {
-      const map = mapRef.current
-      const routeLayer = routeLayerRef.current
+    if (!routeLayer) return
 
-      if (!map || !routeLayer) return
+    routeLayer.clearLayers()
 
-      const L = await import('leaflet')
-
-      if (cancelled) return
-
-      routeLayer.clearLayers()
-
-      const bounds = L.latLngBounds([])
-
-      preparedRoutes.forEach((route) => {
-        const color = resolveRouteColor(route.color)
-        const polyline = L.polyline(route.points, {
-          color,
-          lineCap: 'round',
-          lineJoin: 'round',
-          opacity: 0.95,
-          weight: 5,
-        }).bindTooltip(route.title)
-
-        polyline.addTo(routeLayer)
-        route.points.forEach((point) => {
-          bounds.extend(point)
-          L.circleMarker(point, {
-            color: '#ffffff',
-            fillColor: color,
-            fillOpacity: 1,
-            radius: 6,
-            weight: 2,
-          }).addTo(routeLayer)
-        })
+    preparedRoutes.forEach((route) => {
+      const color = resolveRouteColor(route.color)
+      const tooltip = document.createElement('span')
+      tooltip.textContent = route.title
+      L.polyline(route.points, {
+        color,
+        lineCap: 'round',
+        lineJoin: 'round',
+        opacity: 0.95,
+        weight: 5,
       })
+        .bindTooltip(tooltip)
+        .addTo(routeLayer)
 
-      if (bounds.isValid()) {
-        map.fitBounds(bounds, {
-          maxZoom: 9,
-          padding: [48, 48],
-        })
-      }
-    }
+      route.points.forEach((point) => {
+        L.circleMarker(point, {
+          color: '#ffffff',
+          fillColor: color,
+          fillOpacity: 1,
+          radius: 6,
+          weight: 2,
+        }).addTo(routeLayer)
+      })
+    })
+  }, [preparedRoutes, zoomInLabel, zoomOutLabel])
 
-    void renderRoutes()
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || preparedRoutes.length === 0) return
 
-    return () => {
-      cancelled = true
-    }
-  }, [preparedRoutes])
+    const focusedRoute = preparedRoutes.find((route) => route.id === focusRequest?.routeId)
+    const points = focusedRoute
+      ? focusedRoute.points
+      : preparedRoutes.flatMap((route) => route.points)
+    map.fitBounds(L.latLngBounds(points), {
+      animate: false,
+      maxZoom: 9,
+      paddingTopLeft: [36, 52],
+      paddingBottomRight: [36, 30],
+    })
+  }, [focusRequest, preparedRoutes, zoomInLabel, zoomOutLabel])
 
   return <div className="h-full w-full" ref={mapElementRef} />
 }

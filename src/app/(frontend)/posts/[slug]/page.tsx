@@ -15,29 +15,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
-import { defaultLocale, type AppLocale } from '@/i18n/locales'
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    locale: defaultLocale,
-    fallbackLocale: 'ru',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const params = posts.docs.map(({ slug }) => {
-    return { slug }
-  })
-
-  return params
-}
+import type { AppLocale } from '@/i18n/locales'
 
 type Args = {
   params: Promise<{

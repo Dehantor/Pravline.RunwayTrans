@@ -10,7 +10,6 @@ import { ChevronDown, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
 const companyLabels: Record<AppLocale, string> = {

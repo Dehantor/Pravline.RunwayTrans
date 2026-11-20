@@ -1,10 +1,21 @@
 import type { Metadata } from 'next'
 
-import { GeographyMapClientOnly } from '@/components/GeographyMap/ClientOnly'
+import {
+  geographyFilterMessages,
+  kazakhGeographyDirections,
+  kazakhGeographyFilterLabels,
+  kazakhGeographyPageLabels,
+} from '@/Geography/filterMessages'
+import { DeliveryFilters } from '@/components/GeographyMap/DeliveryFilters'
+import {
+  getRouteCoordinates,
+  hasRouteGeometry,
+  type RouteCoordinate,
+} from '@/components/GeographyMap/routes'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 import { pageMessages } from '@/i18n/pageMessages'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 const directions = [
@@ -22,182 +33,169 @@ type RoutePoint = {
   longitude?: number | null
 }
 
-type DeliveryRouteSource = {
-  id?: string | null
-  route?: string | null
-  routePoints?: RoutePoint[] | null
-  title?: string | null
-}
-
-function hasRoutePoints(item: unknown): item is DeliveryRouteSource {
-  return typeof item === 'object' && item !== null
-}
-
 const fallbackRoutePoints = {
   pipelineService: [
-    { latitude: 70.4706, longitude: 83.2226 },
-    { latitude: 72.3875, longitude: 80.6553 },
+    [70.4706, 83.2226],
+    [72.3875, 80.6553],
   ],
   vankorAllTerrain: [
-    { latitude: 60.2526, longitude: 90.1955 },
-    { latitude: 67.4667, longitude: 86.5667 },
-    { latitude: 65.9623, longitude: 84.2881 },
+    [60.2526, 90.1955],
+    [67.4667, 86.5667],
+    [65.9623, 84.2881],
   ],
-} satisfies Record<string, RoutePoint[]>
+} satisfies Record<string, RouteCoordinate[]>
 
-function getFallbackRoutePoints(item: DeliveryRouteSource): RoutePoint[] | undefined {
-  const searchable = [item.id, item.title, item.route].filter(Boolean).join(' ').toLowerCase()
-
+function getKnownRoute(item: { id?: string | null; route: string }) {
   if (
-    searchable.includes('vankor') ||
-    searchable.includes('ванкор') ||
-    searchable.includes('ярцево') ||
-    searchable.includes('igarka') ||
-    searchable.includes('игарка')
+    item.id === 'vankor-all-terrain' ||
+    (/ярцево|yartsevo|jartsewo/i.test(item.route) &&
+      /игарка|igarka/i.test(item.route) &&
+      /байкаловск|baikalovsk|baikalowsk/i.test(item.route))
   ) {
-    return fallbackRoutePoints.vankorAllTerrain
+    return 'vankorAllTerrain'
   }
 
   if (
-    searchable.includes('pipeline') ||
-    searchable.includes('нефтепровод') ||
-    searchable.includes('караул') ||
-    searchable.includes('tanalau') ||
-    searchable.includes('таналау')
+    item.id === 'pipeline-service' ||
+    (/караул|karaul/i.test(item.route) && /таналау|tanalau/i.test(item.route))
   ) {
-    return fallbackRoutePoints.pipelineService
+    return 'pipelineService'
   }
 
-  return undefined
+  return null
 }
 
-function getDeliveryRoutePoints(item: unknown) {
-  if (!hasRoutePoints(item)) return undefined
+function getDeliveryRoutePoints(
+  item: { id?: string | null; title: string; route: string; routePoints?: RoutePoint[] | null },
+  knownRoute: ReturnType<typeof getKnownRoute>,
+) {
+  const configuredPoints = getRouteCoordinates(item.routePoints)
 
-  const configuredPoints = item.routePoints?.filter(
-    (point) => typeof point.latitude === 'number' && typeof point.longitude === 'number',
-  )
+  if (hasRouteGeometry(configuredPoints)) return configuredPoints
+  if (knownRoute) return fallbackRoutePoints[knownRoute]
 
-  return configuredPoints && configuredPoints.length >= 2
-    ? configuredPoints
-    : getFallbackRoutePoints(item)
+  // Keep the legacy coordinate fallback for existing entries. It does not determine their region.
+  const description = [item.id, item.title, item.route].join(' ')
+  if (/vankor|ванкор|ярцево|igarka|игарка/i.test(description))
+    return fallbackRoutePoints.vankorAllTerrain
+  if (/pipeline|нефтепровод|караул|tanalau|таналау/i.test(description))
+    return fallbackRoutePoints.pipelineService
+
+  return configuredPoints
+}
+
+function getDeliveryVehicle({ id, title }: { id?: string | null; title: string }) {
+  const allTerrain =
+    id === 'vankor-all-terrain' ||
+    /на вездеход(?:е|ах)|вездеходами|\b(?:by|using) all[- ]terrain vehicles?\b|\ben véhicules? tout[- ]terrain\b|жол талғамайтын көлікпен|用全地形车/i.test(
+      title,
+    )
+  const cars =
+    /на автомобил(?:е|ях)|автомобилями|\b(?:by|using) (?:cars?|trucks?)\b|\b(?:en voiture|par camion)\b|автокөлікпен|用(?:汽车|卡车)/i.test(
+      title,
+    )
+
+  if (allTerrain === cars) return null
+  return allTerrain ? 'allTerrain' : 'cars'
 }
 
 function getCommonsFileUrl(fileName: string) {
   return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`
 }
 
-function SelectButton({ children }: { children: React.ReactNode }) {
-  return (
-    <button className="inline-flex h-12 min-w-36 items-center justify-between gap-5 rounded-md border border-neutral-300 bg-white px-5 text-base text-neutral-950 shadow-sm">
-      <span>{children}</span>
-      <ChevronDown className="size-5 text-brand-green" />
-    </button>
-  )
-}
-
 export default async function GeographyPage() {
   const locale = await getRequestLocale()
   const t = pageMessages[locale].geography
+  const pageLabels = locale === 'kk' ? kazakhGeographyPageLabels : t
   const geographyPageData = await getCachedGlobal('geographyPage', locale)()
   const deliveries =
     geographyPageData.deliveries && geographyPageData.deliveries.length > 0
       ? geographyPageData.deliveries
       : t.fallbackDeliveries
-  const mapRoutes = deliveries.map((item) => ({
-    color: item.color,
-    title: item.title,
-    routePoints: getDeliveryRoutePoints(item),
-  }))
+  const directionLabels = locale === 'kk' ? kazakhGeographyDirections : t.directions
+  const filterLabels =
+    locale === 'kk'
+      ? kazakhGeographyFilterLabels
+      : {
+          periodLabel: t.periodLabel,
+          vehicleAllTerrain: t.vehicleAllTerrain,
+          vehicleCars: t.vehicleCars,
+          cargoType: t.cargoType,
+          region: t.region,
+        }
 
   return (
-    <main className="bg-white pb-20 pt-9 text-neutral-950">
-      <div className="container max-w-[1440px] space-y-8">
-        <nav aria-label={t.breadcrumbsAria} className="flex items-center gap-2 text-sm">
-          <Link className="text-neutral-400 transition-colors hover:text-neutral-700" href="/">
-            {t.homeLink}
+    <main className="bg-background pt-5 pb-6 text-foreground md:pt-6">
+      <div className="mx-auto w-full max-w-[1344px] space-y-5 px-4 md:space-y-6 md:px-8">
+        <nav aria-label={pageLabels.breadcrumbsAria} className="flex items-center gap-3 text-sm">
+          <Link
+            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            href={`/${locale}`}
+          >
+            {pageLabels.homeLink}
           </Link>
-          <ChevronRight className="size-4 text-neutral-400" />
-          <span>{t.title}</span>
+          <ChevronRight aria-hidden="true" className="size-4 text-muted-foreground" />
+          <span aria-current="page">{pageLabels.title}</span>
         </nav>
 
-        <section className="space-y-8">
-          <h1 className="sr-only">{t.title}</h1>
-          <p className="max-w-[1330px] text-xl leading-snug">{t.intro}</p>
+        <header className="space-y-1">
+          <h1 className="text-4xl leading-tight font-bold md:text-[40px]">{pageLabels.title}</h1>
+          <p className="max-w-[62rem] text-[17px] leading-snug text-muted-foreground md:text-lg">
+            {pageLabels.intro}
+          </p>
+        </header>
 
-          <div className="space-y-7">
-            <h2 className="text-center text-3xl font-semibold leading-tight">
-              {t.directionsTitle}
-            </h2>
+        <section aria-labelledby="geography-directions" className="space-y-4 md:space-y-5">
+          <h2
+            className="text-center text-2xl leading-tight font-bold md:text-[26px]"
+            id="geography-directions"
+          >
+            {pageLabels.directionsTitle}
+          </h2>
 
-            <div className="mx-auto grid max-w-[1220px] gap-x-20 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-              {directions.map(([fileName, key], index) => (
-                <article
-                  className={`flex min-h-24 items-center gap-6 ${
-                    index === directions.length - 1
-                      ? 'md:col-span-2 md:justify-center xl:col-span-3'
-                      : ''
-                  }`}
-                  key={key}
-                >
-                  <img
-                    alt=""
-                    className="size-24 shrink-0 object-contain"
-                    loading="lazy"
-                    src={getCommonsFileUrl(fileName)}
-                  />
-                  <h3 className="text-xl leading-tight">{t.directions[key]}</h3>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section aria-label={t.mapAria} className="space-y-6">
-          <div className="relative h-[440px] overflow-hidden border border-background-muted bg-background-light md:h-[700px]">
-            <GeographyMapClientOnly routes={mapRoutes} />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-6 text-xl">
-            <span>{t.periodLabel}</span>
-            <SelectButton>2026</SelectButton>
-
-            <div className="flex h-12 flex-wrap items-center gap-5 rounded-md border border-neutral-300 bg-white px-4 text-neutral-500 shadow-sm">
-              <label className="inline-flex items-center gap-2">
-                <span className="size-7 rounded-full border border-neutral-400 bg-neutral-200" />
-                <span>{t.vehicleAllTerrain}</span>
-                <span className="relative h-5 w-9 rounded-full bg-brand-green">
-                  <span className="absolute right-0.5 top-0.5 size-4 rounded-full bg-white shadow" />
-                </span>
-              </label>
-              <label className="inline-flex items-center gap-2">
-                <span className="size-7 rounded-full border border-neutral-400 bg-neutral-200" />
-                <span>{t.vehicleCars}</span>
-                <span className="relative h-5 w-9 rounded-full bg-brand-green">
-                  <span className="absolute right-0.5 top-0.5 size-4 rounded-full bg-white shadow" />
-                </span>
-              </label>
-            </div>
-
-            <SelectButton>{t.cargoType}</SelectButton>
-            <SelectButton>{t.region}</SelectButton>
-          </div>
-
-          <div className="space-y-4 pt-3 text-xl">
-            {deliveries.map((item) => (
-              <div
-                className="grid gap-4 md:grid-cols-[68px_260px_minmax(0,1fr)_340px_80px] md:items-center"
-                key={item.id ?? item.title}
+          <ul className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-12">
+            {directions.map(([fileName, key], index) => (
+              <li
+                className={`flex min-h-[94px] min-w-0 items-center gap-3.5 rounded-[10px] border border-border bg-on-dark px-3.5 py-2.5 text-card-foreground dark:bg-card ${
+                  index < 4 ? 'lg:col-span-3' : 'lg:col-span-4'
+                }`}
+                key={key}
               >
-                <span className="h-3 w-16" style={{ backgroundColor: item.color }} />
-                <span>{item.period}</span>
-                <span>{item.title}</span>
-                <span>{item.route}</span>
-                <span>{item.duration ?? ''}</span>
-              </div>
+                <img
+                  alt=""
+                  className="size-[62px] shrink-0 object-contain md:size-16"
+                  height={64}
+                  loading="lazy"
+                  src={getCommonsFileUrl(fileName)}
+                  width={64}
+                />
+                <span className="min-w-0 leading-tight wrap-anywhere">{directionLabels[key]}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
+
+        <DeliveryFilters
+          deliveries={deliveries.map((item, index) => {
+            const knownRoute = getKnownRoute(item)
+            return {
+              id: item.id ?? String(index),
+              color: item.color,
+              title: item.title,
+              period: item.period,
+              route: item.route,
+              duration: item.duration,
+              points: getDeliveryRoutePoints(item, knownRoute),
+              region: knownRoute ? 'krasnoyarsk' : null,
+              vehicle: getDeliveryVehicle(item),
+            }
+          })}
+          mapLabel={pageLabels.mapAria}
+          messages={{ ...filterLabels, ...geographyFilterMessages[locale] }}
+          regions={directions.map(([, key]) => ({ value: key, label: directionLabels[key] }))}
+          zoomInLabel={pageLabels.zoomIn}
+          zoomOutLabel={pageLabels.zoomOut}
+        />
       </div>
     </main>
   )
@@ -205,6 +203,13 @@ export default async function GeographyPage() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
+  if (locale === 'kk') {
+    return {
+      title: kazakhGeographyPageLabels.title,
+      description: kazakhGeographyPageLabels.description,
+    }
+  }
+
   const t = pageMessages[locale].geography
 
   return {

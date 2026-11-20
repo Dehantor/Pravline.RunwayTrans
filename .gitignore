@@ -4,6 +4,7 @@ node_modules
 .DS_Store
 .env
 .next
+.next-runtime/
 next-env.d.ts
 .vercel
 .pnpm-store

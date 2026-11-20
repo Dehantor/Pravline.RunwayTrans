@@ -65,26 +65,21 @@ function normalizeTextReviews(textReviews: TextReview[] | null | undefined) {
 
 export default async function ReviewsPage() {
   const locale = await getRequestLocale()
-  const t = pageMessages[locale].cases
-  const ru = pageMessages.ru.cases
+  const t = pageMessages[locale].reviews
+  const ru = pageMessages.ru.reviews
   const reviewsPageData = await getCachedGlobal('reviewsPage', locale, 1, false)()
 
   const breadcrumbsTitle = getPageText(
     locale,
     reviewsPageData.breadcrumbsTitle,
-    'Отзывы',
+    ru.breadcrumbsTitle,
     t.breadcrumbsTitle,
   )
-  const pageTitle = getPageText(
-    locale,
-    reviewsPageData.pageTitle,
-    'Видео-отзывы наших партнёров',
-    t.title,
-  )
+  const pageTitle = getPageText(locale, reviewsPageData.pageTitle, ru.title, t.title)
   const pageDescription = getPageText(
     locale,
     reviewsPageData.pageDescription,
-    'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.',
+    ru.description,
     t.description,
   )
   const expertName = getPageText(locale, reviewsPageData.expertName, ru.expertName, t.expertName)
@@ -99,14 +94,14 @@ export default async function ReviewsPage() {
   const documentsSectionTitle = getPageText(
     locale,
     reviewsPageData.documentsSectionTitle,
-    'Отзывы на бумажных носителях',
-    'Отзывы на бумажных носителях',
+    ru.documentsSectionTitle,
+    t.documentsSectionTitle,
   )
   const documentsSectionDescription = getPageText(
     locale,
     reviewsPageData.documentsSectionDescription,
-    'Мы гордимся проделанной работой и успешным сотрудничеством с нашими заказчиками.',
-    'Мы гордимся проделанной работой и успешным сотрудничеством с нашими заказчиками.',
+    ru.documentsSectionDescription,
+    t.documentsSectionDescription,
   )
 
   return (
@@ -134,8 +129,8 @@ export default async function ReviewsPage() {
                 alt={getPageText(
                   locale,
                   reviewsPageData.heroImageAlt,
-                  'Видео-отзывы партнёров Runway Trans',
-                  'Видео-отзывы партнёров Runway Trans',
+                  ru.heroImageAlt,
+                  t.heroImageAlt,
                 )}
                 fill
                 imgClassName="h-full w-full object-contain object-bottom"
@@ -241,21 +236,17 @@ export default async function ReviewsPage() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
-  const t = pageMessages[locale].cases
+  const t = pageMessages[locale].reviews
+  const ru = pageMessages.ru.reviews
   const reviewsPageData = await getCachedGlobal('reviewsPage', locale, 1, false)()
 
   return {
-    title: getPageText(
-      locale,
-      reviewsPageData.meta?.title,
-      'Отзывы | RunwayTrans',
-      t.metadata.title,
-    ),
+    title: getPageText(locale, reviewsPageData.meta?.title, ru.metadata.title, t.metadata.title),
     description: getPageText(
       locale,
       reviewsPageData.meta?.description,
-      'Видео-отзывы и письма благодарности от клиентов RunwayTrans.',
-      t.metadata.description || '',
+      ru.metadata.description,
+      t.metadata.description,
     ),
   }
 }

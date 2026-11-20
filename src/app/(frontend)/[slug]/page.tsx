@@ -11,35 +11,12 @@ import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
+import { CasesFallback } from './CasesFallback'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { casesMessages } from '@/i18n/casesMessages'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
-import { defaultLocale, type AppLocale } from '@/i18n/locales'
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    locale: defaultLocale,
-    fallbackLocale: 'ru',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
-    })
-
-  return params
-}
+import type { AppLocale } from '@/i18n/locales'
+import { casesPageSlug } from '@/i18n/navigationMessages'
 
 type Args = {
   params: Promise<{
@@ -53,18 +30,17 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { slug = 'home' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
+  const isCasesPage = decodedSlug === casesPageSlug
   let page: RequiredDataFromCollectionSlug<'pages'> | null
 
-  page = await queryPageBySlug({
-    slug: decodedSlug,
-    locale,
-  })
+  page = await queryPageBySlug(decodedSlug, locale)
 
   if (!page && slug === 'home') {
     page = homeStatic
   }
 
   if (!page) {
+    if (isCasesPage) return <CasesFallback locale={locale} />
     return <PayloadRedirects url={url} />
   }
 
@@ -73,7 +49,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <article className="pt-16 pb-24">
       <PageClient />
-      <PayloadRedirects disableNotFound url={url} />
+      {!isCasesPage && <PayloadRedirects disableNotFound url={url} />}
 
       {draft && <LivePreviewListener />}
 
@@ -87,15 +63,17 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const locale = await getRequestLocale()
   const { slug = 'home' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const page = await queryPageBySlug({
-    slug: decodedSlug,
-    locale,
-  })
+  const page = await queryPageBySlug(decodedSlug, locale)
+
+  if (!page && decodedSlug === casesPageSlug) {
+    const { title, description } = casesMessages[locale]
+    return { title: `${title} | Runway Trans`, description }
+  }
 
   return generateMeta({ doc: page })
 }
 
-const queryPageBySlug = cache(async ({ slug, locale }: { slug: string; locale: AppLocale }) => {
+const queryPageBySlug = cache(async (slug: string, locale: AppLocale) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })

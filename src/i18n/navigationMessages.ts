@@ -5,10 +5,19 @@ type NavLink = {
   label: string
 }
 
+export const casesPageSlug = 'cases'
+const casesPagePath = `/${casesPageSlug}`
+
 type HeaderMessages = {
   callbackLabel: string
+  callLabel: string
   companyLabel: string
+  homeLabel: string
+  languageLabel: string
+  languageOptionsLabel: string
   mainNavAria: string
+  openMenuLabel: string
+  closeMenuLabel: string
   noPages: string
   serviceLinePrimary: string
   serviceLineSecondary: string
@@ -19,8 +28,14 @@ type HeaderMessages = {
 export const headerMessages: Record<AppLocale, HeaderMessages> = {
   ru: {
     callbackLabel: 'Заказать звонок',
+    callLabel: 'Позвонить',
     companyLabel: 'Компания',
+    homeLabel: 'Runway Trans — на главную',
+    languageLabel: 'Язык сайта',
+    languageOptionsLabel: 'Выберите язык',
     mainNavAria: 'Основная навигация',
+    openMenuLabel: 'Открыть меню',
+    closeMenuLabel: 'Закрыть меню',
     noPages: 'Нет страниц',
     serviceLinePrimary: 'Грузоперевозки',
     serviceLineSecondary: 'Вездеходные и автомобильные',
@@ -34,7 +49,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     topLevelLinks: [
       { href: '/uslugi', label: 'Услуги' },
       { href: '/geografiya', label: 'География' },
-      { href: '/reviews', label: 'Кейсы' },
+      { href: casesPagePath, label: 'Кейсы' },
       { href: '/partners', label: 'Партнеры' },
       { href: '/reviews', label: 'Отзывы' },
       { href: '/contacts', label: 'Контакты' },
@@ -42,8 +57,14 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
   },
   en: {
     callbackLabel: 'Request a call',
+    callLabel: 'Call',
     companyLabel: 'Company',
+    homeLabel: 'Runway Trans home',
+    languageLabel: 'Site language',
+    languageOptionsLabel: 'Choose a language',
     mainNavAria: 'Main navigation',
+    openMenuLabel: 'Open menu',
+    closeMenuLabel: 'Close menu',
     noPages: 'No pages',
     serviceLinePrimary: 'Cargo transportation',
     serviceLineSecondary: 'All-terrain and road transport',
@@ -57,7 +78,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     topLevelLinks: [
       { href: '/uslugi', label: 'Services' },
       { href: '/geografiya', label: 'Geography' },
-      { href: '/reviews', label: 'Cases' },
+      { href: casesPagePath, label: 'Cases' },
       { href: '/partners', label: 'Partners' },
       { href: '/reviews', label: 'Reviews' },
       { href: '/contacts', label: 'Contacts' },
@@ -65,8 +86,14 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
   },
   kk: {
     callbackLabel: 'Қоңырауға тапсырыс беру',
+    callLabel: 'Қоңырау шалу',
     companyLabel: 'Компания',
+    homeLabel: 'Runway Trans — басты бет',
+    languageLabel: 'Сайт тілі',
+    languageOptionsLabel: 'Тілді таңдаңыз',
     mainNavAria: 'Негізгі навигация',
+    openMenuLabel: 'Мәзірді ашу',
+    closeMenuLabel: 'Мәзірді жабу',
     noPages: 'Беттер жоқ',
     serviceLinePrimary: 'Жүк тасымалы',
     serviceLineSecondary: 'Жолсыз және автомобиль көлігі',
@@ -80,7 +107,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     topLevelLinks: [
       { href: '/uslugi', label: 'Қызметтер' },
       { href: '/geografiya', label: 'География' },
-      { href: '/reviews', label: 'Кейстер' },
+      { href: casesPagePath, label: 'Кейстер' },
       { href: '/partners', label: 'Серіктестер' },
       { href: '/reviews', label: 'Пікірлер' },
       { href: '/contacts', label: 'Байланыстар' },
@@ -88,8 +115,14 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
   },
   fr: {
     callbackLabel: 'Demander un appel',
+    callLabel: 'Appeler',
     companyLabel: 'Entreprise',
+    homeLabel: 'Accueil de Runway Trans',
+    languageLabel: 'Langue du site',
+    languageOptionsLabel: 'Choisir la langue',
     mainNavAria: 'Navigation principale',
+    openMenuLabel: 'Ouvrir le menu',
+    closeMenuLabel: 'Fermer le menu',
     noPages: 'Aucune page',
     serviceLinePrimary: 'Transport de marchandises',
     serviceLineSecondary: 'Transport tout-terrain et routier',
@@ -103,7 +136,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     topLevelLinks: [
       { href: '/uslugi', label: 'Services' },
       { href: '/geografiya', label: 'Geographie' },
-      { href: '/reviews', label: 'Cas clients' },
+      { href: casesPagePath, label: 'Cas clients' },
       { href: '/partners', label: 'Partenaires' },
       { href: '/reviews', label: 'Avis' },
       { href: '/contacts', label: 'Contacts' },
@@ -111,8 +144,14 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
   },
   zh: {
     callbackLabel: '请求回电',
+    callLabel: '拨打电话',
     companyLabel: '公司',
+    homeLabel: 'Runway Trans 首页',
+    languageLabel: '网站语言',
+    languageOptionsLabel: '选择语言',
     mainNavAria: '主导航',
+    openMenuLabel: '打开菜单',
+    closeMenuLabel: '关闭菜单',
     noPages: '暂无页面',
     serviceLinePrimary: '货物运输',
     serviceLineSecondary: '全地形和公路运输',
@@ -126,7 +165,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     topLevelLinks: [
       { href: '/uslugi', label: '服务' },
       { href: '/geografiya', label: '运输区域' },
-      { href: '/reviews', label: '案例' },
+      { href: casesPagePath, label: '案例' },
       { href: '/partners', label: '合作伙伴' },
       { href: '/reviews', label: '评价' },
       { href: '/contacts', label: '联系方式' },
