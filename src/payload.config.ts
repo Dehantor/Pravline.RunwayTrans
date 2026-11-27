@@ -163,6 +163,23 @@ export default buildConfig({
     fallback: true,
   },
   i18n: {
+    translations: {
+      en: {
+        general: {
+          createNewLabel: 'Create a record',
+        },
+      },
+      ru: {
+        general: {
+          createNewLabel: 'Создать запись',
+          globals: 'Глобальные настройки',
+        },
+        'plugin-redirects': {
+          internalLink: 'Внутренняя ссылка',
+          customUrl: 'Произвольный URL',
+        },
+      },
+    },
     supportedLanguages: {
       en,
       ru,

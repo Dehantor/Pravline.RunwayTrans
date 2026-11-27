@@ -6,6 +6,10 @@ import { slugField } from 'payload'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
+  labels: {
+    singular: { ru: 'Категория', en: 'Category' },
+    plural: { ru: 'Категории', en: 'Categories' },
+  },
   access: {
     create: canEditContent,
     delete: canEditContent,
@@ -19,6 +23,7 @@ export const Categories: CollectionConfig = {
   fields: [
     {
       name: 'title',
+      label: { ru: 'Название', en: 'Title' },
       type: 'text',
       required: true,
     },

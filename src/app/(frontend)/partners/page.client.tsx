@@ -45,7 +45,7 @@ export function PartnersGrid({ noLogoLabel, partners }: PartnersGridProps) {
                 {row.map((partner) => (
                   <button
                     aria-pressed={partner.key === activePartner.key}
-                    className="group flex min-h-32 flex-col items-center justify-end text-center outline-none"
+                    className="group flex min-h-32 min-w-0 flex-col items-center justify-end rounded text-center focus-visible:outline-2 focus-visible:outline-offset-4"
                     key={partner.key}
                     onClick={() => setActiveKey(partner.key)}
                     type="button"
@@ -53,22 +53,22 @@ export function PartnersGrid({ noLogoLabel, partners }: PartnersGridProps) {
                     <span className="flex h-24 w-full items-center justify-center">
                       {partner.logoUrl ? (
                         <img
-                          alt={partner.name}
+                          alt=""
                           className="max-h-24 max-w-full object-contain transition duration-200 group-hover:scale-[1.03]"
                           loading="lazy"
                           src={partner.logoUrl}
                         />
                       ) : (
-                        <span className="flex h-20 w-full items-center justify-center bg-neutral-100 text-sm text-neutral-400">
+                        <span className="flex h-20 w-full items-center justify-center bg-muted text-sm text-muted-foreground">
                           {noLogoLabel}
                         </span>
                       )}
                     </span>
                     <span
-                      className={`mt-5 text-base transition ${
+                      className={`mt-5 text-base wrap-anywhere transition ${
                         partner.key === activePartner.key
-                          ? 'text-neutral-300'
-                          : 'text-neutral-400 group-hover:text-neutral-600'
+                          ? 'font-semibold text-foreground'
+                          : 'text-muted-foreground group-hover:text-foreground'
                       }`}
                     >
                       {partner.name}
@@ -78,11 +78,11 @@ export function PartnersGrid({ noLogoLabel, partners }: PartnersGridProps) {
               </div>
 
               {rowHasActivePartner ? (
-                <div className="bg-neutral-100 px-8 py-9 text-left">
-                  <p className="max-w-4xl text-base leading-7 text-neutral-800">
+                <div className="bg-muted px-8 py-9 text-left">
+                  <p className="max-w-4xl text-base leading-7 wrap-anywhere text-foreground">
                     {activePartner.description || activePartner.name}
                   </p>
-                  <p className="mt-6 text-base font-medium text-green-700">{activePartner.name}</p>
+                  <p className="mt-6 text-base font-semibold wrap-anywhere">{activePartner.name}</p>
                 </div>
               ) : null}
             </React.Fragment>
@@ -98,33 +98,37 @@ export function PartnersGrid({ noLogoLabel, partners }: PartnersGridProps) {
             <div className="space-y-4" key={partner.key}>
               <button
                 aria-pressed={isActive}
-                className="flex w-full flex-col items-center text-center outline-none"
+                className="flex w-full flex-col items-center rounded text-center focus-visible:outline-2 focus-visible:outline-offset-4"
                 onClick={() => setActiveKey(partner.key)}
                 type="button"
               >
                 <span className="flex h-24 w-full items-center justify-center">
                   {partner.logoUrl ? (
                     <img
-                      alt={partner.name}
+                      alt=""
                       className="max-h-24 max-w-full object-contain"
                       loading="lazy"
                       src={partner.logoUrl}
                     />
                   ) : (
-                    <span className="flex h-20 w-full items-center justify-center bg-neutral-100 text-sm text-neutral-400">
+                    <span className="flex h-20 w-full items-center justify-center bg-muted text-sm text-muted-foreground">
                       {noLogoLabel}
                     </span>
                   )}
                 </span>
-                <span className="mt-4 text-base text-neutral-400">{partner.name}</span>
+                <span
+                  className={`mt-4 text-base wrap-anywhere ${isActive ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}
+                >
+                  {partner.name}
+                </span>
               </button>
 
               {isActive ? (
-                <div className="bg-neutral-100 px-5 py-6 text-left">
-                  <p className="text-base leading-7 text-neutral-800">
+                <div className="bg-muted px-5 py-6 text-left">
+                  <p className="text-base leading-7 wrap-anywhere text-foreground">
                     {partner.description || partner.name}
                   </p>
-                  <p className="mt-5 text-base font-medium text-green-700">{partner.name}</p>
+                  <p className="mt-5 text-base font-semibold wrap-anywhere">{partner.name}</p>
                 </div>
               ) : null}
             </div>

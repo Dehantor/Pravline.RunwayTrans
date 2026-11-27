@@ -37,8 +37,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
         <Providers>
@@ -62,6 +60,12 @@ export const metadata: Metadata = {
   title: 'Runway Trans',
   description: 'Грузоперевозки в труднодоступные районы Севера.',
   metadataBase: new URL(getServerSideURL()),
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=runway-trans', type: 'image/x-icon', sizes: '16x16 32x32 48x48' },
+      { url: '/favicon.svg?v=runway-trans', type: 'image/svg+xml', sizes: 'any' },
+    ],
+  },
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',

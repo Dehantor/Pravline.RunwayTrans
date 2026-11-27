@@ -22,6 +22,10 @@ import {
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
+  labels: {
+    singular: { ru: 'Страница', en: 'Page' },
+    plural: { ru: 'Страницы', en: 'Pages' },
+  },
   access: {
     create: canEditContent,
     delete: canEditContent,
@@ -55,6 +59,7 @@ export const Pages: CollectionConfig<'pages'> = {
   fields: [
     {
       name: 'title',
+      label: { ru: 'Заголовок', en: 'Title' },
       type: 'text',
       required: true,
       localized: true,
@@ -63,14 +68,15 @@ export const Pages: CollectionConfig<'pages'> = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Hero',
+          label: { ru: 'Первый экран', en: 'Hero' },
           fields: [hero],
         },
         {
-          label: 'Content',
+          label: { ru: 'Содержимое', en: 'Content' },
           fields: [
             {
               name: 'layout',
+              label: { ru: 'Блоки страницы', en: 'Layout' },
               type: 'blocks',
               blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, VacanciesList],
               required: true,
@@ -93,11 +99,15 @@ export const Pages: CollectionConfig<'pages'> = {
             }),
             MetaTitleField({
               hasGenerateFn: true,
+              overrides: { label: { ru: 'SEO-заголовок', en: 'Meta Title' } },
             }),
             MetaImageField({
               relationTo: 'media',
+              overrides: { label: { ru: 'Изображение для SEO', en: 'Meta Image' } },
             }),
-            MetaDescriptionField({}),
+            MetaDescriptionField({
+              overrides: { label: { ru: 'SEO-описание', en: 'Meta Description' } },
+            }),
             PreviewField({
               hasGenerateFn: true,
               titlePath: 'meta.title',
@@ -109,6 +119,7 @@ export const Pages: CollectionConfig<'pages'> = {
     },
     {
       name: 'parent',
+      label: { ru: 'Родительская страница', en: 'Parent' },
       type: 'relationship',
       relationTo: 'pages',
       hasMany: false,
@@ -119,6 +130,7 @@ export const Pages: CollectionConfig<'pages'> = {
     },
     {
       name: 'publishedAt',
+      label: { ru: 'Дата публикации', en: 'Published at' },
       type: 'date',
       admin: {
         position: 'sidebar',
@@ -126,6 +138,7 @@ export const Pages: CollectionConfig<'pages'> = {
     },
     {
       name: 'slug',
+      label: { ru: 'Адрес страницы', en: 'Slug' },
       type: 'text',
       index: true,
       unique: true,

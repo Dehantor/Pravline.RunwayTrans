@@ -12,6 +12,14 @@ export type GeographyRoute = {
   points: RouteCoordinate[]
 }
 
+export type GeographyDelivery = GeographyRoute & {
+  period: string
+  route: string
+  duration?: string | null
+  region: string | null
+  vehicle: 'allTerrain' | 'cars' | null
+}
+
 export type RouteFocusRequest = {
   routeId: string
   revision: number

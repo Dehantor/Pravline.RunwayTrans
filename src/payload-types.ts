@@ -2285,6 +2285,19 @@ export interface ServicesPage {
  */
 export interface GeographyPage {
   id: number;
+  /**
+   * Отдельные метки офиса, ремонтных баз и месторождений на странице географии.
+   */
+  mapPoints?:
+    | {
+        kind: 'office' | 'repairBase' | 'field';
+        title: string;
+        description?: string | null;
+        latitude: number;
+        longitude: number;
+        id?: string | null;
+      }[]
+    | null;
   deliveries?:
     | {
         color: string;
@@ -2637,6 +2650,16 @@ export interface ServicesPageSelect<T extends boolean = true> {
  * via the `definition` "geographyPage_select".
  */
 export interface GeographyPageSelect<T extends boolean = true> {
+  mapPoints?:
+    | T
+    | {
+        kind?: T;
+        title?: T;
+        description?: T;
+        latitude?: T;
+        longitude?: T;
+        id?: T;
+      };
   deliveries?:
     | T
     | {

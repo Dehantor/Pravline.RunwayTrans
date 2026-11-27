@@ -6,17 +6,15 @@ import {
   kazakhGeographyFilterLabels,
   kazakhGeographyPageLabels,
 } from '@/Geography/filterMessages'
-import { DeliveryFilters } from '@/components/GeographyMap/DeliveryFilters'
-import {
-  getRouteCoordinates,
-  hasRouteGeometry,
-  type RouteCoordinate,
-} from '@/components/GeographyMap/routes'
+import { getGeographyDeliveries } from '@/Geography/getGeographyDeliveries'
+import { GeographyArchiveFilters } from '@/components/GeographyMap/ArchiveFilters'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
+import type { AppLocale } from '@/i18n/locales'
 import { pageMessages } from '@/i18n/pageMessages'
-import { getCachedGlobal } from '@/utilities/getGlobals'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+
+import { GeographyLocations } from './Locations'
 
 const directions = [
   ['Coat of Arms of Chukotka.svg', 'chukotka'],
@@ -28,90 +26,14 @@ const directions = [
   ['Coat of Arms of Yamal Nenetsia.svg', 'yamal'],
 ] as const
 
-type RoutePoint = {
-  latitude?: number | null
-  longitude?: number | null
-}
-
-const fallbackRoutePoints = {
-  pipelineService: [
-    [70.4706, 83.2226],
-    [72.3875, 80.6553],
-  ],
-  vankorAllTerrain: [
-    [60.2526, 90.1955],
-    [67.4667, 86.5667],
-    [65.9623, 84.2881],
-  ],
-} satisfies Record<string, RouteCoordinate[]>
-
-function getKnownRoute(item: { id?: string | null; route: string }) {
-  if (
-    item.id === 'vankor-all-terrain' ||
-    (/ярцево|yartsevo|jartsewo/i.test(item.route) &&
-      /игарка|igarka/i.test(item.route) &&
-      /байкаловск|baikalovsk|baikalowsk/i.test(item.route))
-  ) {
-    return 'vankorAllTerrain'
-  }
-
-  if (
-    item.id === 'pipeline-service' ||
-    (/караул|karaul/i.test(item.route) && /таналау|tanalau/i.test(item.route))
-  ) {
-    return 'pipelineService'
-  }
-
-  return null
-}
-
-function getDeliveryRoutePoints(
-  item: { id?: string | null; title: string; route: string; routePoints?: RoutePoint[] | null },
-  knownRoute: ReturnType<typeof getKnownRoute>,
-) {
-  const configuredPoints = getRouteCoordinates(item.routePoints)
-
-  if (hasRouteGeometry(configuredPoints)) return configuredPoints
-  if (knownRoute) return fallbackRoutePoints[knownRoute]
-
-  // Keep the legacy coordinate fallback for existing entries. It does not determine their region.
-  const description = [item.id, item.title, item.route].join(' ')
-  if (/vankor|ванкор|ярцево|igarka|игарка/i.test(description))
-    return fallbackRoutePoints.vankorAllTerrain
-  if (/pipeline|нефтепровод|караул|tanalau|таналау/i.test(description))
-    return fallbackRoutePoints.pipelineService
-
-  return configuredPoints
-}
-
-function getDeliveryVehicle({ id, title }: { id?: string | null; title: string }) {
-  const allTerrain =
-    id === 'vankor-all-terrain' ||
-    /на вездеход(?:е|ах)|вездеходами|\b(?:by|using) all[- ]terrain vehicles?\b|\ben véhicules? tout[- ]terrain\b|жол талғамайтын көлікпен|用全地形车/i.test(
-      title,
-    )
-  const cars =
-    /на автомобил(?:е|ях)|автомобилями|\b(?:by|using) (?:cars?|trucks?)\b|\b(?:en voiture|par camion)\b|автокөлікпен|用(?:汽车|卡车)/i.test(
-      title,
-    )
-
-  if (allTerrain === cars) return null
-  return allTerrain ? 'allTerrain' : 'cars'
-}
-
 function getCommonsFileUrl(fileName: string) {
   return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`
 }
 
-export default async function GeographyPage() {
-  const locale = await getRequestLocale()
+async function GeographyRoutesArchive({ locale }: { locale: AppLocale }) {
   const t = pageMessages[locale].geography
   const pageLabels = locale === 'kk' ? kazakhGeographyPageLabels : t
-  const geographyPageData = await getCachedGlobal('geographyPage', locale)()
-  const deliveries =
-    geographyPageData.deliveries && geographyPageData.deliveries.length > 0
-      ? geographyPageData.deliveries
-      : t.fallbackDeliveries
+  const deliveries = await getGeographyDeliveries(locale)
   const directionLabels = locale === 'kk' ? kazakhGeographyDirections : t.directions
   const filterLabels =
     locale === 'kk'
@@ -175,21 +97,8 @@ export default async function GeographyPage() {
           </ul>
         </section>
 
-        <DeliveryFilters
-          deliveries={deliveries.map((item, index) => {
-            const knownRoute = getKnownRoute(item)
-            return {
-              id: item.id ?? String(index),
-              color: item.color,
-              title: item.title,
-              period: item.period,
-              route: item.route,
-              duration: item.duration,
-              points: getDeliveryRoutePoints(item, knownRoute),
-              region: knownRoute ? 'krasnoyarsk' : null,
-              vehicle: getDeliveryVehicle(item),
-            }
-          })}
+        <GeographyArchiveFilters
+          deliveries={deliveries}
           mapLabel={pageLabels.mapAria}
           messages={{ ...filterLabels, ...geographyFilterMessages[locale] }}
           regions={directions.map(([, key]) => ({ value: key, label: directionLabels[key] }))}
@@ -198,6 +107,19 @@ export default async function GeographyPage() {
         />
       </div>
     </main>
+  )
+}
+
+export default async function GeographyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string | string[] }>
+}) {
+  const [locale, { view }] = await Promise.all([getRequestLocale(), searchParams])
+  return view === 'routes' ? (
+    <GeographyRoutesArchive locale={locale} />
+  ) : (
+    <GeographyLocations locale={locale} />
   )
 }
 

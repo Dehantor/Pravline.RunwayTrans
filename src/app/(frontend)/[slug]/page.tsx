@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
+import { SectionUnderConstruction } from '@/components/SectionUnderConstruction'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
@@ -54,7 +55,11 @@ export default async function Page({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      {isCasesPage && !layout?.length ? (
+        <SectionUnderConstruction locale={locale} />
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
     </article>
   )
 }

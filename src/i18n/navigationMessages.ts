@@ -38,7 +38,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     closeMenuLabel: 'Закрыть меню',
     noPages: 'Нет страниц',
     serviceLinePrimary: 'Грузоперевозки',
-    serviceLineSecondary: 'Вездеходные и автомобильные',
+    serviceLineSecondary: 'Автомобильная, вездеходная и специализированная техника',
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: 'Ранвей Транс сегодня' },
       { href: '/istoriya', label: 'История' },
@@ -50,7 +50,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
       { href: '/uslugi', label: 'Услуги' },
       { href: '/geografiya', label: 'География' },
       { href: casesPagePath, label: 'Кейсы' },
-      { href: '/partners', label: 'Партнеры' },
+      { href: '/partners', label: 'Партнёры' },
       { href: '/reviews', label: 'Отзывы' },
       { href: '/contacts', label: 'Контакты' },
     ],
@@ -67,7 +67,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     closeMenuLabel: 'Close menu',
     noPages: 'No pages',
     serviceLinePrimary: 'Cargo transportation',
-    serviceLineSecondary: 'All-terrain and road transport',
+    serviceLineSecondary: 'Road, all-terrain and specialised vehicles',
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: 'Runway Trans Today' },
       { href: '/istoriya', label: 'History' },
@@ -96,7 +96,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     closeMenuLabel: 'Мәзірді жабу',
     noPages: 'Беттер жоқ',
     serviceLinePrimary: 'Жүк тасымалы',
-    serviceLineSecondary: 'Жолсыз және автомобиль көлігі',
+    serviceLineSecondary: 'Автомобильдер, жол талғамайтын көліктер және арнайы техника',
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: 'Runway Trans бүгін' },
       { href: '/istoriya', label: 'Тарих' },
@@ -125,7 +125,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     closeMenuLabel: 'Fermer le menu',
     noPages: 'Aucune page',
     serviceLinePrimary: 'Transport de marchandises',
-    serviceLineSecondary: 'Transport tout-terrain et routier',
+    serviceLineSecondary: 'Véhicules routiers, tout-terrain et spécialisés',
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: "Runway Trans aujourd'hui" },
       { href: '/istoriya', label: 'Histoire' },
@@ -154,7 +154,7 @@ export const headerMessages: Record<AppLocale, HeaderMessages> = {
     closeMenuLabel: '关闭菜单',
     noPages: '暂无页面',
     serviceLinePrimary: '货物运输',
-    serviceLineSecondary: '全地形和公路运输',
+    serviceLineSecondary: '公路车辆、全地形车辆及专用设备',
     companyDropdownLinks: [
       { href: '/ranvey-trans-segodnya', label: '今日 Runway Trans' },
       { href: '/istoriya', label: '历史' },

@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 
 import { CallbackForm } from '@/components/CallbackForm'
 import { ContactMap } from '@/components/ContactMap'
+import { companyEmail, mainPhone, officeAddresses } from '@/i18n/companyContacts'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 import { getPageText, pageMessages } from '@/i18n/pageMessages'
 import { getCachedGlobal } from '@/utilities/getGlobals'
@@ -45,28 +46,28 @@ export default async function ContactsPage() {
   const breadcrumbsTitle = getPageText(locale, data.breadcrumbsTitle, ru.title, t.title)
   const pageTitle = getPageText(locale, data.pageTitle, ru.title, t.title)
   const contactItems =
-    data.contactItems && data.contactItems.length > 0
+    data.id && data.contactItems?.length
       ? data.contactItems
       : [
           {
             id: null,
             icon: 'address',
             label: t.addressTitle,
-            value: t.addressValue,
+            value: officeAddresses[locale],
           },
           {
             id: null,
             icon: 'phone',
             label: t.phoneTitle,
-            value: '+7 (391) 000-00-00',
-            href: 'tel:+73910000000',
+            value: mainPhone.label,
+            href: mainPhone.href,
           },
           {
             id: null,
             icon: 'email',
             label: t.emailTitle,
-            value: 'info@runwaytrans.ru',
-            href: 'mailto:info@runwaytrans.ru',
+            value: companyEmail.label,
+            href: companyEmail.href,
           },
         ]
   const requisitesImage =
@@ -148,7 +149,10 @@ export default async function ContactsPage() {
           </div>
 
           {requisitesImageUrl || requisitesText ? (
-            <div className="max-w-[280px] rounded-lg border border-border bg-card p-3">
+            <div
+              className="max-w-[280px] rounded-lg border border-border bg-card p-3"
+              id="company-details"
+            >
               {requisitesImageUrl ? (
                 <img
                   alt={requisitesImage?.alt || requisitesText}

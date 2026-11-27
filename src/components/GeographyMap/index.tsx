@@ -1,19 +1,20 @@
 'use client'
 
-import L, { type LatLngExpression, type LayerGroup, type Map as LeafletMap } from 'leaflet'
+import L, { type LayerGroup, type Map as LeafletMap, type TileLayer } from 'leaflet'
 
 import { useEffect, useMemo, useRef } from 'react'
+import { createGeographyLeafletMap, type BasemapStatus } from './leafletMap'
 import { hasRouteGeometry, type GeographyRoute, type RouteFocusRequest } from './routes'
 
 export type GeographyMapProps = {
   focusRequest: RouteFocusRequest | null
+  label: string
+  mode?: 'overview' | 'full'
+  onBasemapStatusChange?: (status: BasemapStatus) => void
   routes: GeographyRoute[]
   zoomInLabel: string
   zoomOutLabel: string
 }
-
-const defaultCenter: LatLngExpression = [68.25, 88.25]
-const defaultZoom = 5
 
 function resolveRouteColor(color: string) {
   const cssVarMatch = color.match(/^var\((--[^),]+)(?:,[^)]+)?\)$/)
@@ -24,6 +25,9 @@ function resolveRouteColor(color: string) {
 
 export function GeographyMap({
   focusRequest,
+  label,
+  mode = 'full',
+  onBasemapStatusChange,
   routes,
   zoomInLabel,
   zoomOutLabel,
@@ -31,6 +35,8 @@ export function GeographyMap({
   const mapElementRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<LeafletMap | null>(null)
   const routeLayerRef = useRef<LayerGroup | null>(null)
+  const tileLayerRef = useRef<TileLayer | null>(null)
+  const isOverview = mode === 'overview'
   const preparedRoutes = useMemo(
     () => routes.filter((route) => hasRouteGeometry(route.points)),
     [routes],
@@ -39,36 +45,24 @@ export function GeographyMap({
   useEffect(() => {
     if (!mapElementRef.current) return
 
-    const map = L.map(mapElementRef.current, {
-      attributionControl: false,
-      center: defaultCenter,
-      scrollWheelZoom: true,
-      zoom: defaultZoom,
-      zoomAnimation: false,
-      zoomControl: false,
+    const { map, tiles, dispose } = createGeographyLeafletMap(mapElementRef.current, {
+      preservePageScroll: isOverview,
+      onBasemapStatusChange,
+      zoomInLabel,
+      zoomOutLabel,
     })
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-    }).addTo(map)
-    L.control.attribution({ prefix: false }).addAttribution('&copy; OpenStreetMap').addTo(map)
-    L.control
-      .zoom({
-        position: 'topright',
-        zoomInTitle: zoomInLabel,
-        zoomOutTitle: zoomOutLabel,
-      })
-      .addTo(map)
 
     mapRef.current = map
     routeLayerRef.current = L.layerGroup().addTo(map)
+    tileLayerRef.current = tiles
 
     return () => {
-      map.remove()
+      dispose()
       mapRef.current = null
       routeLayerRef.current = null
+      tileLayerRef.current = null
     }
-  }, [zoomInLabel, zoomOutLabel])
+  }, [isOverview, onBasemapStatusChange, zoomInLabel, zoomOutLabel])
 
   useEffect(() => {
     const routeLayer = routeLayerRef.current
@@ -101,23 +95,28 @@ export function GeographyMap({
         }).addTo(routeLayer)
       })
     })
-  }, [preparedRoutes, zoomInLabel, zoomOutLabel])
+  }, [isOverview, onBasemapStatusChange, preparedRoutes, zoomInLabel, zoomOutLabel])
 
   useEffect(() => {
     const map = mapRef.current
-    if (!map || preparedRoutes.length === 0) return
+    const tiles = tileLayerRef.current
+    if (!map || !tiles) return
 
-    const focusedRoute = preparedRoutes.find((route) => route.id === focusRequest?.routeId)
-    const points = focusedRoute
-      ? focusedRoute.points
-      : preparedRoutes.flatMap((route) => route.points)
-    map.fitBounds(L.latLngBounds(points), {
-      animate: false,
-      maxZoom: 9,
-      paddingTopLeft: [36, 52],
-      paddingBottomRight: [36, 30],
-    })
-  }, [focusRequest, preparedRoutes, zoomInLabel, zoomOutLabel])
+    if (preparedRoutes.length > 0) {
+      const focusedRoute = preparedRoutes.find((route) => route.id === focusRequest?.routeId)
+      const points = focusedRoute
+        ? focusedRoute.points
+        : preparedRoutes.flatMap((route) => route.points)
+      map.fitBounds(L.latLngBounds(points), {
+        animate: false,
+        maxZoom: 9,
+        paddingTopLeft: [36, 52],
+        paddingBottomRight: [36, 30],
+      })
+    }
 
-  return <div className="h-full w-full" ref={mapElementRef} />
+    if (!map.hasLayer(tiles)) tiles.addTo(map)
+  }, [focusRequest, isOverview, onBasemapStatusChange, preparedRoutes, zoomInLabel, zoomOutLabel])
+
+  return <div aria-label={label} className="h-full w-full" ref={mapElementRef} role="region" />
 }

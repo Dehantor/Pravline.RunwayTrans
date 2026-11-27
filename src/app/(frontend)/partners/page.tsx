@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import React from 'react'
-
-import { getCachedGlobal } from '@/utilities/getGlobals'
+import Link from 'next/link'
+import { getConcreteVideoLink } from '@/Reviews/videoLink'
 import { getRequestLocale } from '@/i18n/getRequestLocale'
 import { getPageText, pageMessages } from '@/i18n/pageMessages'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 import { PartnersGrid } from './page.client'
 
 type PartnerCard = {
@@ -34,7 +34,7 @@ export default async function PartnersPage() {
   const locale = await getRequestLocale()
   const t = pageMessages[locale].partners
   const ru = pageMessages.ru.partners
-  const partnersPageData = await getCachedGlobal('partnersPage', locale, 1, false)()
+  const partnersPageData = await getCachedGlobal('partnersPage', locale, 1)()
 
   const breadcrumbsTitle = getPageText(
     locale,
@@ -56,37 +56,43 @@ export default async function PartnersPage() {
     ru.videoButtonLabel,
     t.videoButtonLabel,
   )
-  const videoButtonHref = partnersPageData.videoButtonHref || 'https://www.youtube.com'
+  const videoButtonHref = getConcreteVideoLink(partnersPageData.videoButtonHref)
 
   return (
-    <main className="bg-white pb-24 pt-24 text-black">
+    <main className="bg-background pt-12 pb-24 text-foreground sm:pt-16">
       <div className="container space-y-12">
         <header className="space-y-4">
-          <p className="text-sm text-neutral-600">
-            {t.homeLink} / {breadcrumbsTitle}
+          <p className="text-sm text-muted-foreground">
+            <Link
+              className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"
+              href={`/${locale}`}
+            >
+              {t.homeLink}
+            </Link>{' '}
+            <span aria-hidden="true">/</span> {breadcrumbsTitle}
           </p>
           <h1 className="text-4xl font-bold uppercase tracking-wide">{pageTitle}</h1>
-          <p className="max-w-3xl text-neutral-700">{pageDescription}</p>
+          <p className="max-w-3xl text-muted-foreground">{pageDescription}</p>
         </header>
 
         {partners.length > 0 ? (
           <PartnersGrid noLogoLabel={t.noLogo} partners={partners} />
         ) : (
-          <section className="rounded border border-neutral-200 bg-white p-6 text-neutral-600">
-            {t.empty}
-          </section>
+          <p className="rounded border border-border bg-card p-6 text-card-foreground">{t.empty}</p>
         )}
 
-        <div className="flex justify-center">
-          <a
-            className="inline-flex rounded bg-white px-10 py-3 text-sm font-semibold text-black transition hover:bg-neutral-100 border border-neutral-300"
-            href={videoButtonHref}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {videoButtonLabel}
-          </a>
-        </div>
+        {videoButtonHref && (
+          <div className="flex justify-center">
+            <a
+              className="inline-flex min-h-11 items-center rounded border border-border bg-card px-6 py-3 text-center text-sm font-semibold text-card-foreground transition hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4"
+              href={videoButtonHref}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {videoButtonLabel}
+            </a>
+          </div>
+        )}
       </div>
     </main>
   )

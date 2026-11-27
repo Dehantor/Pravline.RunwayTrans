@@ -34,7 +34,7 @@ export const ReviewsPage: GlobalConfig = {
           label: 'Заголовок страницы',
           type: 'text',
           localized: true,
-          defaultValue: 'Видео-отзывы наших партнёров',
+          defaultValue: 'Отзывы клиентов',
           required: true,
         },
         {
@@ -42,8 +42,7 @@ export const ReviewsPage: GlobalConfig = {
           label: 'Описание страницы',
           type: 'textarea',
           localized: true,
-          defaultValue:
-            'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.',
+          defaultValue: 'Видеоотзывы и письма благодарности от клиентов «Ранвей Транс».',
           required: true,
         },
         {
@@ -74,7 +73,7 @@ export const ReviewsPage: GlobalConfig = {
           label: 'Имя эксперта',
           type: 'text',
           localized: true,
-          defaultValue: 'Виктория Кондакова',
+          defaultValue: '—',
           required: true,
         },
         {
@@ -82,7 +81,7 @@ export const ReviewsPage: GlobalConfig = {
           label: 'Должность эксперта',
           type: 'text',
           localized: true,
-          defaultValue: 'Эксперт по эксплуатации отелей в РФ',
+          defaultValue: '—',
           required: true,
         },
         {
@@ -90,7 +89,6 @@ export const ReviewsPage: GlobalConfig = {
           label: 'Список отзывов эксперта',
           type: 'array',
           localized: true,
-          minRows: 1,
           fields: [
             {
               name: 'label',
@@ -98,11 +96,6 @@ export const ReviewsPage: GlobalConfig = {
               type: 'text',
               required: true,
             },
-          ],
-          defaultValue: [
-            { label: 'Family Place' },
-            { label: 'Glamping Moon' },
-            { label: 'Отель Атмосфера' },
           ],
         },
       ],
@@ -121,7 +114,6 @@ export const ReviewsPage: GlobalConfig = {
           name: 'videoReviews',
           label: 'Карточки',
           type: 'array',
-          minRows: 1,
           admin: {
             description: 'Карточки выводятся на сайте в том же порядке, что и здесь.',
           },
@@ -132,7 +124,6 @@ export const ReviewsPage: GlobalConfig = {
               type: 'text',
               localized: true,
               required: true,
-              defaultValue: 'ООО «Роснефть»',
             },
             {
               name: 'reviewer',
@@ -140,14 +131,12 @@ export const ReviewsPage: GlobalConfig = {
               type: 'textarea',
               localized: true,
               required: true,
-              defaultValue: 'Управляющий проекта: Сечин Семён Валерьевич',
             },
             {
               name: 'year',
               label: 'Год',
               type: 'number',
               required: true,
-              defaultValue: 2023,
             },
             {
               name: 'videoUrl',
@@ -160,26 +149,6 @@ export const ReviewsPage: GlobalConfig = {
               label: 'Превью (опционально)',
               type: 'upload',
               relationTo: 'media',
-            },
-          ],
-          defaultValue: [
-            {
-              companyName: 'ООО «Роснефть»',
-              reviewer: 'Управляющий проекта: Сечин Семён Валерьевич',
-              year: 2023,
-              videoUrl: 'https://www.youtube.com',
-            },
-            {
-              companyName: 'Логистика Транс Сервис',
-              reviewer: 'Владелец компании: Иванов Дмитрий Владимирович',
-              year: 2022,
-              videoUrl: 'https://www.youtube.com',
-            },
-            {
-              companyName: 'Авто Транспорт Москва',
-              reviewer: 'Мэр г. Москва: Лужков Сергей Иванович',
-              year: 2021,
-              videoUrl: 'https://www.youtube.com',
             },
           ],
         },
@@ -210,7 +179,6 @@ export const ReviewsPage: GlobalConfig = {
           name: 'textReviews',
           label: 'Карточки',
           type: 'array',
-          minRows: 1,
           admin: {
             description: 'Карточки выводятся на сайте в том же порядке, что и здесь.',
           },
@@ -221,7 +189,6 @@ export const ReviewsPage: GlobalConfig = {
               type: 'text',
               localized: true,
               required: true,
-              defaultValue: 'ООО «Роснефть»',
             },
             {
               name: 'reviewer',
@@ -229,14 +196,12 @@ export const ReviewsPage: GlobalConfig = {
               type: 'textarea',
               localized: true,
               required: true,
-              defaultValue: 'Управляющий проекта: Сечин Семён Валерьевич',
             },
             {
               name: 'year',
               label: 'Год',
               type: 'number',
               required: true,
-              defaultValue: 2023,
             },
             {
               name: 'documentImage',
@@ -257,13 +222,13 @@ export const ReviewsPage: GlobalConfig = {
       fields: [
         {
           name: 'title',
-          label: 'Meta title',
+          label: { ru: 'SEO-заголовок', en: 'Meta title' },
           type: 'text',
           defaultValue: 'Отзывы | RunwayTrans',
         },
         {
           name: 'description',
-          label: 'Meta description',
+          label: { ru: 'SEO-описание', en: 'Meta description' },
           type: 'textarea',
           defaultValue: 'Видео-отзывы и письма благодарности от клиентов RunwayTrans.',
         },

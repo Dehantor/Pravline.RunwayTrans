@@ -43,8 +43,9 @@
     "redirects.js",
     "next-env.d.ts",
     "next.config.js",
-    "next-sitemap.config.cjs",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    ".next-runtime/docker-20261126-consultation-optional/types/**/*.ts",
+    ".next-runtime/docker-20261126-consultation-optional/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

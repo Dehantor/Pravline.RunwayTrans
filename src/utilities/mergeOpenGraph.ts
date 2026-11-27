@@ -6,7 +6,11 @@ const defaultOpenGraph: Metadata['openGraph'] = {
   description: 'Грузоперевозки в труднодоступные районы Севера.',
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: new URL('/runway-trans-preview.jpg', getServerSideURL()),
+      type: 'image/jpeg',
+      width: 1200,
+      height: 630,
+      alt: 'Runway Trans',
     },
   ],
   siteName: 'Runway Trans',

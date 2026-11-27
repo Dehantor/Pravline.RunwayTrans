@@ -71,7 +71,7 @@ export function LanguageSwitcher({ locale, isOpen, onToggle, onClose }: Language
   }
 
   return (
-    <div className="relative ml-auto shrink-0 lg:order-4" ref={rootRef}>
+    <div className="relative ml-auto shrink-0 lg:ml-0" ref={rootRef}>
       <button
         aria-controls={isOpen ? menuId : undefined}
         aria-expanded={isOpen}
@@ -83,11 +83,11 @@ export function LanguageSwitcher({ locale, isOpen, onToggle, onClose }: Language
         title={t.languageLabel}
         type="button"
       >
-        <span className="flex items-center gap-1.5">
+        <span className="flex items-center gap-1.5 lg:flex-col lg:gap-0.5">
           <Image alt="" aria-hidden height={22} src={current.flag} width={22} />
           <span>{current.shortLabel}</span>
         </span>
-        <ChevronDown aria-hidden="true" className="size-3" />
+        <ChevronDown aria-hidden="true" className="size-3 lg:hidden" />
       </button>
 
       {isOpen && (

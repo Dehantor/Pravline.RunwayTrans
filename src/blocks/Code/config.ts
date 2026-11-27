@@ -2,6 +2,10 @@ import type { Block } from 'payload'
 
 export const Code: Block = {
   slug: 'code',
+  labels: {
+    singular: { ru: 'Код', en: 'Code' },
+    plural: { ru: 'Блоки кода', en: 'Code' },
+  },
   interfaceName: 'CodeBlock',
   fields: [
     {

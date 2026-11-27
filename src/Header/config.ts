@@ -6,6 +6,7 @@ import { revalidateHeader } from './hooks/revalidateHeader'
 
 export const Header: GlobalConfig = {
   slug: 'header',
+  label: { ru: 'Шапка сайта', en: 'Header' },
   access: {
     read: () => true,
     update: canEditContent,
@@ -16,6 +17,7 @@ export const Header: GlobalConfig = {
   fields: [
     {
       name: 'navItems',
+      label: { ru: 'Пункты меню', en: 'Navigation items' },
       localized: true,
       type: 'array',
       fields: [
@@ -34,7 +36,7 @@ export const Header: GlobalConfig = {
               appearances: false,
             }),
           ],
-          label: 'Child links',
+          label: { ru: 'Вложенные ссылки', en: 'Child links' },
         },
       ],
       maxRows: 6,

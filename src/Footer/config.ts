@@ -6,6 +6,7 @@ import { revalidateFooter } from './hooks/revalidateFooter'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
+  label: { ru: 'Подвал сайта', en: 'Footer' },
   access: {
     read: () => true,
     update: canEditContent,
@@ -16,6 +17,7 @@ export const Footer: GlobalConfig = {
   fields: [
     {
       name: 'navItems',
+      label: { ru: 'Пункты меню', en: 'Navigation items' },
       localized: true,
       type: 'array',
       fields: [

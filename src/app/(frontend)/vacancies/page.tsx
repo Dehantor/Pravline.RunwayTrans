@@ -60,39 +60,45 @@ export default async function VacanciesPage() {
   )
 
   return (
-    <main className="bg-background-light pb-24 text-ink">
+    <main className="bg-background pb-24 text-foreground">
       <div className="container pt-12 sm:pt-16">
-        <nav aria-label={contactsCopy.breadcrumbsAria} className="flex items-center gap-3 text-sm">
-          <Link className="text-neutral-400 transition-colors hover:text-brand-green" href="/">
+        <nav
+          aria-label={contactsCopy.breadcrumbsAria}
+          className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground"
+        >
+          <Link
+            className="hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+            href={`/${locale}`}
+          >
             {contactsCopy.homeLink}
           </Link>
-          <ChevronRight className="size-5 text-neutral-400" />
+          <ChevronRight aria-hidden="true" className="size-5 shrink-0" />
           <Link
-            className="text-neutral-400 transition-colors hover:text-brand-green"
-            href="/ranvey-trans-segodnya"
+            className="hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+            href={`/${locale}/ranvey-trans-segodnya`}
           >
             {companyLabels[locale]}
           </Link>
-          <ChevronRight className="size-5 text-neutral-400" />
-          <span>{t.title}</span>
+          <ChevronRight aria-hidden="true" className="size-5 shrink-0" />
+          <span aria-current="page" className="text-foreground">
+            {t.title}
+          </span>
         </nav>
 
         <h1 className="sr-only">{t.title}</h1>
         <p className="mt-12 text-lg leading-relaxed sm:text-xl">{introMessages[locale]}</p>
 
         {publishedVacancies.length > 0 ? (
-          <div className="mt-7 border-t border-black/40">
+          <div className="mt-7 border-t border-border">
             {publishedVacancies.map((vacancy, index) => (
               <details
-                className="group border-b border-black/40"
+                className="group border-b border-border"
                 key={vacancy.id}
                 open={index === Math.min(1, publishedVacancies.length - 1)}
               >
-                <summary className="grid cursor-pointer list-none grid-cols-[1fr_auto] items-center gap-6 px-6 py-7 text-lg marker:hidden sm:px-14 sm:text-xl [&::-webkit-details-marker]:hidden">
-                  <span className="transition-colors group-open:font-semibold group-open:text-brand-green">
-                    {vacancy.title}
-                  </span>
-                  <span className="flex items-center gap-5 font-semibold text-brand-green">
+                <summary className="grid cursor-pointer list-none grid-cols-[1fr_auto] items-center gap-6 px-6 py-7 text-lg marker:hidden focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-foreground sm:px-14 sm:text-xl [&::-webkit-details-marker]:hidden">
+                  <span className="group-open:font-semibold">{vacancy.title}</span>
+                  <span className="flex items-center gap-5 font-semibold text-foreground">
                     {vacancy.salary || ''}
                     <ChevronDown className="size-5 transition-transform group-open:rotate-180" />
                   </span>
@@ -139,7 +145,7 @@ export default async function VacanciesPage() {
             ))}
           </div>
         ) : (
-          <p className="mt-12 text-neutral-600">{emptyMessages[locale]}</p>
+          <p className="mt-12 text-muted-foreground">{emptyMessages[locale]}</p>
         )}
       </div>
     </main>

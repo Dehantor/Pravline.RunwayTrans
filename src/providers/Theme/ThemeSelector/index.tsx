@@ -14,7 +14,11 @@ import type { Theme } from './types'
 import { useTheme } from '..'
 import { themeLocalStorageKey } from './types'
 
-export const ThemeSelector: React.FC = () => {
+type ThemeSelectorProps = {
+  labels: { label: string; auto: string; light: string; dark: string }
+}
+
+export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ labels }) => {
   const { setTheme } = useTheme()
   const [value, setValue] = useState('')
 
@@ -36,15 +40,15 @@ export const ThemeSelector: React.FC = () => {
   return (
     <Select onValueChange={onThemeChange} value={value}>
       <SelectTrigger
-        aria-label="Select a theme"
+        aria-label={labels.label}
         className="w-auto bg-transparent gap-2 pl-0 md:pl-3 border-none"
       >
-        <SelectValue placeholder="Theme" />
+        <SelectValue placeholder={labels.label} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="auto">Auto</SelectItem>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
+        <SelectItem value="auto">{labels.auto}</SelectItem>
+        <SelectItem value="light">{labels.light}</SelectItem>
+        <SelectItem value="dark">{labels.dark}</SelectItem>
       </SelectContent>
     </Select>
   )

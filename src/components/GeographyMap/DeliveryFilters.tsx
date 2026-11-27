@@ -6,17 +6,9 @@ import { useMemo, useRef, useState } from 'react'
 import Select, { type AriaLiveMessages, type GroupBase, type StylesConfig } from 'react-select'
 import { GeographyMapClientOnly } from './ClientOnly'
 import styles from './map.module.css'
-import { hasRouteGeometry, type GeographyRoute, type RouteFocusRequest } from './routes'
+import { hasRouteGeometry, type GeographyDelivery, type RouteFocusRequest } from './routes'
 
 type FilterOption = { value: string; label: string }
-
-type GeographyDelivery = GeographyRoute & {
-  period: string
-  route: string
-  duration?: string | null
-  region: string | null
-  vehicle: 'allTerrain' | 'cars' | null
-}
 
 type DeliveryFiltersProps = {
   deliveries: GeographyDelivery[]
@@ -181,6 +173,7 @@ export function DeliveryFilters({
           </span>
           <GeographyMapClientOnly
             focusRequest={focusRequest}
+            label={mapLabel}
             routes={visibleDeliveries}
             zoomInLabel={zoomInLabel}
             zoomOutLabel={zoomOutLabel}
@@ -190,7 +183,11 @@ export function DeliveryFilters({
           {focusedDelivery ? messages.focusedRoute.replace('{label}', focusedDelivery.title) : ''}
         </p>
 
-        <div className="relative z-10 grid items-start gap-x-3 gap-y-2.5 rounded-[9px] border border-border bg-on-dark p-3 text-sm text-card-foreground dark:bg-card sm:grid-cols-2 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1.75fr)_minmax(0,1fr)_minmax(0,1.25fr)]">
+        <div
+          className="relative z-10 grid scroll-mt-6 items-start gap-x-3 gap-y-2.5 rounded-[9px] border border-border bg-on-dark p-3 text-sm text-card-foreground dark:bg-card sm:grid-cols-2 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1.75fr)_minmax(0,1fr)_minmax(0,1.25fr)]"
+          id="geography-filters"
+          tabIndex={-1}
+        >
           <div className="flex min-w-0 items-center gap-2.5">
             <label className="max-w-[40%] wrap-anywhere" htmlFor="geography-period">
               {messages.periodLabel}

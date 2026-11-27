@@ -4,13 +4,13 @@ import deepMerge from '@/utilities/deepMerge'
 
 export type LinkAppearances = 'default' | 'outline'
 
-export const appearanceOptions: Record<LinkAppearances, { label: string; value: string }> = {
+export const appearanceOptions: Record<LinkAppearances, { label: { ru: string; en: string }; value: string }> = {
   default: {
-    label: 'Default',
+    label: { ru: 'Обычная', en: 'Default' },
     value: 'default',
   },
   outline: {
-    label: 'Outline',
+    label: { ru: 'Контурная', en: 'Outline' },
     value: 'outline',
   },
 }
@@ -25,6 +25,7 @@ type LinkType = (options?: {
 export const link: LinkType = ({ appearances, disableLabel = false, localizedLabel = false, overrides = {} } = {}) => {
   const linkResult: GroupField = {
     name: 'link',
+    label: { ru: 'Ссылка', en: 'Link' },
     type: 'group',
     admin: {
       hideGutter: true,
@@ -43,11 +44,11 @@ export const link: LinkType = ({ appearances, disableLabel = false, localizedLab
             defaultValue: 'reference',
             options: [
               {
-                label: 'Internal link',
+                label: { ru: 'Внутренняя ссылка', en: 'Internal link' },
                 value: 'reference',
               },
               {
-                label: 'Custom URL',
+                label: { ru: 'Произвольный URL', en: 'Custom URL' },
                 value: 'custom',
               },
             ],
@@ -61,7 +62,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, localizedLab
               },
               width: '50%',
             },
-            label: 'Open in new tab',
+            label: { ru: 'Открывать в новой вкладке', en: 'Open in new tab' },
           },
         ],
       },
@@ -75,7 +76,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, localizedLab
       admin: {
         condition: (_, siblingData) => siblingData?.type === 'reference',
       },
-      label: 'Document to link to',
+      label: { ru: 'Документ для ссылки', en: 'Document to link to' },
       relationTo: ['pages', 'posts'],
       required: true,
     },
@@ -85,7 +86,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, localizedLab
       admin: {
         condition: (_, siblingData) => siblingData?.type === 'custom',
       },
-      label: 'Custom URL',
+      label: { ru: 'Произвольный URL', en: 'Custom URL' },
       required: true,
     },
   ]
@@ -109,7 +110,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, localizedLab
           admin: {
             width: '50%',
           },
-          label: 'Label',
+          label: { ru: 'Текст ссылки', en: 'Label' },
           localized: localizedLabel,
           required: true,
         },
@@ -128,9 +129,10 @@ export const link: LinkType = ({ appearances, disableLabel = false, localizedLab
 
     linkResult.fields.push({
       name: 'appearance',
+      label: { ru: 'Оформление', en: 'Appearance' },
       type: 'select',
       admin: {
-        description: 'Choose how the link should be rendered.',
+        description: { ru: 'Выберите оформление ссылки.', en: 'Choose how the link should be rendered.' },
       },
       defaultValue: 'default',
       options: appearanceOptionsToUse,

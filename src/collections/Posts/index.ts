@@ -28,6 +28,10 @@ import { slugField } from 'payload'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
+  labels: {
+    singular: { ru: 'Публикация', en: 'Post' },
+    plural: { ru: 'Публикации', en: 'Posts' },
+  },
   access: {
     create: canEditContent,
     delete: canEditContent,
@@ -68,6 +72,7 @@ export const Posts: CollectionConfig<'posts'> = {
   fields: [
     {
       name: 'title',
+      label: { ru: 'Заголовок', en: 'Title' },
       type: 'text',
       required: true,
       localized: true,
@@ -79,6 +84,7 @@ export const Posts: CollectionConfig<'posts'> = {
           fields: [
             {
               name: 'heroImage',
+              label: { ru: 'Обложка', en: 'Hero image' },
               type: 'upload',
               relationTo: 'media',
             },
@@ -102,12 +108,13 @@ export const Posts: CollectionConfig<'posts'> = {
               localized: true,
             },
           ],
-          label: 'Content',
+          label: { ru: 'Содержимое', en: 'Content' },
         },
         {
           fields: [
             {
               name: 'relatedPosts',
+              label: { ru: 'Связанные публикации', en: 'Related posts' },
               type: 'relationship',
               admin: {
                 position: 'sidebar',
@@ -124,6 +131,7 @@ export const Posts: CollectionConfig<'posts'> = {
             },
             {
               name: 'categories',
+              label: { ru: 'Категории', en: 'Categories' },
               type: 'relationship',
               admin: {
                 position: 'sidebar',
@@ -132,7 +140,7 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'categories',
             },
           ],
-          label: 'Meta',
+          label: { ru: 'Дополнительно', en: 'Meta' },
         },
         {
           name: 'meta',
@@ -146,12 +154,16 @@ export const Posts: CollectionConfig<'posts'> = {
             }),
             MetaTitleField({
               hasGenerateFn: true,
+              overrides: { label: { ru: 'SEO-заголовок', en: 'Meta Title' } },
             }),
             MetaImageField({
               relationTo: 'media',
+              overrides: { label: { ru: 'Изображение для SEO', en: 'Meta Image' } },
             }),
 
-            MetaDescriptionField({}),
+            MetaDescriptionField({
+              overrides: { label: { ru: 'SEO-описание', en: 'Meta Description' } },
+            }),
             PreviewField({
               // if the `generateUrl` function is configured
               hasGenerateFn: true,
@@ -166,6 +178,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
     {
       name: 'publishedAt',
+      label: { ru: 'Дата публикации', en: 'Published at' },
       type: 'date',
       admin: {
         date: {
@@ -186,6 +199,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
     {
       name: 'authors',
+      label: { ru: 'Авторы', en: 'Authors' },
       type: 'relationship',
       admin: {
         position: 'sidebar',

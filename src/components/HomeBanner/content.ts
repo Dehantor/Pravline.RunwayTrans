@@ -9,7 +9,7 @@ export type HomeBannerContent = {
 type BannerImage = `/${string}`
 
 export const homeBannerImages = [
-  '/media/home-arctic-freight.webp',
+  '/media/home-banner-vityaz-snow.webp',
   '/media/image-2.png',
 ] satisfies readonly [
   BannerImage,
@@ -30,7 +30,7 @@ export const homeBannerContent: Record<AppLocale, HomeBannerContent> = {
       'Самое надёжное и стопроцентное.',
     ],
     actions: [
-      { label: 'ВездеПроходимые Витязи', path: '/tehnika' },
+      { label: 'Вездепроходимые Витязи', path: '/tehnika' },
       { label: 'Задать вопрос', path: '/contacts#callback-form' },
     ],
   },
@@ -85,25 +85,30 @@ export const bannerControls = {
     region: 'Баннеры главной страницы',
     previous: 'Предыдущий баннер',
     next: 'Следующий баннер',
+    slide: 'Баннер',
   },
   en: {
     region: 'Homepage banners',
     previous: 'Previous banner',
     next: 'Next banner',
+    slide: 'Banner',
   },
   fr: {
     region: 'Bannières de la page d’accueil',
     previous: 'Bannière précédente',
     next: 'Bannière suivante',
+    slide: 'Bannière',
   },
   kk: {
     region: 'Басты бет баннерлері',
     previous: 'Алдыңғы баннер',
     next: 'Келесі баннер',
+    slide: 'Баннер',
   },
   zh: {
     region: '首页横幅',
     previous: '上一张横幅',
     next: '下一张横幅',
+    slide: '横幅',
   },
-} satisfies Record<AppLocale, Record<'region' | 'previous' | 'next', string>>
+} satisfies Record<AppLocale, Record<'region' | 'previous' | 'next' | 'slide', string>>

@@ -1,20 +1,22 @@
 'use client'
 
 import React, { Fragment, useCallback, useState } from 'react'
-import { toast } from '@payloadcms/ui'
+import { toast, useTranslation } from '@payloadcms/ui'
 
 import './index.scss'
 
-const SuccessMessage: React.FC = () => (
+const SuccessMessage = ({ russian }: { russian: boolean }) => (
   <div>
-    Database seeded! You can now{' '}
+    {russian ? 'Примеры добавлены. Теперь можно ' : 'Database seeded! You can now '}
     <a target="_blank" href="/">
-      visit your website
+      {russian ? 'открыть сайт' : 'visit your website'}
     </a>
   </div>
 )
 
 export const SeedButton: React.FC = () => {
+  const { i18n } = useTranslation()
+  const russian = i18n.language !== 'en'
   const [loading, setLoading] = useState(false)
   const [seeded, setSeeded] = useState(false)
   const [error, setError] = useState<null | string>(null)
@@ -24,18 +26,25 @@ export const SeedButton: React.FC = () => {
       e.preventDefault()
 
       if (seeded) {
-        toast.info('Database already seeded.')
+        toast.info(russian ? 'Примеры уже добавлены.' : 'Database already seeded.')
         return
       }
       if (loading) {
-        toast.info('Seeding already in progress.')
+        toast.info(russian ? 'Примеры уже добавляются.' : 'Seeding already in progress.')
         return
       }
       if (error) {
-        toast.error(`An error occurred, please refresh and try again.`)
+        toast.error(
+          russian
+            ? 'Произошла ошибка. Обновите страницу и попробуйте снова.'
+            : 'An error occurred, please refresh and try again.',
+        )
         return
       }
 
+      const failureMessage = russian
+        ? 'Не удалось добавить примеры.'
+        : 'An error occurred while seeding.'
       setLoading(true)
 
       try {
@@ -48,7 +57,7 @@ export const SeedButton: React.FC = () => {
                     resolve(true)
                     setSeeded(true)
                   } else {
-                    reject('An error occurred while seeding.')
+                    reject(failureMessage)
                   }
                 })
                 .catch((error) => {
@@ -59,9 +68,9 @@ export const SeedButton: React.FC = () => {
             }
           }),
           {
-            loading: 'Seeding with data....',
-            success: <SuccessMessage />,
-            error: 'An error occurred while seeding.',
+            loading: russian ? 'Добавляем примеры…' : 'Seeding with data…',
+            success: <SuccessMessage russian={russian} />,
+            error: failureMessage,
           },
         )
       } catch (err) {
@@ -69,18 +78,18 @@ export const SeedButton: React.FC = () => {
         setError(error)
       }
     },
-    [loading, seeded, error],
+    [loading, seeded, error, russian],
   )
 
   let message = ''
-  if (loading) message = ' (seeding...)'
-  if (seeded) message = ' (done!)'
-  if (error) message = ` (error: ${error})`
+  if (loading) message = russian ? ' (добавляем…) ' : ' (seeding…) '
+  if (seeded) message = russian ? ' (готово) ' : ' (done!) '
+  if (error) message = russian ? ` (ошибка: ${error}) ` : ` (error: ${error}) `
 
   return (
     <Fragment>
       <button className="seedButton" onClick={handleClick}>
-        Seed your database
+        {russian ? 'Заполните базу примерами' : 'Seed your database'}
       </button>
       {message}
     </Fragment>

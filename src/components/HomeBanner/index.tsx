@@ -1,6 +1,5 @@
 'use client'
 
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useId, useState, useSyncExternalStore } from 'react'
@@ -83,31 +82,6 @@ export function HomeBanner({ content, controls, images, locale }: HomeBannerProp
       )}
       <div className={styles.overlay} aria-hidden="true" />
 
-      {hasMultipleImages && (
-        <div className={styles.controls}>
-          <button
-            aria-controls={imageId}
-            aria-label={controls.previous}
-            className={`${styles.control} ${styles.previous}`}
-            onClick={() => moveBy(-1)}
-            title={controls.previous}
-            type="button"
-          >
-            <ChevronLeft aria-hidden="true" size={24} strokeWidth={1.75} />
-          </button>
-          <button
-            aria-controls={imageId}
-            aria-label={controls.next}
-            className={`${styles.control} ${styles.next}`}
-            onClick={() => moveBy(1)}
-            title={controls.next}
-            type="button"
-          >
-            <ChevronRight aria-hidden="true" size={24} strokeWidth={1.75} />
-          </button>
-        </div>
-      )}
-
       <div className={styles.content}>
         <h1 className={styles.title}>
           <span className={styles.titleFirst}>{content.title[0]}</span>
@@ -131,6 +105,59 @@ export function HomeBanner({ content, controls, images, locale }: HomeBannerProp
           </div>
         </div>
       </div>
+
+      {hasMultipleImages && (
+        <div className={styles.controls}>
+          <button
+            aria-controls={imageId}
+            aria-label={controls.previous}
+            className={`${styles.control} ${styles.previous}`}
+            onClick={() => moveBy(-1)}
+            title={controls.previous}
+            type="button"
+          >
+            <svg aria-hidden="true" viewBox="0 0 50 50" fill="currentColor">
+              <path
+                d="M17.6 24.3l9.5-9.5c.2-.2.4-.3.7-.3s.5.1.7.3c.4.4.4 1 0 1.4L19.6 25l8.9 8.9c.4.4.4 1 0 1.3-.4.4-1 .4-1.3 0l-9.5-9.5c-.5-.4-.5-1-.1-1.4z"
+                transform="translate(2 0)"
+              />
+            </svg>
+          </button>
+          <div className={styles.indicators}>
+            {images.map((src, index) => {
+              const label = `${controls.slide} ${index + 1}`
+
+              return (
+                <button
+                  aria-controls={imageId}
+                  aria-current={index === activeIndex ? 'true' : undefined}
+                  aria-label={label}
+                  className={styles.indicator}
+                  key={src}
+                  onClick={() => setActiveIndex(index)}
+                  title={label}
+                  type="button"
+                />
+              )
+            })}
+          </div>
+          <button
+            aria-controls={imageId}
+            aria-label={controls.next}
+            className={`${styles.control} ${styles.next}`}
+            onClick={() => moveBy(1)}
+            title={controls.next}
+            type="button"
+          >
+            <svg aria-hidden="true" viewBox="0 0 50 50" fill="currentColor">
+              <path
+                d="M32.4 25.7l-9.5 9.5c-.2.2-.4.3-.7.3s-.5-.1-.7-.3c-.4-.4-.4-1 0-1.4l8.9-8.8-8.9-8.9c-.4-.4-.4-1 0-1.3.4-.4 1-.4 1.3 0l9.5 9.5c.5.4.5 1 .1 1.4z"
+                transform="translate(-2 0)"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
     </section>
   )
 }

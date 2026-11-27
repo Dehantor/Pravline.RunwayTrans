@@ -12,23 +12,24 @@ import { link } from '@/fields/link'
 const columnFields: Field[] = [
   {
     name: 'size',
+    label: { ru: 'Ширина', en: 'Size' },
     type: 'select',
     defaultValue: 'oneThird',
     options: [
       {
-        label: 'One Third',
+        label: { ru: 'Одна треть', en: 'One Third' },
         value: 'oneThird',
       },
       {
-        label: 'Half',
+        label: { ru: 'Половина', en: 'Half' },
         value: 'half',
       },
       {
-        label: 'Two Thirds',
+        label: { ru: 'Две трети', en: 'Two Thirds' },
         value: 'twoThirds',
       },
       {
-        label: 'Full',
+        label: { ru: 'Вся ширина', en: 'Full' },
         value: 'full',
       },
     ],
@@ -50,6 +51,7 @@ const columnFields: Field[] = [
   },
   {
     name: 'enableLink',
+    label: { ru: 'Показывать ссылку', en: 'Enable link' },
     type: 'checkbox',
   },
   link({
@@ -65,10 +67,15 @@ const columnFields: Field[] = [
 
 export const Content: Block = {
   slug: 'content',
+  labels: {
+    singular: { ru: 'Текстовый блок', en: 'Content' },
+    plural: { ru: 'Текстовые блоки', en: 'Content' },
+  },
   interfaceName: 'ContentBlock',
   fields: [
     {
       name: 'columns',
+      label: { ru: 'Колонки', en: 'Columns' },
       type: 'array',
       admin: {
         initCollapsed: true,

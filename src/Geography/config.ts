@@ -1,7 +1,9 @@
 import type { GlobalConfig } from 'payload'
 
 import { canEditContent, userHasRole } from '@/access/roles'
+import { isAppLocale } from '@/i18n/locales'
 import { revalidateGeography } from './hooks/revalidateGeography'
+import { getDefaultGeographyMapPoints } from './locationMessages'
 
 export const GeographyPage: GlobalConfig = {
   slug: 'geographyPage',
@@ -17,6 +19,46 @@ export const GeographyPage: GlobalConfig = {
     hidden: ({ user }) => !userHasRole(user, ['admin', 'moderator']),
   },
   fields: [
+    {
+      name: 'mapPoints',
+      label: 'Объекты на карте',
+      type: 'array',
+      defaultValue: ({ locale }: { locale?: string }) =>
+        getDefaultGeographyMapPoints(locale && isAppLocale(locale) ? locale : 'ru').map(
+          ({ coordinates: [latitude, longitude], ...point }) => ({
+            ...point,
+            latitude,
+            longitude,
+          }),
+        ),
+      admin: {
+        description: 'Отдельные метки офиса, ремонтных баз и месторождений на странице географии.',
+      },
+      fields: [
+        {
+          name: 'kind',
+          label: 'Тип объекта',
+          type: 'select',
+          options: [
+            { label: 'Офис', value: 'office' },
+            { label: 'Ремонтная база', value: 'repairBase' },
+            { label: 'Месторождение', value: 'field' },
+          ],
+          required: true,
+        },
+        { name: 'title', label: 'Название', type: 'text', localized: true, required: true },
+        { name: 'description', label: 'Описание', type: 'textarea', localized: true },
+        { name: 'latitude', label: 'Широта', type: 'number', min: -90, max: 90, required: true },
+        {
+          name: 'longitude',
+          label: 'Долгота',
+          type: 'number',
+          min: -180,
+          max: 180,
+          required: true,
+        },
+      ],
+    },
     {
       name: 'deliveries',
       label: 'Список перевозок под картой',

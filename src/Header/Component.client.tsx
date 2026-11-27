@@ -1,10 +1,12 @@
 'use client'
 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { SocialIcon, socialNetworks } from '@/components/SocialIcons'
+import { companyEmail, mainPhone } from '@/i18n/companyContacts'
 import { type AppLocale } from '@/i18n/locales'
 import { headerMessages } from '@/i18n/navigationMessages'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
-import { Menu, MessageCircle, Phone, Play, Send, X } from 'lucide-react'
+import { Mail, Menu, Phone, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -14,71 +16,10 @@ import type { Header } from '@/payload-types'
 
 import { HeaderNav } from './Nav'
 
-type SocialLink =
-  | {
-      href: string
-      label: string
-      icon: React.ComponentType<{ className?: string }>
-      image?: never
-      className: string
-    }
-  | {
-      href: string
-      label: string
-      image: string
-      icon?: never
-      className?: never
-    }
-
-const socialLinks: SocialLink[] = [
-  {
-    href: '#',
-    label: 'Telegram',
-    icon: Send,
-    className: 'bg-social-telegram text-on-dark',
-  },
-  {
-    href: '#',
-    label: 'WhatsApp',
-    icon: MessageCircle,
-    className: 'bg-social-whatsapp text-on-dark',
-  },
-  {
-    href: '#',
-    label: 'YouTube',
-    icon: Play,
-    className: 'bg-social-youtube text-on-dark',
-  },
-  {
-    href: '#',
-    label: 'Rutube',
-    image: '/media/social/tel.svg',
-  },
-  {
-    href: '#',
-    label: 'ВКонтакте',
-    className: 'bg-social-vk text-on-dark',
-    icon: () => <span className="text-[13px] font-black tracking-[-1px]">VK</span>,
-  },
-  {
-    href: '#',
-    label: 'Одноклассники',
-    image: '/media/social/vk.svg',
-  },
-  {
-    href: '#',
-    label: 'TikTok',
-    className: 'bg-ink text-on-dark',
-    icon: () => <span className="text-lg font-black">♪</span>,
-  },
-]
-
 interface HeaderClientProps {
   data: Header
   locale: AppLocale
 }
-
-const mainPhone = { href: 'tel:+79130303030', label: '8-913-030-30-30' }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
   const [theme, setTheme] = useState<string | null>(null)
@@ -145,72 +86,69 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
   }, [isMenuOpen, closePanel])
 
   const socials = (
-    <div className="grid min-w-0 justify-items-start gap-1.5 lg:justify-items-center">
-      <div className="flex max-w-full flex-wrap items-center gap-1 sm:gap-1.5">
-        {socialLinks.map(({ href, label, icon: Icon, image, className }) => (
-          <Link
-            aria-label={label}
-            className="inline-flex size-8 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
-            href={href}
-            key={label}
-            onClick={closePanel}
-          >
-            {image ? (
-              <Image alt="" aria-hidden height={39} src={image} width={39} />
-            ) : Icon ? (
-              <span
-                className={`inline-flex h-full w-full items-center justify-center rounded-full ${className}`}
-              >
-                <Icon className="size-4" />
-              </span>
-            ) : null}
-          </Link>
-        ))}
-      </div>
-      <Link
-        className="inline-flex items-center gap-1.5 rounded-sm text-sm font-medium hover:underline focus-visible:outline-2 focus-visible:outline-brand-green max-lg:min-h-11"
-        href="mailto:info@rwt.ru"
-        onClick={closePanel}
-      >
-        <Image alt="" aria-hidden height={18} src="/media/social/rt.svg" width={18} />
-        <span>info@rwt.ru</span>
-      </Link>
+    <div className="flex max-w-full flex-wrap items-center gap-1 sm:gap-1.5 lg:shrink-0 lg:flex-nowrap">
+      {socialNetworks.map((network) => (
+        <Link
+          aria-label={network.label}
+          className="inline-flex size-8 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+          href="#"
+          key={network.label}
+          onClick={closePanel}
+        >
+          <SocialIcon network={network} />
+        </Link>
+      ))}
     </div>
   )
-  const contacts = (
-    <div className="grid min-w-0 justify-items-start gap-1.5 border-t border-border pt-3 lg:border-t-0 lg:border-l lg:border-background-muted lg:pt-0 lg:pl-4">
-      <div className="flex items-center gap-2">
-        <span
-          aria-hidden="true"
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-green-hover text-on-dark"
-        >
-          <Phone className="size-4" />
-        </span>
-        <div className="flex flex-col text-sm leading-tight font-semibold">
-          <a
-            className="inline-flex items-center max-lg:min-h-10"
-            href={mainPhone.href}
-            onClick={closePanel}
-          >
-            {mainPhone.label}
-          </a>
-          <a
-            className="inline-flex items-center max-lg:min-h-10"
-            href="tel:+73912803030"
-            onClick={closePanel}
-          >
-            280-30-30
-          </a>
-        </div>
-      </div>
-      <Link
-        className="inline-flex min-h-11 items-center rounded-sm bg-brand-green-hover px-3 py-1.5 text-center text-sm font-semibold text-on-dark transition-colors hover:bg-brand-green-hover/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green lg:min-h-8"
-        href={`/${locale}/contacts#callback-form`}
-        onNavigate={closePanel}
+  const email = (
+    <Link
+      className="inline-flex items-center gap-2 rounded-sm text-sm font-medium hover:underline focus-visible:outline-2 focus-visible:outline-brand-green max-lg:min-h-11"
+      href={companyEmail.href}
+      onClick={closePanel}
+    >
+      <span
+        aria-hidden="true"
+        className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-green-hover text-on-dark"
       >
-        {t.callbackLabel}
-      </Link>
+        <Mail className="size-4" />
+      </span>
+      <span>{companyEmail.label}</span>
+    </Link>
+  )
+  const phones = (
+    <div className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-green-hover text-on-dark"
+      >
+        <Phone className="size-4 lg:fill-current" />
+      </span>
+      <div className="flex flex-col text-sm leading-tight font-semibold whitespace-nowrap">
+        <a
+          className="inline-flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-brand-green max-lg:min-h-10"
+          href={mainPhone.href}
+          onClick={closePanel}
+        >
+          {mainPhone.label}
+        </a>
+        <a
+          className="inline-flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-brand-green max-lg:min-h-10"
+          href="tel:+73912803030"
+          onClick={closePanel}
+        >
+          280-30-30
+        </a>
+      </div>
     </div>
+  )
+  const callback = (
+    <Link
+      className="inline-flex min-h-11 items-center rounded-sm bg-brand-green-hover px-3 py-1.5 text-center text-sm font-semibold text-on-dark transition-colors hover:bg-brand-green-hover/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green lg:min-h-9 lg:whitespace-nowrap"
+      href={`/${locale}/contacts#callback-form`}
+      onNavigate={closePanel}
+    >
+      {t.callbackLabel}
+    </Link>
   )
 
   return (
@@ -219,8 +157,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className="mx-auto w-full max-w-[1380px] px-2">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-x-1.5 px-1 max-lg:min-h-17 max-lg:pt-2 max-lg:pb-2.5 lg:grid-cols-[minmax(0,1.1fr)_minmax(16.25rem,0.85fr)_auto_auto] lg:gap-x-4 lg:px-4 lg:border-b lg:border-background-muted lg:py-4 xl:gap-x-6">
-          <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-x-1.5 px-1 max-lg:min-h-17 max-lg:pt-2 max-lg:pb-2.5 lg:flex lg:flex-wrap lg:justify-center lg:gap-x-3 lg:gap-y-2 lg:border-b lg:border-background-muted lg:px-4 lg:py-4 xl:gap-x-4">
+          <div className="flex min-w-0 items-center lg:shrink-0 lg:gap-3">
             <Link
               aria-label={t.homeLabel}
               className="min-w-0 rounded-sm focus-visible:outline-2 focus-visible:outline-brand-green max-lg:max-w-full lg:shrink-0"
@@ -229,18 +167,18 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
             >
               <Image
                 alt="Runway Trans"
-                className="h-auto w-32 max-w-full xl:w-44"
+                className="h-auto w-32 max-w-full xl:w-40"
                 height={63}
                 priority
                 src="/media/logo.svg"
                 width={202}
               />
             </Link>
-            <div className="hidden min-w-[8rem] flex-1 border-l border-background-muted pl-3 text-brand-green lg:block">
-              <div className="font-openSans text-lg leading-tight font-semibold break-words italic xl:text-[24px]">
+            <div className="hidden max-w-36 text-brand-green lg:block xl:max-w-[216px]">
+              <div className="font-openSans text-base leading-tight font-semibold italic xl:text-[22px]">
                 {t.serviceLinePrimary}
               </div>
-              <div className="mt-0.5 text-[12px] leading-snug italic text-ink/75">
+              <div className="mt-0.5 text-[11px] leading-snug italic text-brand-green-hover xl:text-[12px]">
                 {t.serviceLineSecondary}
               </div>
             </div>
@@ -256,17 +194,21 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
             <Phone aria-hidden="true" className="size-5" />
           </a>
 
-          <div className="hidden lg:contents">
-            {socials}
-            {contacts}
-          </div>
+          <div className="contents lg:flex lg:shrink-0 lg:items-center lg:gap-3 xl:gap-4">
+            <div className="hidden items-center gap-3 lg:flex xl:gap-4">
+              {socials}
+              {callback}
+              {email}
+              {phones}
+            </div>
 
-          <LanguageSwitcher
-            isOpen={openPanel === 'language'}
-            locale={locale}
-            onClose={closePanel}
-            onToggle={() => setOpenPanel((panel) => (panel === 'language' ? null : 'language'))}
-          />
+            <LanguageSwitcher
+              isOpen={openPanel === 'language'}
+              locale={locale}
+              onClose={closePanel}
+              onToggle={() => setOpenPanel((panel) => (panel === 'language' ? null : 'language'))}
+            />
+          </div>
 
           <button
             aria-controls={panelId}
@@ -296,8 +238,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ locale }) => {
             </div>
 
             <HeaderNav locale={locale} onNavigate={closePanel} />
-            {contacts}
-            {socials}
+            <div className="grid min-w-0 justify-items-start gap-1.5 border-t border-border pt-3">
+              {phones}
+              {callback}
+            </div>
+            <div className="grid min-w-0 justify-items-start gap-1.5">
+              {socials}
+              {email}
+            </div>
           </div>
         </div>
         <div className="hidden lg:block">

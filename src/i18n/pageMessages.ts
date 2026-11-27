@@ -23,6 +23,7 @@ type GuideMessages = SimplePageMessages & {
   personFallback: {
     fullName: string
     position: string
+    initials: string
   }
 }
 
@@ -53,8 +54,6 @@ type ReviewsMessages = SimplePageMessages & {
   homeLink: string
   breadcrumbsTitle: string
   description: string
-  expertName: string
-  expertRole: string
   reviewPrefix: string
   openVideoAria: string
   heroImageAlt: string
@@ -162,8 +161,9 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       galleryTitle: 'Фотогалерея',
       galleryImageAlt: 'Фотография из галереи',
       personFallback: {
-        fullName: 'Сотрудник компании',
-        position: 'Специалист',
+        fullName: 'Владислав Николаевич Пимонов',
+        position: 'Директор',
+        initials: 'ВП',
       },
       metadata: {
         title: 'Руководство',
@@ -225,7 +225,7 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         'Компании, с которыми мы сотрудничаем в международной логистике и комплексных поставках.',
       partnerFallback: 'Партнер',
       noLogo: 'Нет логотипа',
-      empty: 'Добавьте карточки партнеров в админке, чтобы они отобразились на странице.',
+      empty: 'Информация о партнёрах пока не опубликована.',
       videoButtonLabel: 'Смотреть видео отзывы',
       metadata: {
         title: 'Партнеры',
@@ -233,13 +233,10 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       },
     },
     reviews: {
-      title: 'Видео-отзывы наших партнёров',
+      title: 'Отзывы клиентов',
       homeLink: 'Главная',
       breadcrumbsTitle: 'Отзывы',
-      description:
-        'Мы имеем более 60 видео-отзывов и более 100 благодарностей на фирменных бланках от своих клиентов.',
-      expertName: 'Виктория Кондакова',
-      expertRole: 'Эксперт по эксплуатации отелей в РФ',
+      description: 'Видеоотзывы и письма благодарности от клиентов «Ранвей Транс».',
       reviewPrefix: 'Отзыв:',
       openVideoAria: 'Открыть видео-отзыв',
       heroImageAlt: 'Видео-отзывы партнёров Runway Trans',
@@ -360,7 +357,11 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       peopleTitle: 'Management',
       galleryTitle: 'Photo gallery',
       galleryImageAlt: 'Gallery photo',
-      personFallback: { fullName: 'Company employee', position: 'Specialist' },
+      personFallback: {
+        fullName: 'Vladislav Nikolaevich Pimonov',
+        position: 'Director',
+        initials: 'VP',
+      },
       metadata: {
         title: 'Guide',
         description: 'A guide to RunwayTrans cargo transportation services and terms.',
@@ -418,18 +419,15 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         'Companies we work with in international logistics and integrated supply chains.',
       partnerFallback: 'Partner',
       noLogo: 'No logo',
-      empty: 'Add partner cards in the admin panel to show them on this page.',
+      empty: 'Partner information has yet to be published.',
       videoButtonLabel: 'Watch video testimonials',
       metadata: { title: 'Partners', description: 'Runway Trans partners page.' },
     },
     reviews: {
-      title: 'Video testimonials from our partners',
+      title: 'Client testimonials',
       homeLink: 'Home',
       breadcrumbsTitle: 'Reviews',
-      description:
-        'Our clients have shared more than 60 video testimonials and over 100 letters of appreciation on company letterhead.',
-      expertName: 'Victoria Kondakova',
-      expertRole: 'Hotel operations expert in Russia',
+      description: 'Video testimonials and letters of appreciation from Runway Trans clients.',
       reviewPrefix: 'Review:',
       openVideoAria: 'Open video testimonial',
       heroImageAlt: 'Video testimonials from Runway Trans partners',
@@ -547,7 +545,11 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       peopleTitle: 'Leitung',
       galleryTitle: 'Fotogalerie',
       galleryImageAlt: 'Galeriefoto',
-      personFallback: { fullName: 'Mitarbeiter', position: 'Spezialist' },
+      personFallback: {
+        fullName: 'Владислав Николаевич Пимонов',
+        position: 'Директор',
+        initials: 'ВП',
+      },
       metadata: {
         title: 'Leitfaden',
         description: 'Leitfaden zu Services und Bedingungen von RunwayTrans.',
@@ -595,24 +597,21 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       },
     },
     partners: {
-      title: 'Partner',
-      homeLink: 'Startseite',
-      breadcrumbsTitle: 'Partner',
-      description: 'Unternehmen, mit denen wir in Logistik und komplexen Lieferketten arbeiten.',
-      partnerFallback: 'Partner',
-      noLogo: 'Kein Logo',
-      empty: 'Fugen Sie Partnerkarten im Adminbereich hinzu.',
-      videoButtonLabel: 'Video-Referenzen ansehen',
-      metadata: { title: 'Partner', description: 'Partnerseite von Runway Trans.' },
+      title: 'Серіктестер',
+      homeLink: 'Басты бет',
+      breadcrumbsTitle: 'Серіктестер',
+      description: 'Логистика және кешенді жеткізу саласында бізбен жұмыс істейтін компаниялар.',
+      partnerFallback: 'Серіктес',
+      noLogo: 'Логотипі жоқ',
+      empty: 'Серіктестер туралы ақпарат әлі жарияланған жоқ.',
+      videoButtonLabel: 'Бейнепікірлерді көру',
+      metadata: { title: 'Серіктестер', description: 'Runway Trans серіктестері.' },
     },
     reviews: {
-      title: 'Серіктестеріміздің бейнепікірлері',
+      title: 'Клиенттердің пікірлері',
       homeLink: 'Басты бет',
       breadcrumbsTitle: 'Пікірлер',
-      description:
-        'Клиенттеріміз 60-тан астам бейнепікір және фирмалық бланкіде 100-ден астам алғыс хат жолдады.',
-      expertName: 'Виктория Кондакова',
-      expertRole: 'Ресейдегі қонақүйлерді пайдалану жөніндегі сарапшы',
+      description: 'Runway Trans клиенттерінің бейнепікірлері мен алғыс хаттары.',
       reviewPrefix: 'Пікір:',
       openVideoAria: 'Бейнепікірді ашу',
       heroImageAlt: 'Runway Trans серіктестерінің бейнепікірлері',
@@ -730,7 +729,11 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       peopleTitle: 'Direction',
       galleryTitle: 'Galerie photo',
       galleryImageAlt: 'Photo de galerie',
-      personFallback: { fullName: 'Employe de l entreprise', position: 'Specialiste' },
+      personFallback: {
+        fullName: 'Vladislav Nikolaïevitch Pimonov',
+        position: 'Directeur',
+        initials: 'VP',
+      },
       metadata: {
         title: 'Guide',
         description: 'Guide des services et conditions de transport RunwayTrans.',
@@ -782,18 +785,15 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
         'Entreprises avec lesquelles nous collaborons en logistique et chaines d approvisionnement.',
       partnerFallback: 'Partenaire',
       noLogo: 'Pas de logo',
-      empty: 'Ajoutez des cartes partenaires dans l administration.',
+      empty: 'Les informations sur nos partenaires restent à paraître.',
       videoButtonLabel: 'Voir les temoignages video',
       metadata: { title: 'Partenaires', description: 'Page des partenaires Runway Trans.' },
     },
     reviews: {
-      title: 'Témoignages vidéo de nos partenaires',
+      title: 'Témoignages de nos clients',
       homeLink: 'Accueil',
       breadcrumbsTitle: 'Avis',
-      description:
-        'Nos clients nous ont adressé plus de 60 témoignages vidéo et plus de 100 lettres de remerciement sur papier à en-tête.',
-      expertName: 'Victoria Kondakova',
-      expertRole: 'Experte en exploitation hôtelière en Russie',
+      description: 'Témoignages vidéo et lettres de remerciement des clients de Runway Trans.',
       reviewPrefix: 'Avis :',
       openVideoAria: 'Ouvrir le témoignage vidéo',
       heroImageAlt: 'Témoignages vidéo des partenaires de Runway Trans',
@@ -896,7 +896,11 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       peopleTitle: '管理团队',
       galleryTitle: '图片库',
       galleryImageAlt: '图库照片',
-      personFallback: { fullName: '公司员工', position: '专家' },
+      personFallback: {
+        fullName: '弗拉季斯拉夫·尼古拉耶维奇·皮莫诺夫',
+        position: '总经理',
+        initials: 'VP',
+      },
       metadata: { title: '指南', description: 'RunwayTrans 货物运输服务和条件指南。' },
     },
     vacancies: { title: '招聘职位', detailsLink: '详情并申请 ->', metadata: { title: '招聘职位' } },
@@ -925,17 +929,15 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
       description: '我们在物流和综合供应链中合作的公司。',
       partnerFallback: '合作伙伴',
       noLogo: '无标志',
-      empty: '请在管理后台添加合作伙伴卡片。',
+      empty: '合作伙伴信息尚未发布。',
       videoButtonLabel: '观看视频评价',
       metadata: { title: '合作伙伴', description: 'Runway Trans 合作伙伴页面。' },
     },
     reviews: {
-      title: '合作伙伴的视频评价',
+      title: '客户评价',
       homeLink: '首页',
       breadcrumbsTitle: '评价',
-      description: '客户提供了 60 多条视频评价和 100 多封以公司信笺书写的感谢信。',
-      expertName: 'Victoria Kondakova',
-      expertRole: '俄罗斯酒店运营专家',
+      description: 'Runway Trans 客户的视频评价和感谢信。',
       reviewPrefix: '评价：',
       openVideoAria: '打开视频评价',
       heroImageAlt: 'Runway Trans 合作伙伴的视频评价',
@@ -1016,7 +1018,24 @@ export const pageMessages: Record<AppLocale, LocalizedPageMessages> = {
 }
 
 // Use the Russian copy for pages still awaiting a Kazakh translation.
-pageMessages.kk = { ...pageMessages.ru, reviews: pageMessages.kk.reviews }
+pageMessages.kk = {
+  ...pageMessages.ru,
+  guide: {
+    ...pageMessages.ru.guide,
+    title: 'Басшылық',
+    breadcrumbsAria: 'Навигация жолы',
+    homeLink: 'Басты бет',
+    breadcrumbsTitle: 'Басшылық',
+    peopleTitle: 'Басшылық',
+    galleryTitle: 'Фотогалерея',
+    galleryImageAlt: 'Runway Trans командасы',
+    personFallback: pageMessages.kk.guide.personFallback,
+    metadata: { title: 'Басшылық', description: 'Runway Trans компаниясының басшылығы.' },
+  },
+  partners: pageMessages.kk.partners,
+  reviews: pageMessages.kk.reviews,
+  services: { ...pageMessages.ru.services, empty: 'Қызметтер әлі жарияланған жоқ.' },
+}
 
 export function getPageText(
   locale: AppLocale,

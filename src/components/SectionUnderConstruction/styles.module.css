@@ -1,0 +1,19 @@
+.banner {
+  max-width: 750px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.notice {
+  display: grid;
+  place-items: center;
+  min-height: clamp(104px, 24vw, 180px);
+  padding: max(36px, 6%) 9%;
+  border-radius: 4.2% / 14%;
+  background: #f39222 url('/media/construction.svg') center / 100% 100% no-repeat;
+  color: #21170d;
+  font-size: clamp(0.875rem, 2.5vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}

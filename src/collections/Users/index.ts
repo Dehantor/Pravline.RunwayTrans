@@ -4,6 +4,10 @@ import { adminOnly, adminOrSelf, canUseAdminPanel, isAdminUser, ROLE_OPTIONS } f
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: { ru: 'Пользователь', en: 'User' },
+    plural: { ru: 'Пользователи', en: 'Users' },
+  },
   access: {
     admin: canUseAdminPanel,
     create: adminOnly,
@@ -20,10 +24,12 @@ export const Users: CollectionConfig = {
   fields: [
     {
       name: 'name',
+      label: { ru: 'Имя', en: 'Name' },
       type: 'text',
     },
     {
       name: 'roles',
+      label: { ru: 'Роли', en: 'Roles' },
       type: 'select',
       hasMany: true,
       options: ROLE_OPTIONS,

@@ -224,13 +224,13 @@ export const ContactsPage: GlobalConfig = {
       fields: [
         {
           name: 'title',
-          label: 'Meta title',
+          label: { ru: 'SEO-заголовок', en: 'Meta title' },
           type: 'text',
           defaultValue: 'Контакты | Runway Trans',
         },
         {
           name: 'description',
-          label: 'Meta description',
+          label: { ru: 'SEO-описание', en: 'Meta description' },
           type: 'textarea',
           defaultValue: 'Свяжитесь с Runway Trans: адрес, телефон, email и форма обратного звонка.',
         },

@@ -24,19 +24,20 @@ export const Archive: Block = {
           ]
         },
       }),
-      label: 'Intro Content',
+      label: { ru: 'Вступительный текст', en: 'Intro Content' },
     },
     {
       name: 'populateBy',
+      label: { ru: 'Источник публикаций', en: 'Populate by' },
       type: 'select',
       defaultValue: 'collection',
       options: [
         {
-          label: 'Collection',
+          label: { ru: 'Коллекция', en: 'Collection' },
           value: 'collection',
         },
         {
-          label: 'Individual Selection',
+          label: { ru: 'Ручной выбор', en: 'Individual Selection' },
           value: 'selection',
         },
       ],
@@ -48,10 +49,10 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'collection',
       },
       defaultValue: 'posts',
-      label: 'Collections To Show',
+      label: { ru: 'Коллекция для показа', en: 'Collections To Show' },
       options: [
         {
-          label: 'Posts',
+          label: { ru: 'Публикации', en: 'Posts' },
           value: 'posts',
         },
       ],
@@ -63,7 +64,7 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'collection',
       },
       hasMany: true,
-      label: 'Categories To Show',
+      label: { ru: 'Категории для показа', en: 'Categories To Show' },
       relationTo: 'categories',
     },
     {
@@ -74,7 +75,7 @@ export const Archive: Block = {
         step: 1,
       },
       defaultValue: 10,
-      label: 'Limit',
+      label: { ru: 'Максимум записей', en: 'Limit' },
     },
     {
       name: 'selectedDocs',
@@ -83,12 +84,12 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'selection',
       },
       hasMany: true,
-      label: 'Selection',
+      label: { ru: 'Выбранные публикации', en: 'Selection' },
       relationTo: ['posts'],
     },
   ],
   labels: {
-    plural: 'Archives',
-    singular: 'Archive',
+    plural: { ru: 'Списки публикаций', en: 'Archives' },
+    singular: { ru: 'Список публикаций', en: 'Archive' },
   },
 }

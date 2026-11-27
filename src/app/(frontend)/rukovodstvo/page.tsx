@@ -1,166 +1,173 @@
 import type { Metadata } from 'next'
-
 import Link from 'next/link'
 
 import { getRequestLocale } from '@/i18n/getRequestLocale'
+import type { AppLocale } from '@/i18n/locales'
+import {
+  managementBiographyKeys,
+  managementFactKeys,
+  managementHobbyPhotos,
+  managementProfileMessages,
+} from '@/i18n/managementProfileMessages'
+import { headerMessages } from '@/i18n/navigationMessages'
 import { getPageText, pageMessages } from '@/i18n/pageMessages'
-import type { Media } from '@/payload-types'
+import type { GuidePage } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
-type PersonCardInput = {
-  id?: string | null
-  fullName?: string | null
-  position?: string | null
-  photo?: number | Media | null
+const directorPlaceholder = /(?:^|\/)runway-confirmed-team-placeholder(?:-\d+x\d+)?\.png(?:[?#]|$)/i
+
+function normalizeFullName(fullName: string) {
+  return fullName.normalize('NFC').trim().replace(/\s+/g, ' ').toLowerCase()
 }
 
-type GalleryImageInput = {
-  id?: string | null
-  image?: number | Media | null
+const directorNames = new Set(
+  Object.values(managementProfileMessages).map(({ fullName }) => normalizeFullName(fullName)),
+)
+
+const hobbyKeys = Object.keys(managementHobbyPhotos) as (keyof typeof managementHobbyPhotos)[]
+
+function getDirectorPortrait(peopleCards: GuidePage['peopleCards']) {
+  for (const { fullName, photo } of peopleCards ?? []) {
+    if (
+      !fullName ||
+      !directorNames.has(normalizeFullName(fullName)) ||
+      !photo ||
+      typeof photo !== 'object' ||
+      !photo.mimeType?.startsWith('image/') ||
+      directorPlaceholder.test(photo.filename?.trim() ?? '')
+    ) {
+      continue
+    }
+
+    const url = getMediaUrl(photo.sizes?.medium?.url?.trim() || photo.url?.trim())
+    if (url && !directorPlaceholder.test(url)) return url
+  }
+
+  return null
 }
 
-function normalizePeopleCards(
-  cards: PersonCardInput[] | null | undefined,
-  fallback: { fullName: string; position: string },
-) {
-  return (cards || [])
-    .map((person, index) => {
-      const photo = person.photo && typeof person.photo === 'object' ? person.photo : null
-      const photoUrl = getMediaUrl(photo?.sizes?.medium?.url || photo?.url)
-
-      return {
-        id: person.id || `person-${index}`,
-        fullName: person.fullName || fallback.fullName,
-        position: person.position || fallback.position,
-        photoUrl: photoUrl || '',
-      }
-    })
-}
-
-function PersonCard({ person }: { person: ReturnType<typeof normalizePeopleCards>[number] }) {
+function getManagementTitle(locale: AppLocale) {
   return (
-    <article className="flex flex-col items-center text-center">
-      <div className="h-[180px] w-[180px] overflow-hidden rounded-full border-2 border-[#bfbfbf] bg-[#d9d9d9] sm:h-[205px] sm:w-[205px]">
-        {person.photoUrl && (
-          <img
-            alt={person.fullName}
-            className="h-full w-full object-cover"
-            loading="lazy"
-            src={person.photoUrl}
-          />
-        )}
-      </div>
-      <h2 className="mt-5 text-[18px] leading-tight font-semibold">{person.fullName}</h2>
-      <p className="mt-3 text-[18px] leading-tight">{person.position}</p>
-    </article>
+    headerMessages[locale].companyDropdownLinks.find(({ href }) => href === '/rukovodstvo')?.label ??
+    pageMessages[locale].guide.breadcrumbsTitle
   )
-}
-
-function normalizeGallery(images: GalleryImageInput[] | null | undefined) {
-  return (images || [])
-    .map((item, index) => {
-      const image = item.image && typeof item.image === 'object' ? item.image : null
-      const url = getMediaUrl(image?.sizes?.large?.url || image?.sizes?.medium?.url || image?.url)
-
-      return {
-        id: item.id || `gallery-${index}`,
-        url: url || '',
-      }
-    })
-    .filter((item) => Boolean(item.url))
 }
 
 export default async function RukovodstvoPage() {
   const locale = await getRequestLocale()
   const t = pageMessages[locale].guide
   const ru = pageMessages.ru.guide
-  const guidePageData = await getCachedGlobal('guidePage', locale, 2, false)()
-
-  const peopleCards = normalizePeopleCards(guidePageData.peopleCards, t.personFallback)
-  const galleryImages = normalizeGallery(guidePageData.teamGallery)
+  const profile = managementProfileMessages[locale]
+  const guidePageData = await getCachedGlobal('guidePage', locale, 1)()
+  const portrait = getDirectorPortrait(guidePageData.peopleCards)
   const breadcrumbsTitle = getPageText(
     locale,
     guidePageData.breadcrumbsTitle,
     ru.breadcrumbsTitle,
-    t.breadcrumbsTitle,
+    getManagementTitle(locale),
   )
   const companyBreadcrumbLabel = getPageText(
     locale,
     guidePageData.companyBreadcrumbLabel,
     'Компания',
-    'Компания',
+    headerMessages[locale].companyLabel,
   )
-  const introText = getPageText(
-    locale,
-    guidePageData.introText,
-    'Наша великолепная команда к Вашим услугам.',
-    'Наша великолепная команда к Вашим услугам.',
-  )
-  const pageTitle = getPageText(locale, guidePageData.pageTitle, ru.title, t.title)
 
   return (
-    <main className="bg-background-light pb-24 text-ink">
-      <div className="container pt-12 sm:pt-16">
-        <nav aria-label={t.breadcrumbsAria} className="flex items-center gap-3 text-sm">
-          <Link className="text-neutral-400 transition-colors hover:text-brand-green" href="/">
+    <main className="bg-background pb-24 text-foreground">
+      <div className="container max-w-6xl pt-10 sm:pt-12">
+        <nav aria-label={t.breadcrumbsAria} className="flex flex-wrap items-center gap-3 text-sm">
+          <Link
+            className="text-muted-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"
+            href={`/${locale}`}
+          >
             {t.homeLink}
           </Link>
-          <span className="text-neutral-400">›</span>
-          <span className="text-neutral-400">{companyBreadcrumbLabel}</span>
-          <span className="text-neutral-400">›</span>
-          <span>{breadcrumbsTitle}</span>
+          <span aria-hidden="true">›</span>
+          <span className="text-muted-foreground">{companyBreadcrumbLabel}</span>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">{breadcrumbsTitle}</span>
         </nav>
 
-        <h1 className="sr-only">{pageTitle}</h1>
+        <div
+          className={`mt-5 ${
+            portrait ? 'grid items-start gap-7 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12' : ''
+          }`}
+        >
+          <div className="min-w-0">
+            <h1 className="text-2xl leading-tight font-semibold text-brand-green-hover sm:text-[28px] dark:text-brand-green">
+              {profile.fullName}
+            </h1>
+            <p className="mt-2 text-[15px] font-medium leading-normal sm:text-base">{profile.role}</p>
 
-        <p className="mt-8 text-[18px] leading-tight">{introText}</p>
-
-        <section className="pt-6">
-          {peopleCards.length > 0 ? (
-            <div className="grid gap-x-20 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
-              {peopleCards.map((person) => (
-                <PersonCard key={person.id} person={person} />
-              ))}
-            </div>
-          ) : (
-            <p className="py-12 text-center text-neutral-600">{t.personFallback.fullName}</p>
-          )}
-        </section>
-
-        {galleryImages.length > 0 && (
-          <section className="mt-96 border-t border-neutral-300 pt-2">
-            <h2 className="sr-only">{getPageText(locale, guidePageData.galleryTitle, ru.galleryTitle, t.galleryTitle)}</h2>
-            <div className="grid auto-rows-[155px] grid-cols-12 gap-0 overflow-hidden">
-              {galleryImages.map((image, index) => {
-                const className =
-                  index === 0
-                    ? 'col-span-3 row-span-2'
-                    : index === 1
-                      ? 'col-span-3 row-span-2'
-                      : index === 2
-                        ? 'col-span-4 row-span-2'
-                        : index === 3
-                          ? 'col-span-2 row-span-2'
-                          : index === 4
-                            ? 'col-span-2 row-span-2'
-                            : index === 5
-                              ? 'col-span-4 row-span-2'
-                              : 'col-span-2 row-span-2'
+            <dl className="mt-5 max-w-prose space-y-2 text-sm leading-relaxed sm:mt-6">
+              {managementFactKeys.map((key) => {
+                const { label, value } = profile.facts[key]
 
                 return (
-                  <img
-                    alt={t.galleryImageAlt}
-                    className={`${className} h-full w-full object-cover`}
-                    key={image.id}
-                    loading="lazy"
-                    src={image.url}
-                  />
+                  <div className="flex flex-wrap gap-x-2" key={key}>
+                    <dt className="font-semibold">{label}</dt>
+                    <dd>{key === 'birthDate' ? <time dateTime="1971-03-11">{value}</time> : value}</dd>
+                  </div>
                 )
               })}
-            </div>
-          </section>
-        )}
+            </dl>
+          </div>
+
+          {portrait && (
+            <img
+              alt={profile.fullName}
+              className="mx-auto aspect-[3/4] w-full max-w-[300px] object-cover lg:mr-0 lg:max-w-[360px]"
+              height={480}
+              src={portrait}
+              width={360}
+            />
+          )}
+        </div>
+
+        <div className="mt-9 max-w-prose space-y-7 sm:mt-10">
+          {managementBiographyKeys.map((key) => {
+            const { title, text } = profile.biography[key]
+
+            return (
+              <section key={key}>
+                <h2 className="text-lg font-semibold sm:text-xl">{title}</h2>
+                <p className="mt-2 text-[15px] leading-relaxed">{text}</p>
+              </section>
+            )
+          })}
+        </div>
+
+        <section aria-labelledby="profile-hobbies" className="mt-9 sm:mt-10">
+          <h2 className="text-lg font-semibold sm:text-xl" id="profile-hobbies">
+            {profile.hobbiesTitle}
+          </h2>
+          <ul className="mt-4 grid gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+            {hobbyKeys.map((key) => {
+              const { title, alt, caption } = profile.hobbies[key]
+
+              return (
+                <li className="text-center" key={key}>
+                  <h3 className="mb-2 text-sm leading-5 font-semibold sm:flex sm:min-h-10 sm:items-end sm:justify-center">
+                    {title}
+                  </h3>
+                  <figure>
+                    <img
+                      alt={alt}
+                      className="aspect-[4/3] w-full object-cover"
+                      height={270}
+                      loading="lazy"
+                      src={`/media/management-gallery/${managementHobbyPhotos[key]}`}
+                      width={360}
+                    />
+                    <figcaption className="mt-2 text-sm leading-snug">{caption}</figcaption>
+                  </figure>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
       </div>
     </main>
   )
@@ -168,17 +175,15 @@ export default async function RukovodstvoPage() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
-  const t = pageMessages[locale].guide
   const ru = pageMessages.ru.guide
-  const guidePageData = await getCachedGlobal('guidePage', locale, 2, false)()
+  const t = pageMessages[locale].guide
+  const profile = managementProfileMessages[locale]
+  const { meta } = await getCachedGlobal('guidePage', locale, 0, false)()
+  const description = meta?.description?.trim()
+  const isLegacyDescription = description === ru.metadata.description || description === t.metadata.description
 
   return {
-    title: getPageText(locale, guidePageData.meta?.title, ru.metadata.title, t.metadata.title),
-    description: getPageText(
-      locale,
-      guidePageData.meta?.description,
-      ru.metadata.description || '',
-      t.metadata.description || '',
-    ),
+    title: getPageText(locale, meta?.title?.trim(), ru.metadata.title, getManagementTitle(locale)),
+    description: !description || isLegacyDescription ? profile.metadataDescription : description,
   }
 }

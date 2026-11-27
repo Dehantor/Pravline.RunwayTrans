@@ -16,24 +16,34 @@ type HomeMessages = {
   advantagesTitle: string
   advantages: AdvantageItem[]
   playVideoAria: string
-  mapButton: string
-  metrics: MetricItem[]
-  workWithUsTitle: string
-  imageAlt: string
-  personalDataAgreementPrefix: string
-  personalDataPolicy: string
-  consultationPoints: string[]
-  form: {
-    name: string
-    phone: string
-    email: string
-    message: string
-    submit: string
+  geography: {
+    title: string
+    intro: string
+    cta: string
+    empty: string
+    loading: string
+    basemapUnavailable: string
+  }
+  company: {
+    title: string
+    intro: string
+    metrics: MetricItem[]
+    life: CompanyLifeMessages
   }
   metadata: {
     title: string
     description: string
   }
+}
+
+export type CompanyLifeMessages = {
+  title: string
+  previous: string
+  next: string
+  stories: Record<
+    'taimyrSnow' | 'krasnoyarskRepair' | 'moscowMotorcycles' | 'taimyrAntigravity',
+    { location: string; title: string }
+  >
 }
 
 type RunwayTransTodayFaqItem = { question: string; answer: string }
@@ -102,7 +112,7 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
     ctaRequest: 'Оформить заявку',
     cargoTitle: 'Что мы перевозим',
     cargoDescription:
-      'Мы доставляем всё: от крупногабаритной спецтехники, оборудования, опасных грузов до малогабаритных сборных грузов.',
+      'Перевозим крупногабаритную спецтехнику, оборудование, опасные грузы и малогабаритные сборные грузы.',
     capabilities: [
       'Крупногабаритные и тяжеловесные грузы',
       'Специальная и строительная техника',
@@ -116,7 +126,7 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
       {
         label: 'Собственный парк техники',
         description:
-          'Располагаем надёжной техникой для работы в северном климаете. Подберём оптимальный транспорт под любую заявку',
+          'Располагаем надёжной техникой для работы в северном климате. Подберём оптимальный транспорт под любую заявку',
       },
       {
         label: 'Готовы привезти любой груз',
@@ -142,30 +152,37 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
       },
     ],
     playVideoAria: 'Воспроизвести видео',
-    mapButton: 'Смотреть маршрут на карте',
-    metrics: [
-      { label: 'Год основания', value: '2008' },
-      { label: 'Перевозок в год', value: '>690' },
-      { label: 'Единиц спецтехники', value: '14' },
-      { label: 'Клиентов', value: '>50' },
-      { label: 'Собственных маршрутов', value: '80%' },
-    ],
-    workWithUsTitle: 'Начните работать с нами',
-    imageAlt: 'Вездеходная техника',
-    personalDataAgreementPrefix: 'Я согласен с',
-    personalDataPolicy: 'политикой обработки персональных данных',
-    consultationPoints: [
-      'Расчёт стоимости перевозки',
-      'Сроки доставки',
-      'Консультация специалистов',
-      'Прочие вопросы',
-    ],
-    form: {
-      name: 'Ваше имя*',
-      phone: 'Телефон*',
-      email: 'E-mail',
-      message: 'Сообщение',
-      submit: 'Отправить',
+    geography: {
+      title: 'Направления и маршруты',
+      intro:
+        'Транспортно-логистическая компания «Ранвей Транс» специализируется на доставке грузов в районы Крайнего Севера и приравненные к ним территории.',
+      cta: 'Смотреть маршруты по годам',
+      empty: 'Пока нет маршрутов для отображения на карте.',
+      loading: 'Карта загружается…',
+      basemapUnavailable: 'Подложка карты загрузилась не полностью. Маршруты доступны.',
+    },
+    company: {
+      title: 'Транспортная логистическая компания «Ранвей Транс»',
+      intro:
+        'С 2008 года мы доставляем грузы на самые труднодоступные объекты нефтяных и газовых разработок.',
+      metrics: [
+        { label: 'Год создания', value: '2008' },
+        { label: 'Перевезено тонн', value: '>790 тыс.' },
+        { label: 'Единиц спецтехники', value: '14' },
+        { label: 'Клиентов', value: '>50' },
+        { label: 'Клиентов остаются лояльны', value: '100%' },
+      ],
+      life: {
+        title: 'Жизнь компании',
+        previous: 'Предыдущая карточка',
+        next: 'Следующая карточка',
+        stories: {
+          taimyrSnow: { location: 'Таймыр', title: 'Застряли в снегах Таймыра' },
+          krasnoyarskRepair: { location: 'Красноярск', title: 'Ремонт вездехода в Красноярске' },
+          moscowMotorcycles: { location: 'Москва', title: 'Купили 3 тыс. мотоциклов' },
+          taimyrAntigravity: { location: 'Таймыр', title: 'Антигравитация' },
+        },
+      },
     },
     metadata: {
       title: 'RunwayTrans — грузоперевозки в труднодоступные районы Севера',
@@ -203,7 +220,7 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
     ctaRequest: 'Submit request',
     cargoTitle: 'What we transport',
     cargoDescription:
-      'We deliver everything: from oversized machinery, equipment and hazardous cargo to small consolidated shipments.',
+      'We transport oversized specialised machinery, equipment, hazardous cargo and small consolidated shipments.',
     capabilities: [
       'Oversized and heavy cargo',
       'Special and construction machinery',
@@ -243,30 +260,39 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
       },
     ],
     playVideoAria: 'Play video',
-    mapButton: 'View route on map',
-    metrics: [
-      { label: 'Founded', value: '2008' },
-      { label: 'Shipments per year', value: '>690' },
-      { label: 'Special vehicles', value: '14' },
-      { label: 'Clients', value: '>50' },
-      { label: 'Own routes', value: '80%' },
-    ],
-    workWithUsTitle: 'Start working with us',
-    imageAlt: 'All-terrain machinery',
-    personalDataAgreementPrefix: 'I agree with the',
-    personalDataPolicy: 'personal data processing policy',
-    consultationPoints: [
-      'Cost estimation',
-      'Delivery timelines',
-      'Expert consultation',
-      'Other questions',
-    ],
-    form: {
-      name: 'Your name*',
-      phone: 'Phone*',
-      email: 'E-mail',
-      message: 'Message',
-      submit: 'Send',
+    geography: {
+      title: 'Destinations and routes',
+      intro:
+        'Runway Trans is a transport and logistics company specialising in delivering freight to Russia’s Far North and equivalent areas.',
+      cta: 'View routes by year',
+      empty: 'There are no routes to show on the map yet.',
+      loading: 'Loading the map…',
+      basemapUnavailable: 'The base map could not be fully loaded. Routes are still available.',
+    },
+    company: {
+      title: 'Runway Trans transport and logistics company',
+      intro: 'Since 2008, we have delivered freight to the most remote oil and gas sites.',
+      metrics: [
+        { label: 'Year founded', value: '2008' },
+        { label: 'Tonnes delivered', value: '>790K' },
+        { label: 'Special-purpose vehicles', value: '14' },
+        { label: 'Clients', value: '>50' },
+        { label: 'Client retention', value: '100%' },
+      ],
+      life: {
+        title: 'Company life',
+        previous: 'Previous story',
+        next: 'Next story',
+        stories: {
+          taimyrSnow: { location: 'Taimyr', title: 'Stuck in the Taimyr snow' },
+          krasnoyarskRepair: {
+            location: 'Krasnoyarsk',
+            title: 'Repairing an all-terrain vehicle in Krasnoyarsk',
+          },
+          moscowMotorcycles: { location: 'Moscow', title: 'Bought 3,000 motorcycles' },
+          taimyrAntigravity: { location: 'Taimyr', title: 'Antigravity' },
+        },
+      },
     },
     metadata: {
       title: 'RunwayTrans — cargo transportation to remote northern regions',
@@ -345,30 +371,40 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
       },
     ],
     playVideoAria: 'Video abspielen',
-    mapButton: 'Route auf der Karte ansehen',
-    metrics: [
-      { label: 'Grundungsjahr', value: '2008' },
-      { label: 'Transporte pro Jahr', value: '>690' },
-      { label: 'Spezialfahrzeuge', value: '14' },
-      { label: 'Kunden', value: '>50' },
-      { label: 'Eigene Routen', value: '80%' },
-    ],
-    workWithUsTitle: 'Beginnen Sie die Zusammenarbeit mit uns',
-    imageAlt: 'Gelandetechnik',
-    personalDataAgreementPrefix: 'Ich stimme der',
-    personalDataPolicy: 'Richtlinie zur Verarbeitung personenbezogener Daten zu',
-    consultationPoints: [
-      'Kostenberechnung fur den Transport',
-      'Lieferfristen',
-      'Beratung durch Spezialisten',
-      'Weitere Fragen',
-    ],
-    form: {
-      name: 'Ihr Name*',
-      phone: 'Telefon*',
-      email: 'E-mail',
-      message: 'Nachricht',
-      submit: 'Senden',
+    geography: {
+      title: 'Бағыттар мен маршруттар',
+      intro:
+        '«Ранвей Транс» көлік-логистика компаниясы Қиыр Солтүстік аудандарына және оларға теңестірілген аумақтарға жүк жеткізуге маманданған.',
+      cta: 'Маршруттарды жылдар бойынша көру',
+      empty: 'Картада көрсетілетін маршруттар әзірге жоқ.',
+      loading: 'Карта жүктелуде…',
+      basemapUnavailable: 'Картаның негізі толық жүктелмеді. Маршруттар қолжетімді.',
+    },
+    company: {
+      title: '«Ранвей Транс» көлік-логистика компаниясы',
+      intro:
+        '2008 жылдан бері мұнай мен газ өндіретін ең қиын жететін нысандарға жүк жеткізіп келеміз.',
+      metrics: [
+        { label: 'Құрылған жылы', value: '2008' },
+        { label: 'Тасымалданған тонна', value: '>790 мың' },
+        { label: 'Арнайы техника бірлігі', value: '14' },
+        { label: 'Клиенттер', value: '>50' },
+        { label: 'Клиенттер бізге адал', value: '100%' },
+      ],
+      life: {
+        title: 'Компания өмірі',
+        previous: 'Алдыңғы карточка',
+        next: 'Келесі карточка',
+        stories: {
+          taimyrSnow: { location: 'Таймыр', title: 'Таймырдың қарында тұрып қалдық' },
+          krasnoyarskRepair: {
+            location: 'Красноярск',
+            title: 'Красноярскіде жол талғамайтын көлікті жөндеу',
+          },
+          moscowMotorcycles: { location: 'Мәскеу', title: '3 мың мотоцикл сатып алдық' },
+          taimyrAntigravity: { location: 'Таймыр', title: 'Антигравитация' },
+        },
+      },
     },
     metadata: {
       title: 'RunwayTrans - Gutertransporte in schwer erreichbare Regionen des Nordens',
@@ -406,7 +442,7 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
     ctaRequest: 'Envoyer une demande',
     cargoTitle: 'Ce que nous transportons',
     cargoDescription:
-      'Nous livrons tout : machines hors gabarit, equipements, marchandises dangereuses et petites cargaisons groupees.',
+      'Nous transportons des engins spécialisés hors gabarit, des équipements, des marchandises dangereuses et de petits envois groupés.',
     capabilities: [
       'Fret hors gabarit et lourd',
       'Machines speciales et de construction',
@@ -448,30 +484,40 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
       },
     ],
     playVideoAria: 'Lire la video',
-    mapButton: 'Voir l itineraire sur la carte',
-    metrics: [
-      { label: 'Annee de creation', value: '2008' },
-      { label: 'Transports par an', value: '>690' },
-      { label: 'Vehicules speciaux', value: '14' },
-      { label: 'Clients', value: '>50' },
-      { label: 'Itineraires propres', value: '80%' },
-    ],
-    workWithUsTitle: 'Commencez a travailler avec nous',
-    imageAlt: 'Materiel tout-terrain',
-    personalDataAgreementPrefix: 'J accepte la',
-    personalDataPolicy: 'politique de traitement des donnees personnelles',
-    consultationPoints: [
-      'Calcul du cout du transport',
-      'Delais de livraison',
-      'Consultation de specialistes',
-      'Autres questions',
-    ],
-    form: {
-      name: 'Votre nom*',
-      phone: 'Telephone*',
-      email: 'E-mail',
-      message: 'Message',
-      submit: 'Envoyer',
+    geography: {
+      title: 'Destinations et itinéraires',
+      intro:
+        'L’entreprise de transport et de logistique Runway Trans est spécialisée dans la livraison de marchandises dans le Grand Nord russe et les territoires assimilés.',
+      cta: 'Voir les itinéraires par année',
+      empty: 'Aucun itinéraire ne peut encore être affiché sur la carte.',
+      loading: 'Chargement de la carte…',
+      basemapUnavailable: 'Le fond de carte est incomplet. Les itinéraires restent disponibles.',
+    },
+    company: {
+      title: 'Runway Trans, entreprise de transport et de logistique',
+      intro:
+        'Depuis 2008, nous livrons des marchandises aux sites pétroliers et gaziers les plus difficiles d’accès.',
+      metrics: [
+        { label: 'Année de création', value: '2008' },
+        { label: 'Tonnes transportées', value: '>790 k' },
+        { label: 'Véhicules spécialisés', value: '14' },
+        { label: 'Clients', value: '>50' },
+        { label: 'Clients fidèles', value: '100%' },
+      ],
+      life: {
+        title: 'Vie de l’entreprise',
+        previous: 'Carte précédente',
+        next: 'Carte suivante',
+        stories: {
+          taimyrSnow: { location: 'Taïmyr', title: 'Coincés dans les neiges du Taïmyr' },
+          krasnoyarskRepair: {
+            location: 'Krasnoïarsk',
+            title: 'Réparation d’un tout-terrain à Krasnoïarsk',
+          },
+          moscowMotorcycles: { location: 'Moscou', title: 'Achat de 3 000 motos' },
+          taimyrAntigravity: { location: 'Taïmyr', title: 'Antigravité' },
+        },
+      },
     },
     metadata: {
       title: 'RunwayTrans - transport vers les regions difficiles d acces du Nord',
@@ -507,7 +553,7 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
     ],
     ctaRequest: '提交申请',
     cargoTitle: '我们运输什么',
-    cargoDescription: '我们运输各种货物：从大型特种设备、器材和危险品到小批量拼装货物。',
+    cargoDescription: '我们运输大型特种机械、设备、危险品和小件拼装货物。',
     capabilities: ['超大和重型货物', '特种和工程机械', '各类设备', '危险货物', '油田设备', '人员'],
     advantagesTitle: '我们的优势',
     advantages: [
@@ -537,25 +583,38 @@ export const homeMessages: Partial<Record<AppLocale, HomeMessages>> = {
       },
     ],
     playVideoAria: '播放视频',
-    mapButton: '在地图上查看路线',
-    metrics: [
-      { label: '成立年份', value: '2008' },
-      { label: '每年运输次数', value: '>690' },
-      { label: '特种车辆', value: '14' },
-      { label: '客户', value: '>50' },
-      { label: '自有路线', value: '80%' },
-    ],
-    workWithUsTitle: '开始与我们合作',
-    imageAlt: '全地形设备',
-    personalDataAgreementPrefix: '我同意',
-    personalDataPolicy: '个人数据处理政策',
-    consultationPoints: ['运输费用计算', '交付时间', '专家咨询', '其他问题'],
-    form: {
-      name: '您的姓名*',
-      phone: '电话*',
-      email: 'E-mail',
-      message: '留言',
-      submit: '发送',
+    geography: {
+      title: '运输目的地和路线',
+      intro: '运输物流公司“Runway Trans”专门向俄罗斯极北地区及同等地区运送货物。',
+      cta: '按年份查看路线',
+      empty: '地图上暂无可显示的路线。',
+      loading: '地图正在加载…',
+      basemapUnavailable: '底图未能完整加载，路线仍可查看。',
+    },
+    company: {
+      title: 'Runway Trans 运输物流公司',
+      intro: '自 2008 年以来，我们一直为最难抵达的油气开发项目运输货物。',
+      metrics: [
+        { label: '成立年份', value: '2008' },
+        { label: '货运量（吨）', value: '>79 万' },
+        { label: '特种车辆', value: '14' },
+        { label: '客户', value: '>50' },
+        { label: '客户留存率', value: '100%' },
+      ],
+      life: {
+        title: '公司风采',
+        previous: '上一张卡片',
+        next: '下一张卡片',
+        stories: {
+          taimyrSnow: { location: '泰梅尔', title: '困在泰梅尔的雪地里' },
+          krasnoyarskRepair: {
+            location: '克拉斯诺亚尔斯克',
+            title: '在克拉斯诺亚尔斯克维修全地形车',
+          },
+          moscowMotorcycles: { location: '莫斯科', title: '买了 3,000 辆摩托车' },
+          taimyrAntigravity: { location: '泰梅尔', title: '反重力' },
+        },
+      },
     },
     metadata: {
       title: 'RunwayTrans - 运往北方偏远地区的货物运输',
@@ -1012,5 +1071,74 @@ export const runwayTransTodayMessages: Record<AppLocale, RunwayTransTodayMessage
   },
 }
 
-// Until full Kazakh page copy is ready, use the Russian copy instead of exposing legacy German text.
-homeMessages.kk = homeMessages.ru
+// Use Russian for home page copy that has not been translated into Kazakh.
+if (homeMessages.ru) {
+  homeMessages.kk = {
+    ...homeMessages.ru,
+    geography: homeMessages.kk?.geography ?? homeMessages.ru.geography,
+    company: homeMessages.kk?.company ?? homeMessages.ru.company,
+    transportCapabilitiesTitle: 'Біздің көлік мүмкіндіктеріміз',
+    transportCapabilitiesDescription:
+      'Компаниямызда жүкті тиімді жолмен тасымалдауға қажет көлік пен техника бар. «Ранвей Транс» құрылғаннан бері саладағы ең сенімді компаниялардың бірі ретінде танылды. Әр клиенттің мүддесін ескеріп, тасымалдау сапасын қамтамасыз етеміз.',
+    coreServices: [
+      {
+        label: '«Витязь» көлігімен жүк тасымалдау',
+        description: 'Негізгі қызметіміз. Түрлі жүктерді жеткіземіз!',
+      },
+      {
+        label: 'Қысқы жолдармен жүк тасымалдау',
+        description:
+          'Арнайы жолдармен және қысқы жолдармен жартылай тіркемелер мен тралдар арқылы жүк жеткіземіз.',
+      },
+      {
+        label: 'Жол талғамайтын көлікпен жүк тасымалдау',
+        description: 'Шиналарындағы қысымы төмен жол талғамайтын көлікпен жүк жеткіземіз.',
+      },
+      {
+        label: 'Крандар мен авариялық кешендердің қызметтері',
+        description: 'Манипулятор және экскаватормен жабдықталған ДТ-30 негізіндегі авариялық кешен.',
+      },
+    ],
+    ctaRequest: 'Өтінім беру',
+    cargoTitle: 'Біз қандай жүк тасымалдаймыз',
+    cargoDescription:
+      'Ірі габаритті арнайы техниканы, жабдықты, қауіпті жүктерді және шағын құрама жүктерді тасымалдаймыз.',
+    capabilities: [
+      'Ірі габаритті және ауыр жүктер',
+      'Арнайы және құрылыс техникасы',
+      'Әртүрлі жабдық',
+      'Қауіпті жүктер',
+      'Мұнай өндіру жабдығы',
+      'Жолаушылар',
+    ],
+    advantagesTitle: 'Біздің артықшылықтарымыз',
+    advantages: [
+      {
+        label: 'Өз техника паркіміз',
+        description:
+          'Солтүстік климатта жұмыс істеуге арналған сенімді техникамыз бар. Әр өтінімге оңтайлы көлік таңдаймыз.',
+      },
+      {
+        label: 'Кез келген жүкті жеткіземіз',
+        description: 'Ірі габаритті, ұзын өлшемді, ауыр және қауіпті жүктерді тасымалдаймыз.',
+      },
+      {
+        label: 'Күрделі жағдайларда жұмыс істейміз',
+        description:
+          'Жүкті қолжетпес аудандарға, кен орындары мен тундрадағы мұнай-газ нысандарына жеткіземіз, қысқы жолдармен тасымалдаймыз.',
+      },
+      {
+        label: 'Жыл бойы жұмыс істейміз',
+        description: 'Жазда да, қатты аязда да тасымалдауды үзбейміз.',
+      },
+      {
+        label: 'Бір шарттағы кешенді шешім',
+        description: 'Маршрут пен есепті дайындаймыз, жүкті тиеуді және қауіпсіз жеткізуді ұйымдастырамыз.',
+      },
+      {
+        label: 'Мол тәжірибе',
+        description: 'Жүк тасымалдау саласындағы жетекші компаниялар қатарындамыз.',
+      },
+    ],
+  }
+}
